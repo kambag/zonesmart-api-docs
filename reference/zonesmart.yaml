@@ -5090,154 +5090,217 @@ paths:
   /v1/etsy/account/:
     get:
       operationId: v1_etsy_account_list
-      description: ''
+      description: Данный Endpoint используется для получения списка аккаунтов etsy.
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Количество результатов для возврата на страницу.
           required: false
           type: integer
         - name: offset
           in: query
-          description: The initial index from which to return the results.
+          description: Начальный индекс для возврата результатов.
           required: false
           type: integer
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
                 type: integer
+                description: Кол-во вернувшихся объектов.
               next:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение следующей группы объектов.
               previous:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
+                description: Список Etsy аккаунтов.
                 items:
                   $ref: '#/definitions/EtsyUserAccount'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 1
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  marketplace_user_account:
+                    id: string
+                    marketplace_name: string
+                    username: string
+                    user: 0
+                    marketplace: 0
+                  user_info:
+                    id: string
+                    feedback_info:
+                      count: 0
+                      score: 0
+                    user_id: string
+                    login_name: string
+                    primary_email: user@example.com
+                    feedback_count: 0
+                    feedback_score: 0
+                    creation_tsz: '2020-05-18T07:33:39Z'
+                  billing_overview:
+                    is_overdue: true
+                    currency_code: USD
+                    overdue_balance: 0
+                    balance_due: 0
+                    total_balance: 0
+                    date_due: '2020-05-18T07:33:39Z'
+                  bill_charges:
+                    - creation_tsz: '2020-05-18T07:33:39Z'
+                      last_modified_tsz: '2020-05-18T07:33:39Z'
+                      bill_type: listing
+                      bill_type_id: string
+                      amount: 0
+                      currency_code: USD
+                  access_token: string
+                  access_token_secret: string
+      summary: Получение списка аккаунтов etsy
       tags:
-        - work_in_process
+        - etsy_account
     parameters: []
   /v1/etsy/account/complete/:
     get:
       operationId: v1_etsy_account_complete
       description: |-
-        Создание / обновление Etsy аккаунта пользователя.
+        Данных Endpoint используется для создание / обновление Etsy аккаунта пользователя.
         Необходимо передавать oauth_token и oauth_verifier в query параметрах запроса.
       parameters:
-        - name: limit
+        - type: string
           in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
+          name: oauth_token
+          required: true
+          description: oauth токен.
+        - type: string
           in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+          name: oauth_verifier
+          required: true
+          description: oauth токен верификации.
       responses:
-        '200':
+        '201':
           description: ''
           schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/EtsyUserAccount'
+            type: string
+            description: Сообщение о результате.
+          examples:
+            Example: Аккаунт успешно создан
+        '400':
+          description: ''
+          schema:
+            type: string
+            description: Сообщение о результате.
+          examples:
+            Example: Произошла ошибка при создании аккаунта
+        '':
+          schema:
+            type: string
+            description: Сообщение о результате.
+          examples:
+            Example: Аккаунт успешно создан
+      summary: Создание / обновление аккаунта etsy
       tags:
-        - work_in_process
+        - etsy_account
     parameters: []
   /v1/etsy/account/login/:
     get:
       operationId: v1_etsy_account_login
-      description: Получение url для авторзиации пользователя с помощью Etsy аккаунта.
-      parameters:
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: Данный Endpoint используется для получение url для авторзиации пользователя с помощью Etsy аккаунта.
+      parameters: []
+      summary: Получение url для авторизации на etsy
+      tags:
+        - etsy_account
       responses:
-        '200':
+        '302':
+          description: Redirect
+          schema: {}
+        '400':
           description: ''
           schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/EtsyUserAccount'
-      tags:
-        - work_in_process
+            type: string
+            description: Сообщение об ошибке.
+          examples:
+            Example: Error 123 - try again
     parameters: []
   '/v1/etsy/account/{id}/':
     get:
       operationId: v1_etsy_account_read
-      description: ''
+      description: Данный Endpoint используется для получения аккаунта Etsy по id.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/EtsyUserAccount'
+          examples:
+            Example:
+              id: string
+              marketplace_user_account:
+                id: string
+                marketplace_name: string
+                username: string
+                user: 0
+                marketplace: 0
+              user_info:
+                id: string
+                feedback_info:
+                  count: 0
+                  score: 0
+                user_id: string
+                login_name: string
+                primary_email: user@example.com
+                feedback_count: 0
+                feedback_score: 0
+                creation_tsz: '2020-05-18T07:33:39Z'
+              billing_overview:
+                is_overdue: true
+                currency_code: USD
+                overdue_balance: 0
+                balance_due: 0
+                total_balance: 0
+                date_due: '2020-05-18T07:33:39Z'
+              bill_charges:
+                - creation_tsz: '2020-05-18T07:33:39Z'
+                  last_modified_tsz: '2020-05-18T07:33:39Z'
+                  bill_type: listing
+                  bill_type_id: string
+                  amount: 0
+                  currency_code: USD
+              access_token: string
+              access_token_secret: string
+      summary: Получение аккаунта etsy
       tags:
-        - work_in_process
+        - etsy_account
     delete:
       operationId: v1_etsy_account_delete
-      description: ''
+      description: Данный Endpoint используется для удаления аккаунта Etsy по id.
       parameters: []
       responses:
         '204':
           description: ''
+      summary: Удаление аккаунта etsy
       tags:
-        - work_in_process
+        - etsy_account
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: Идентификатор аккаунта Etsy.
+        format: uuid
   /v1/etsy/category/:
     get:
       operationId: v1_etsy_category_list
@@ -6012,159 +6075,240 @@ paths:
   /v1/etsy/policy/payment/:
     get:
       operationId: v1_etsy_policy_payment_list
-      description: ''
+      description: Данный Endpoint используется для получения списка политик оплаты.
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Количество результатов для возврата на страницу.
           required: false
           type: integer
         - name: offset
           in: query
-          description: The initial index from which to return the results.
+          description: Начальный индекс для возврата результатов.
           required: false
           type: integer
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
                 type: integer
+                description: Кол-во вернувшихся объектов.
               next:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение следующей группы объектов.
               previous:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
+                description: Список политик оплаты.
                 items:
                   $ref: '#/definitions/PaymentTemplate'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 1
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  created: '2020-05-18T07:33:42Z'
+                  modified: '2020-05-18T07:33:42Z'
+                  status: draft
+                  published_at: '2020-05-18T07:33:42Z'
+                  payment_template_id: 0
+                  allow_bt: true
+                  allow_check: true
+                  allow_mo: true
+                  allow_other: true
+                  allow_paypal: true
+                  allow_cc: true
+                  paypal_email: true
+                  name: string
+                  first_line: string
+                  second_line: string
+                  city: string
+                  state: string
+                  zip: string
+                  channel: string
+                  country: 0
+      summary: Получение списка политик оплаты
       tags:
-        - work_in_process
+        - etsy_payment_policy
     parameters: []
   '/v1/etsy/policy/payment/{id}/':
     get:
       operationId: v1_etsy_policy_payment_read
-      description: ''
+      description: Данный Endpoint используется для получения политики оплаты по id.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/PaymentTemplate'
+          examples:
+            Example:
+              id: string
+              created: '2020-05-18T07:33:42Z'
+              modified: '2020-05-18T07:33:42Z'
+              status: draft
+              published_at: '2020-05-18T07:33:42Z'
+              payment_template_id: 0
+              allow_bt: true
+              allow_check: true
+              allow_mo: true
+              allow_other: true
+              allow_paypal: true
+              allow_cc: true
+              paypal_email: true
+              name: string
+              first_line: string
+              second_line: string
+              city: string
+              state: string
+              zip: string
+              channel: string
+              country: 0
+      summary: Получение политики оплаты
       tags:
-        - work_in_process
+        - etsy_payment_policy
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: Идентификатор политики оплаты.
+        format: uuid
   /v1/etsy/policy/shipping/:
     get:
       operationId: v1_etsy_policy_shipping_list
-      description: ''
+      description: Данный Endpoint используется для получения списка политик доставки.
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Количество результатов для возврата на страницу.
           required: false
           type: integer
         - name: offset
           in: query
-          description: The initial index from which to return the results.
+          description: Начальный индекс для возврата результатов.
           required: false
           type: integer
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
                 type: integer
+                description: Кол-во вернувшихся объектов.
               next:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение следующей группы объектов.
               previous:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
+                description: Список политик доставки.
                 items:
                   $ref: '#/definitions/ShippingTemplate'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 1
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  created: '2020-05-18T07:33:42Z'
+                  modified: '2020-05-18T07:33:42Z'
+                  status: draft
+                  published_at: '2020-05-18T07:33:42Z'
+                  shipping_template_id: string
+                  title: string
+                  max_processing_days: 0
+                  min_processing_days: 0
+                  processing_days_display_label: string
+                  marketplace_user_account: string
+                  origin_country: 0
+      summary: Получение списка политик доставки
       tags:
-        - work_in_process
+        - etsy_shipping_policy
     parameters: []
   '/v1/etsy/policy/shipping/remote_download_list/{marketplace_user_account_id}/':
     get:
       operationId: v1_etsy_policy_shipping_remote_download_list
-      description: ''
-      parameters:
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: Данный Endpoint используется для удалённого скачивания списка политик доставки с Etsy.
+      parameters: []
+      summary: Скачивание списка политик доставки
+      tags:
+        - etsy_shipping_policy
       responses:
-        '200':
+        '201':
           description: ''
           schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/ShippingTemplate'
-      tags:
-        - work_in_process
+            type: string
+            description: Сообщение о результате.
+          examples:
+            Example: Скачивание прошло успешно
+        '400':
+          description: ''
+          schema:
+            type: string
+            description: Сообщение о результате.
+          examples:
+            Example: Скачивание провалилось
     parameters:
       - name: marketplace_user_account_id
         in: path
         required: true
         type: string
+        description: Идентификатор маркетплейс аккаунта пользователя.
+        format: uuid
   '/v1/etsy/policy/shipping/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_read
-      description: ''
+      description: Данный Endpoint используется для получения политики оплаты по id.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/ShippingTemplate'
+          examples:
+            Example:
+              id: string
+              created: '2020-05-18T07:33:42Z'
+              modified: '2020-05-18T07:33:42Z'
+              status: draft
+              published_at: '2020-05-18T07:33:42Z'
+              shipping_template_id: string
+              title: string
+              max_processing_days: 0
+              min_processing_days: 0
+              processing_days_display_label: string
+              marketplace_user_account: string
+              origin_country: 0
+      summary: Получение политики доставки
       tags:
-        - work_in_process
+        - etsy_shipping_policy
     parameters:
       - name: id
         in: path
@@ -6173,69 +6317,111 @@ paths:
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/':
     get:
       operationId: v1_etsy_policy_shipping_entry_list
-      description: 'Примечание: записи политик доставки не могут быть обновлены.'
+      description: |-
+        Данный Endpoint используется для получения списка записей политик доставки.
+        Примечание: записи политик доставки не могут быть обновлены.
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Количество результатов для возврата на страницу.
           required: false
           type: integer
         - name: offset
           in: query
-          description: The initial index from which to return the results.
+          description: Начальный индекс для возврата результатов.
           required: false
           type: integer
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
                 type: integer
+                description: Кол-во вернувшихся объектов.
               next:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение следующей группы объектов.
               previous:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
+                description: Список записей политик доставки.
                 items:
                   $ref: '#/definitions/ShippingTemplateEntry'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 1
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  is_removed: true
+                  shipping_template_entry_id: string
+                  currency_code: RUB
+                  primary_cost: 0
+                  secondary_cost: 0
+                  shipping_template: string
+                  destination_country: 0
+                  destination_region: 0
+      summary: Получение списка записей политик доставки
       tags:
-        - work_in_process
+        - etsy_shipping_policy
     parameters:
       - name: shipping_template_id
         in: path
         required: true
         type: string
+        format: uuid
+        description: Идентификатор политики доставки.
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_entry_read
-      description: 'Примечание: записи политик доставки не могут быть обновлены.'
+      description: |-
+        Данный Endpoint используется для получения записи политики доставки по id.
+        Примечание: записи политик доставки не могут быть обновлены.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/ShippingTemplateEntry'
+          examples:
+            Example:
+              id: string
+              is_removed: true
+              shipping_template_entry_id: string
+              currency_code: RUB
+              primary_cost: 0
+              secondary_cost: 0
+              shipping_template: string
+              destination_country: 0
+              destination_region: 0
+      summary: Получение записи политики доставки
       tags:
-        - work_in_process
+        - etsy_shipping_policy
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        format: uuid
+        description: Идентификатор записи.
       - name: shipping_template_id
         in: path
         required: true
         type: string
+        format: uuid
+        description: Идентификатор политики доставки.
   /v1/etsy/region/:
     get:
       operationId: v1_etsy_region_list
@@ -14317,31 +14503,47 @@ definitions:
         returnPeriod:
           value: 30
   FeedbackInfo:
-    title: Feedback info
-    required:
-      - count
-      - score
+    title: FeedbackInfo
     type: object
     properties:
       count:
         title: Count
         type: integer
+        description: Количество оценок.
       score:
         title: Score
         type: integer
-  EtsyUserAccountInfo:
-    title: User info
+        description: Процент положительных оценок.
     required:
-      - feedback_info
-      - user_id
-      - login_name
-      - creation_tsz
+      - count
+      - score
+    x-examples:
+      Example:
+        count: 0
+        score: 0
+    description: Используется для отображения кол-ва оценок и процента положительных оценок.
+  EtsyUserAccountInfo:
+    title: UserInfo
     type: object
+    description: Используется для отображения информации аккаунта Etsy.
+    x-examples:
+      Example:
+        id: string
+        feedback_info:
+          count: 0
+          score: 0
+        user_id: string
+        login_name: string
+        primary_email: user@example.com
+        feedback_count: 0
+        feedback_score: 0
+        creation_tsz: '2020-05-18T07:33:39Z'
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор информации etsy аккаунта.
       feedback_info:
         $ref: '#/definitions/FeedbackInfo'
       user_id:
@@ -14349,35 +14551,75 @@ definitions:
         type: string
         maxLength: 30
         minLength: 1
+        description: Идентификатор пользователя.
       login_name:
         title: Логин пользователя
         type: string
         maxLength: 50
         minLength: 1
+        description: Логин пользователя.
       primary_email:
         title: E-mail пользователя
         type: string
         format: email
         maxLength: 254
         x-nullable: true
+        description: E-mail пользователя.
       feedback_count:
         title: Количество оценок
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Количество оценок.
       feedback_score:
         title: Процент положительных оценок
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Процент положительных оценок.
       creation_tsz:
         title: Дата и время регистрации
         type: string
         format: date-time
+        description: Дата и время регистрации.
+    required:
+      - feedback_info
+      - user_id
+      - login_name
+      - creation_tsz
   EtsyUserBillingOverview:
-    title: Billing overview
+    title: BillingOverview
+    type: object
+    properties:
+      is_overdue:
+        title: Баланс просрочен
+        type: boolean
+        description: Баланс просрочен.
+      currency_code:
+        title: Код валюты
+        type: string
+        enum:
+          - USD
+        description: Код валюты.
+      overdue_balance:
+        title: Сумма просроченного баланса
+        type: number
+        description: Сумма просроченного баланса.
+      balance_due:
+        title: 'Общая сумма, подлежащая оплате в настоящее время (включая просроченный остаток)'
+        type: number
+        description: 'Общая сумма, подлежащая оплате в настоящее время (включая просроченный остаток).'
+      total_balance:
+        title: 'Общая сумма, причитающаяся пользователю (включая сборы, которые еще не подлежат оплате)'
+        type: number
+        description: 'Общая сумма, причитающаяся пользователю (включая сборы, которые еще не подлежат оплате).'
+      date_due:
+        title: 'Дата, к которой баланс должен быть оплачен'
+        type: string
+        format: date-time
+        description: 'Дата, к которой баланс должен быть оплачен.'
     required:
       - is_overdue
       - currency_code
@@ -14385,47 +14627,38 @@ definitions:
       - balance_due
       - total_balance
       - date_due
-    type: object
-    properties:
-      is_overdue:
-        title: Баланс просрочен
-        type: boolean
-      currency_code:
-        title: Код валюты
-        type: string
-        enum:
-          - USD
-      overdue_balance:
-        title: Сумма просроченного баланса
-        type: number
-      balance_due:
-        title: 'Общая сумма, подлежащая оплате в настоящее время (включая просроченный остаток)'
-        type: number
-      total_balance:
-        title: 'Общая сумма, причитающаяся пользователю (включая сборы, которые еще не подлежат оплате)'
-        type: number
-      date_due:
-        title: 'Дата, к которой баланс должен быть оплачен'
-        type: string
-        format: date-time
+    description: Используется для отображения информация о балансе аккаунта Etsy.
+    x-examples:
+      Example:
+        is_overdue: true
+        currency_code: USD
+        overdue_balance: 0
+        balance_due: 0
+        total_balance: 0
+        date_due: '2020-05-18T07:33:39Z'
   EtsyBillCharge:
-    required:
-      - creation_tsz
-      - last_modified_tsz
-      - bill_type
-      - bill_type_id
-      - amount
-      - currency_code
     type: object
+    title: EtsyBillCharge
+    description: Используется для отображения списаний по аккаунту Etsy.
+    x-examples:
+      Example:
+        creation_tsz: '2020-05-18T07:33:39Z'
+        last_modified_tsz: '2020-05-18T07:33:39Z'
+        bill_type: listing
+        bill_type_id: string
+        amount: 0
+        currency_code: USD
     properties:
       creation_tsz:
         title: Дата и время создания
         type: string
         format: date-time
+        description: Дата и время создания.
       last_modified_tsz:
         title: Дата и время обновления
         type: string
         format: date-time
+        description: Дата и время обновления.
       bill_type:
         title: Тип списания
         type: string
@@ -14454,32 +14687,76 @@ definitions:
           - wholesale_setup_fee
           - vat_tax
           - vat_seller_services
+        description: Тип списания.
       bill_type_id:
         title: ID объекта связанного со списанием
         type: string
         maxLength: 20
         minLength: 1
+        description: ID объекта связанного со списанием.
       amount:
         title: Сумма списания
         type: number
+        description: Сумма списания.
       currency_code:
         title: Код валюты
         type: string
         enum:
           - USD
-  EtsyUserAccount:
+        description: Код валюты.
     required:
-      - user_info
-      - billing_overview
-      - bill_charges
-      - access_token
-      - access_token_secret
+      - creation_tsz
+      - last_modified_tsz
+      - bill_type
+      - bill_type_id
+      - amount
+      - currency_code
+  EtsyUserAccount:
     type: object
+    title: EtsyUserAccount
+    description: Используется для отображения Etsy аккаунта.
+    x-examples:
+      Example:
+        id: string
+        marketplace_user_account:
+          id: string
+          marketplace_name: string
+          username: string
+          user: 0
+          marketplace: 0
+        user_info:
+          id: string
+          feedback_info:
+            count: 0
+            score: 0
+          user_id: string
+          login_name: string
+          primary_email: user@example.com
+          feedback_count: 0
+          feedback_score: 0
+          creation_tsz: '2020-05-18T07:33:39Z'
+        billing_overview:
+          is_overdue: true
+          currency_code: USD
+          overdue_balance: 0
+          balance_due: 0
+          total_balance: 0
+          date_due: '2020-05-18T07:33:39Z'
+        bill_charges:
+          - creation_tsz: '2020-05-18T07:33:39Z'
+            last_modified_tsz: '2020-05-18T07:33:39Z'
+            bill_type: listing
+            bill_type_id: string
+            amount: 0
+            currency_code: USD
+        access_token: string
+        access_token_secret: string
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор аккаунта Etsy.
       marketplace_user_account:
         $ref: '#/definitions/MarketplaceUserAccount'
       user_info:
@@ -14488,6 +14765,7 @@ definitions:
         $ref: '#/definitions/EtsyUserBillingOverview'
       bill_charges:
         type: array
+        description: Списание по аккаунту Etsy.
         items:
           $ref: '#/definitions/EtsyBillCharge'
       access_token:
@@ -14495,11 +14773,19 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
+        description: Токен доступа.
       access_token_secret:
         title: Секрет токена доступа
         type: string
         maxLength: 50
         minLength: 1
+        description: Секрет токена доступа.
+    required:
+      - user_info
+      - billing_overview
+      - bill_charges
+      - access_token
+      - access_token_secret
   EtsyCategory:
     required:
       - category_id
@@ -15046,24 +15332,50 @@ definitions:
         items:
           type: integer
   PaymentTemplate:
-    required:
-      - channel
     type: object
+    title: PaymentTemplate
+    description: Используется для отображения политики оплаты.
+    x-examples:
+      Example:
+        id: string
+        created: '2020-05-18T07:33:42Z'
+        modified: '2020-05-18T07:33:42Z'
+        status: draft
+        published_at: '2020-05-18T07:33:42Z'
+        payment_template_id: 0
+        allow_bt: true
+        allow_check: true
+        allow_mo: true
+        allow_other: true
+        allow_paypal: true
+        allow_cc: true
+        paypal_email: true
+        name: string
+        first_line: string
+        second_line: string
+        city: string
+        state: string
+        zip: string
+        channel: string
+        country: 0
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор политики оплаты.
       created:
         title: Created
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время создания.
       modified:
         title: Modified
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -15072,96 +15384,132 @@ definitions:
           - ready_to_be_published
           - published
           - update_required
+        description: Статус.
       published_at:
         title: Время публикации
         type: string
         format: date-time
+        description: Время публикации.
       payment_template_id:
         title: ID политики оплаты в системе Etsy
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Идентификатор политики оплаты в системе Etsy.
       allow_bt:
         title: Принимает банковские переводы
         type: boolean
+        description: Принимает банковские переводы.
       allow_check:
         title: Принимает чеки
         type: boolean
+        description: Принимает чеки.
       allow_mo:
         title: Принимает платежные поручения
         type: boolean
+        description: Принимает платежные поручения.
       allow_other:
         title: Принимает другие способы оплаты
         type: boolean
+        description: Принимает другие способы оплаты.
       allow_paypal:
         title: Принимает PayPal
         type: boolean
+        description: Принимает PayPal.
       allow_cc:
         title: Принимает кредитные карты
         type: boolean
+        description: Принимает кредитные карты.
       paypal_email:
         title: PayPal e-mail
         type: boolean
         x-nullable: true
+        description: PayPal e-mail.
       name:
         title: Имя продавца
         type: string
         maxLength: 255
         x-nullable: true
+        description: Имя продавца.
       first_line:
         title: Первая строка адреса
         type: string
         maxLength: 255
         x-nullable: true
+        description: Первая строка адреса.
       second_line:
         title: Вторая строка адреса
         type: string
         maxLength: 255
         x-nullable: true
+        description: Вторая строка адреса.
       city:
         title: Город
         type: string
         maxLength: 255
         x-nullable: true
+        description: Город.
       state:
         title: Область
         type: string
         maxLength: 255
         x-nullable: true
+        description: Область.
       zip:
         title: Почтовый индекс
         type: string
         maxLength: 255
         x-nullable: true
+        description: Почтовый индекс.
       channel:
         title: Магазин
         type: string
         format: uuid
+        description: Идентификатор канала продаж.
       country:
         title: Страна
         type: integer
         x-nullable: true
-  ShippingTemplate:
+        description: Идентификатор страны.
     required:
-      - title
-      - marketplace_user_account
+      - channel
+  ShippingTemplate:
     type: object
+    title: ShippingTemplate
+    description: Используется для отображения политики доставки.
+    x-examples:
+      Example:
+        id: string
+        created: '2020-05-18T07:33:42Z'
+        modified: '2020-05-18T07:33:42Z'
+        status: draft
+        published_at: '2020-05-18T07:33:42Z'
+        shipping_template_id: string
+        title: string
+        max_processing_days: 0
+        min_processing_days: 0
+        processing_days_display_label: string
+        marketplace_user_account: string
+        origin_country: 0
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор политики доставки.
       created:
         title: Created
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время создания.
       modified:
         title: Modified
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -15170,64 +15518,88 @@ definitions:
           - ready_to_be_published
           - published
           - update_required
+        description: Статус.
       published_at:
         title: Время публикации
         type: string
         format: date-time
+        description: Время публикации.
       shipping_template_id:
         title: ID политики доставки
         type: string
         maxLength: 30
         x-nullable: true
+        description: Идентификатор политики доставки в системе Etsy.
       title:
         title: Название политики
         type: string
         maxLength: 100
         minLength: 1
+        description: Название политики доставки.
       max_processing_days:
         title: Максимальное число дней на обработку заказа
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Максимальное число дней на обработку заказа.
       min_processing_days:
         title: Минимальное число дней на обработку заказа
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Минимальное число дней на обработку заказа.
       processing_days_display_label:
         title: Отображаемое число дней на обработку заказа
         type: string
         maxLength: 100
         x-nullable: true
+        description: Отображаемое число дней на обработку заказа.
       marketplace_user_account:
         title: Marketplace user account
         type: string
         format: uuid
+        description: Идентификатор маркетплейс аккаунта пользователя.
       origin_country:
         title: 'Страна, из которой отравляется заказ'
         type: integer
         x-nullable: true
-  ShippingTemplateEntry:
+        description: 'Идентификатор страны, из которой отравляется заказ.'
     required:
-      - primary_cost
-      - secondary_cost
-      - shipping_template
+      - title
+      - marketplace_user_account
+  ShippingTemplateEntry:
     type: object
+    title: ShippingTemplateEntry
+    description: Используется для отображения записей политик доставки.
+    x-examples:
+      Example:
+        id: string
+        is_removed: true
+        shipping_template_entry_id: string
+        currency_code: RUB
+        primary_cost: 0
+        secondary_cost: 0
+        shipping_template: string
+        destination_country: 0
+        destination_region: 0
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор записи.
       is_removed:
         title: Is removed
         type: boolean
+        description: Запись удалена.
       shipping_template_entry_id:
         title: ID записи политики доставки
         type: string
         maxLength: 30
         x-nullable: true
+        description: Идентификатор записи в системе Etsy.
       currency_code:
         title: Код валюты
         type: string
@@ -15240,24 +15612,34 @@ definitions:
           - CNY
           - AUD
           - CAD
+        description: Код валюты.
       primary_cost:
         title: Плата за одиночную доставку
         type: number
+        description: Плата за одиночную доставку.
       secondary_cost:
         title: Плата за совместную доставку
         type: number
+        description: Плата за совместную доставку.
       shipping_template:
         title: Политика доставки
         type: string
         format: uuid
+        description: Идентификатор политики доставки.
       destination_country:
         title: 'Страна, в которую отравляется заказ'
         type: integer
         x-nullable: true
+        description: 'Идентификатор страны, в которую отравляется заказ.'
       destination_region:
         title: 'Регион, в который отравляется заказ'
         type: integer
         x-nullable: true
+        description: 'Идентификатор региона, в который отравляется заказ.'
+    required:
+      - primary_cost
+      - secondary_cost
+      - shipping_template
   BaseEtsyRegion:
     required:
       - region_id
