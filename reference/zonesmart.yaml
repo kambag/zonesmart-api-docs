@@ -10,7 +10,7 @@ info:
 host: zonesmart.su
 schemes:
   - https
-basePath: /
+basePath: /api
 consumes:
   - application/json
 produces:
@@ -546,7 +546,7 @@ paths:
   /v1/ebay/account/:
     get:
       operationId: v1_ebay_account_list
-      description: Данный Endpoint используется для получения списка аккаунтов eBay.
+      description: Получение списка аккаунтов eBay.
       parameters:
         - name: limit
           in: query
@@ -657,235 +657,32 @@ paths:
         - ebay_account
     parameters: []
   /v1/ebay/account/complete/:
-    get:
-      operationId: v1_ebay_account_complete
-      description: 'Авторизовывает пользователя с помощью кода, который eBay возвращает при авторизации.'
-      parameters:
-        - name: limit
-          in: query
-          description: Количество результатов для возврата на страницу.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: Начальный индекс для возврата результатов.
-          required: false
-          type: integer
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-v1-ebay-account-complete
       responses:
         '200':
-          description: ''
-          schema:
-            type: object
-            properties:
-              count:
-                type: integer
-                description: Кол-во вернувшихся объектов.
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-                description: Страница для получение следующей группы объектов.
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-                description: Страница для получение предыдущей группы объектов.
-              results:
-                type: array
-                description: Список аккаунтов eBay.
-                items:
-                  $ref: '#/definitions/EbayUserAccount'
-            required:
-              - count
-              - results
-          examples:
-            Example:
-              count: 1
-              next: 'http://example.com'
-              previous: 'http://example.com'
-              results:
-                - id: string
-                  marketplace_user_account:
-                    id: string
-                    user: 0
-                    marketplace: 0
-                  profile:
-                    businessAccount:
-                      address:
-                        addressLine1: string
-                        addressLine2: string
-                        city: string
-                        county: string
-                        postalCode: string
-                        stateOrProvince: string
-                        countryCode: AD
-                      primaryContact:
-                        firstName: string
-                        lastName: string
-                      primaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      secondaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      doingBusinessAs: string
-                      email: user@example.com
-                      name: string
-                      website: string
-                    individualAccount:
-                      primaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      registrationAddress:
-                        addressLine1: string
-                        addressLine2: string
-                        city: string
-                        county: string
-                        postalCode: string
-                        stateOrProvince: string
-                        countryCode: AD
-                      secondaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      firstName: string
-                      lastName: string
-                      email: user@example.com
-                    account_type: BUSINESS
-                    registrationMarketplaceId: EBAY_US
-                    status: CONFIRMED
-                    userId: string
-                    username: string
-                    ebay_user_account: string
-                  access_token: string
-                  access_token_expiry: '2020-05-12T10:19:59Z'
-                  refresh_token: string
-                  refresh_token_expiry: '2020-05-12T10:19:59Z'
-                  sandbox: true
-      summary: Авторизация пользователя ebay
-      tags:
-        - ebay_account
-    parameters: []
+          description: OK
+      description: 'Создание аккаунта eBay с помощью кода, возвращаемым eBay при авторизации.'
+      parameters:
+        - type: string
+          in: query
+          name: code
+          description: 'Код, полученный от eBay'
   /v1/ebay/account/login/:
-    get:
-      operationId: v1_ebay_account_login
-      description: Перенаправляет пользователя на сайт eBay для авторизации.
-      parameters:
-        - name: limit
-          in: query
-          description: Количество результатов для возврата на страницу.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: Начальный индекс для возврата результатов.
-          required: false
-          type: integer
+    parameters: []
+    post:
+      summary: ''
+      operationId: post-v1-ebay-account-login
       responses:
         '200':
-          description: ''
-          schema:
-            type: object
-            properties:
-              count:
-                type: integer
-                description: Кол-во вернувшихся объектов.
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-                description: Страница для получение следующей группы объектов.
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-                description: Страница для получение предыдущей группы объектов.
-              results:
-                type: array
-                description: Список аккаунтов eBay.
-                items:
-                  $ref: '#/definitions/EbayUserAccount'
-            required:
-              - count
-              - results
-          examples:
-            Example:
-              count: 1
-              next: 'http://example.com'
-              previous: 'http://example.com'
-              results:
-                - id: string
-                  marketplace_user_account:
-                    id: string
-                    user: 0
-                    marketplace: 0
-                  profile:
-                    businessAccount:
-                      address:
-                        addressLine1: string
-                        addressLine2: string
-                        city: string
-                        county: string
-                        postalCode: string
-                        stateOrProvince: string
-                        countryCode: AD
-                      primaryContact:
-                        firstName: string
-                        lastName: string
-                      primaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      secondaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      doingBusinessAs: string
-                      email: user@example.com
-                      name: string
-                      website: string
-                    individualAccount:
-                      primaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      registrationAddress:
-                        addressLine1: string
-                        addressLine2: string
-                        city: string
-                        county: string
-                        postalCode: string
-                        stateOrProvince: string
-                        countryCode: AD
-                      secondaryPhone:
-                        countryCode: AD
-                        number: string
-                        phoneType: MOBILE
-                      firstName: string
-                      lastName: string
-                      email: user@example.com
-                    account_type: BUSINESS
-                    registrationMarketplaceId: EBAY_US
-                    status: CONFIRMED
-                    userId: string
-                    username: string
-                    ebay_user_account: string
-                  access_token: string
-                  access_token_expiry: '2020-05-12T10:19:59Z'
-                  refresh_token: string
-                  refresh_token_expiry: '2020-05-12T10:19:59Z'
-                  sandbox: true
-      summary: Перенаправляет на ebay для авторизации
-      tags:
-        - ebay_account
-    parameters: []
+          description: OK
+      description: Перенаправление пользователя на сайт eBay для авторизации.
   '/v1/ebay/account/{id}/':
     get:
       operationId: v1_ebay_account_read
-      description: Данный Endpoint используется для получения аккаунта eBay по id.
+      description: Получение аккаунта eBay по id.
       parameters: []
       responses:
         '200':
@@ -966,108 +763,6 @@ paths:
         '204':
           description: ''
       summary: Удаление аккаунта eBay
-      tags:
-        - ebay_account
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-        format: uuid
-        description: Идентификатор аккаунта eBay.
-  '/v1/ebay/account/{id}/remote_sync/':
-    post:
-      operationId: v1_ebay_account_remote_sync
-      description: Данный Endpoint используется для синхронизации аккаунта zonesmart (EbayUserAccount) и ebay.
-      parameters:
-        - in: body
-          name: body
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-          x-examples:
-            Example:
-              code: 123-123-123-123
-        - in: body
-          name: body
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-          x-examples:
-            example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayUserAccount'
-          examples:
-            Example:
-              id: string
-              marketplace_user_account:
-                id: string
-                user: 0
-                marketplace: 0
-              profile:
-                businessAccount:
-                  address:
-                    addressLine1: string
-                    addressLine2: string
-                    city: string
-                    county: string
-                    postalCode: string
-                    stateOrProvince: string
-                    countryCode: AD
-                  primaryContact:
-                    firstName: string
-                    lastName: string
-                  primaryPhone:
-                    countryCode: AD
-                    number: string
-                    phoneType: MOBILE
-                  secondaryPhone:
-                    countryCode: AD
-                    number: string
-                    phoneType: MOBILE
-                  doingBusinessAs: string
-                  email: user@example.com
-                  name: string
-                  website: string
-                individualAccount:
-                  primaryPhone:
-                    countryCode: AD
-                    number: string
-                    phoneType: MOBILE
-                  registrationAddress:
-                    addressLine1: string
-                    addressLine2: string
-                    city: string
-                    county: string
-                    postalCode: string
-                    stateOrProvince: string
-                    countryCode: AD
-                  secondaryPhone:
-                    countryCode: AD
-                    number: string
-                    phoneType: MOBILE
-                  firstName: string
-                  lastName: string
-                  email: user@example.com
-                account_type: BUSINESS
-                registrationMarketplaceId: EBAY_US
-                status: CONFIRMED
-                userId: string
-                username: string
-                ebay_user_account: string
-              access_token: string
-              access_token_expiry: '2020-05-13T11:09:54Z'
-              refresh_token: string
-              refresh_token_expiry: '2020-05-13T11:09:54Z'
-              sandbox: true
-      summary: Синхронизация аккаунта eBay
       tags:
         - ebay_account
     parameters:
@@ -8654,6 +8349,12 @@ paths:
         in: path
         required: true
         type: string
+  /v1/ebay/account/get_login_url/:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-v1-ebay-account-get_login_url
 definitions:
   TokenObtainPair:
     type: object
