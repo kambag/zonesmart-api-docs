@@ -659,26 +659,30 @@ paths:
   /v1/ebay/account/complete/:
     parameters: []
     post:
-      summary: ''
+      summary: Подключение или обновление аккаунта eBay
       operationId: post-v1-ebay-account-complete
       responses:
         '200':
           description: OK
-      description: 'Создание аккаунта eBay с помощью кода, возвращаемым eBay при авторизации.'
+      description: 'Создание или обновление аккаунта eBay с помощью кода, возвращаемым eBay при авторизации.'
       parameters:
         - type: string
           in: query
           name: code
           description: 'Код, полученный от eBay'
+      tags:
+        - ebay_account
   /v1/ebay/account/login/:
     parameters: []
     post:
-      summary: ''
+      summary: Переход на страницу подключения аккаунта eBay
       operationId: post-v1-ebay-account-login
       responses:
-        '200':
-          description: OK
+        '302':
+          description: Found
       description: Перенаправление пользователя на сайт eBay для авторизации.
+      tags:
+        - ebay_account
   '/v1/ebay/account/{id}/':
     get:
       operationId: v1_ebay_account_read
@@ -8351,10 +8355,19 @@ paths:
         type: string
   /v1/ebay/account/get_login_url/:
     get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
+      summary: Получение ссылки для подключения аккаунта eBay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: 'https://auth.ebay.com/oauth2/authorize?client_id=Zonesmar-testapp-PRD-e447bf109-5c790707&redirect_uri=Zonesmart-Zonesmar-testap-mymfabpe&response_type=code&prompt=login&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.marketing.readonly+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.marketing+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.inventory.readonly+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.inventory+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.account.readonly+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.account+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.fulfillment.readonly+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.fulfillment+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.analytics.readonly+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.finances+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fsell.payment.dispute+https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope%2Fcommerce.identity.readonly'
       operationId: get-v1-ebay-account-get_login_url
+      description: Получение ссылки на страницу авторизации аккаунта eBay.
+      parameters: []
 definitions:
   TokenObtainPair:
     type: object
