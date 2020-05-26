@@ -2420,7 +2420,7 @@ paths:
           type: integer
       responses:
         '200':
-          description: ''
+          description: Список сообщений
           schema:
             required:
               - count
@@ -2463,32 +2463,15 @@ paths:
           in: query
           name: folder_ids
           description: 'Из каких папок скачивать сообщения (по умолчанию из папок "Входящие" и "Исходящие")'
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/BaseEbayMessage'
       tags:
         - ebay_messages
       summary: Скачивание сообщений eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters: []
   /v1/ebay/message/summary/:
     get:
@@ -2504,11 +2487,8 @@ paths:
           type: string
       responses:
         '200':
-          description: ''
+          description: Сводка по количеству сообщений
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
@@ -2522,9 +2502,29 @@ paths:
                 format: uri
                 x-nullable: true
               results:
-                type: array
-                items:
-                  $ref: '#/definitions/BaseEbayMessage'
+                type: object
+                properties:
+                  inbox:
+                    type: object
+                    description: 'Информация о папке "Входящие"'
+                    properties:
+                      total:
+                        type: string
+                        description: Количестводящих сообщений
+                      read:
+                        type: string
+                        description: Количество прочитанных сообщений
+                      unread:
+                        type: string
+                        description: Количество непрочитанных сообщений
+                      replied:
+                        type: string
+                        description: Количество отвеченных сообщений
+                  sent:
+                    type: string
+                    description: Количество отправленных сообщений
+            required:
+              - count
       summary: Получение сводки по количеству сообщений eBay
       tags:
         - ebay_messages
@@ -2556,19 +2556,6 @@ paths:
       operationId: v1_ebay_negotiation_message_remote_mark_as_read
       description: Отмечивание одного или нескольких сообщений eBay как прочитанных.
       parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayMessage'
-          x-examples: {}
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayMessage'
-          x-examples:
-            example-1: {}
         - type: string
           in: query
           name: marketplace_user_account_id
@@ -2579,14 +2566,15 @@ paths:
           name: message_ids
           required: true
           description: 'ID сообщений eBay, которые нужно отметить прочитанными'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayMessage'
       summary: Отметить сообщения eBay прочитанными
       tags:
         - ebay_messages
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters: []
   '/v1/ebay/messages/{message_id}/':
     get:
@@ -2612,31 +2600,35 @@ paths:
       operationId: v1_ebay_negotiation_message_remote_reply
       description: Отправить ответ на входящее сообщение eBay.
       parameters:
-        - name: data
-          in: body
-          required: true
+        - in: body
+          name: body
           schema:
-            $ref: '#/definitions/BaseEbayMessage'
-          description: ''
+            type: object
+            properties:
+              message_body:
+                type: string
           x-examples:
             example-1:
-              message_body: Test message
-        - name: data
-          in: body
-          required: true
+              message_body: Yet another test
+          description: Содержимое ответного сообщения
+        - in: body
+          name: body
           schema:
-            $ref: '#/definitions/BaseEbayMessage'
-          description: ''
+            type: object
+            properties:
+              message_body:
+                type: string
           x-examples:
             example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayMessage'
       tags:
         - ebay_messages
       summary: Ответ на сообщение eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: message_id
         in: path
