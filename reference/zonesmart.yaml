@@ -10525,14 +10525,62 @@ definitions:
         lastName: string
         email: user@example.com
   EbayUserAccountProfile:
-    title: Profile
+    title: EbayUserAccountInfo
     type: object
     description: Используется для отображения информации о пользоваетеле.
+    x-examples:
+      Example:
+        businessAccount:
+          address:
+            addressLine1: string
+            addressLine2: string
+            city: string
+            county: string
+            postalCode: string
+            stateOrProvince: string
+            countryCode: AD
+          primaryContact:
+            firstName: string
+            lastName: string
+          primaryPhone:
+            countryCode: AD
+            number: string
+            phoneType: MOBILE
+          secondaryPhone:
+            countryCode: AD
+            number: string
+            phoneType: MOBILE
+          doingBusinessAs: string
+          email: user@example.com
+          name: string
+          website: string
+        individualAccount:
+          primaryPhone:
+            countryCode: AD
+            number: string
+            phoneType: MOBILE
+          registrationAddress:
+            addressLine1: string
+            addressLine2: string
+            city: string
+            county: string
+            postalCode: string
+            stateOrProvince: string
+            countryCode: AD
+          secondaryPhone:
+            countryCode: AD
+            number: string
+            phoneType: MOBILE
+          firstName: string
+          lastName: string
+          email: user@example.com
+        account_type: BUSINESS
+        registrationMarketplaceId: EBAY_US
+        status: CONFIRMED
+        userId: string
+        username: string
+        ebay_user_account: string
     properties:
-      businessAccount:
-        $ref: '#/definitions/BusinessAccount'
-      individualAccount:
-        $ref: '#/definitions/IndividualAccount'
       account_type:
         title: Тип аккаунта
         type: string
@@ -10541,7 +10589,7 @@ definitions:
           - INDIVIDUAL
         x-nullable: true
         description: Тип аккаунта.
-      registrationMarketplaceId:
+      registration_domain:
         title: Домен регистрации
         type: string
         enum:
@@ -10610,108 +10658,80 @@ definitions:
         maxLength: 100
         minLength: 1
         description: Имя пользователя.
-      ebay_user_account:
-        title: Ebay user account
+      address:
+        type: object
+        description: Адрес
+        properties:
+          addressLine1:
+            type: string
+          addressLine2:
+            type: string
+          city:
+            type: string
+          country:
+            type: string
+            description: Двухбуквенный код страны
+          county:
+            type: string
+          postalCode:
+            type: string
+            description: Почтовый индекс
+          stateOrProvince:
+            type: string
+      contact:
+        type: object
+        description: |
+          Персональные данные
+        properties:
+          email:
+            type: string
+            format: email
+          doing_business_as:
+            type: string
+          business_account_name:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          primary_phone:
+            type: string
+          secondary_phone:
+            type: string
+          website:
+            type: string
+      selling:
+        type: object
+        properties:
+          selling_limit_amount:
+            type: number
+            description: Месячное ограничение на суммарную стоимость опубликованных листингов
+          selling_limit_quantity:
+            type: integer
+            description: Месячное ограничение на суммарное количество опубликованных листингов
+          total_sold_amount:
+            type: number
+            description: Суммарная стоимость проданных за месяц товаров
+          total_sold_quantity:
+            type: integer
+            description: Суммарное количество проданных за месяц товаров
+          until_amount_limit:
+            type: number
+            description: Остаток до месячного лимита по суммарной стоимости
+          until_quantity_limit:
+            description: Остаток до месячного лимита по суммарному количеству
+            type: integer
+      registration_completed:
         type: string
-        format: uuid
-        description: Идентификатор аккаунта eBay.
+        description: Регистрация аккаунта полностью завершена
     required:
-      - registrationMarketplaceId
+      - registration_domain
       - userId
       - username
-    x-examples:
-      Example:
-        businessAccount:
-          address:
-            addressLine1: string
-            addressLine2: string
-            city: string
-            county: string
-            postalCode: string
-            stateOrProvince: string
-            countryCode: AD
-          primaryContact:
-            firstName: string
-            lastName: string
-          primaryPhone:
-            countryCode: AD
-            number: string
-            phoneType: MOBILE
-          secondaryPhone:
-            countryCode: AD
-            number: string
-            phoneType: MOBILE
-          doingBusinessAs: string
-          email: user@example.com
-          name: string
-          website: string
-        individualAccount:
-          primaryPhone:
-            countryCode: AD
-            number: string
-            phoneType: MOBILE
-          registrationAddress:
-            addressLine1: string
-            addressLine2: string
-            city: string
-            county: string
-            postalCode: string
-            stateOrProvince: string
-            countryCode: AD
-          secondaryPhone:
-            countryCode: AD
-            number: string
-            phoneType: MOBILE
-          firstName: string
-          lastName: string
-          email: user@example.com
-        account_type: BUSINESS
-        registrationMarketplaceId: EBAY_US
-        status: CONFIRMED
-        userId: string
-        username: string
-        ebay_user_account: string
   EbayUserAccount:
     type: object
     title: EbayUserAccount
     description: Используется для отображения аккаунтов eBay.
-    properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        description: Идентификатор аккаунта eBay.
-      marketplace_user_account:
-        $ref: '#/definitions/MarketplaceUserAccount'
-      profile:
-        $ref: '#/definitions/EbayUserAccountProfile'
-      access_token:
-        title: Токен доступа
-        type: string
-        maxLength: 2500
-        description: Токен доступа.
-      access_token_expiry:
-        title: Токен доступа годен до
-        type: string
-        format: date-time
-        description: Дата и время истечения токена доступа.
-      refresh_token:
-        title: Токен обновления
-        type: string
-        maxLength: 2500
-        description: Токен обновления.
-      refresh_token_expiry:
-        title: Токен обновления годен до
-        type: string
-        format: date-time
-        description: Дата и время истечения токена обновления.
-      sandbox:
-        title: Аккаунт eBay Sandbox
-        type: boolean
-        description: Аккаунт eBay Sandbox.
-    required:
-      - profile
-      - sandbox
     x-examples:
       Example:
         id: string
@@ -10775,6 +10795,41 @@ definitions:
         refresh_token: string
         refresh_token_expiry: '2020-05-12T10:19:59Z'
         sandbox: true
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор аккаунта eBay.
+      marketplace_user_account:
+        $ref: '#/definitions/MarketplaceUserAccount'
+      profile:
+        $ref: '#/definitions/EbayUserAccountProfile'
+      access_token_expiry:
+        title: Токен доступа годен до
+        type: string
+        format: date-time
+        description: Дата и время истечения токена доступа.
+      refresh_token_expiry:
+        title: Токен обновления годен до
+        type: string
+        format: date-time
+        description: Дата и время истечения токена обновления.
+      sandbox:
+        title: Аккаунт eBay Sandbox
+        type: boolean
+        description: Является ли тестовым аккаунтом eBay Sandbox
+      created:
+        type: string
+        format: date-time
+        description: Дата и время создания
+      modified:
+        type: string
+        format: date-time
+        description: Дата и время последнего обновления
+    required:
+      - profile
+      - sandbox
   EbayCategory:
     required:
       - domain_id
