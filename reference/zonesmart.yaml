@@ -2362,51 +2362,52 @@ paths:
         in: path
         required: true
         type: string
-  /v1/ebay/negotiation/message/:
+  /v1/ebay/messages/:
     get:
       operationId: v1_ebay_negotiation_message_list
-      description: ''
+      description: Получение списка сообщений eBay из базы данных.
       parameters:
         - name: search
           in: query
-          description: A search term.
+          description: 'Поиск сообщения по отправителю, заголовку и содержимому'
           required: false
           type: string
         - name: marketplace_user_account
           in: query
-          description: ''
+          description: |
+            ID аккаунта маркетплейса
           required: false
           type: string
         - name: folder_id
           in: query
-          description: ''
+          description: ID папки
           required: false
-          type: string
+          type: integer
         - name: read
           in: query
-          description: ''
+          description: Прочитано ли сообщение
           required: false
-          type: string
+          type: boolean
         - name: replied
           in: query
-          description: ''
+          description: Отправлен ли на сообщение ответ
           required: false
-          type: string
+          type: boolean
         - name: start_date
           in: query
-          description: ''
+          description: 'Выводить сообщения, полученные не ранее этой даты'
           required: false
           type: string
         - name: end_date
           in: query
-          description: ''
+          description: 'Выводить сообщения, полученные не позднее этой даты'
           required: false
           type: string
         - name: response_enabled
           in: query
-          description: ''
+          description: Можно ли ответить на сообщение
           required: false
-          type: string
+          type: boolean
         - name: limit
           in: query
           description: Number of results to return per page.
@@ -2440,64 +2441,28 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/EbayMessageList'
+      summary: Получение списка сообщений eBay
       tags:
-        - work_in_process
+        - ebay_messages
     parameters: []
-  '/v1/ebay/negotiation/message/remote_download_list/{marketplace_user_account_id}/':
+  /v1/ebay/messages/remote_download_list/:
     get:
       operationId: v1_ebay_negotiation_message_remote_download_list
-      description: ''
+      description: Скачивание всех сообщений eBay в базу данных за указанный срок и из указанных папок.
       parameters:
-        - name: search
+        - type: string
           in: query
-          description: A search term.
-          required: false
-          type: string
-        - name: marketplace_user_account
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+        - type: integer
           in: query
-          description: ''
-          required: false
-          type: string
-        - name: folder_id
+          name: days_ago
+          description: За какое количество дней до настоящего времени полученные сообщения eBay нужно скачивать (по умолчанию за последние 90 дней)
+        - type: array
           in: query
-          description: ''
-          required: false
-          type: string
-        - name: read
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: replied
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: start_date
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: end_date
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: response_enabled
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+          name: folder_ids
+          description: 'Из каких папок скачивать сообщения (по умолчанию из папок "Входящие" и "Исходящие")'
       responses:
         '200':
           description: ''
@@ -2522,69 +2487,21 @@ paths:
                 items:
                   $ref: '#/definitions/BaseEbayMessage'
       tags:
-        - work_in_process
-    parameters:
-      - name: marketplace_user_account_id
-        in: path
-        required: true
-        type: string
-  /v1/ebay/negotiation/message/summary/:
+        - ebay_messages
+      summary: Скачивание сообщений eBay
+    parameters: []
+  /v1/ebay/message/summary/:
     get:
       operationId: v1_ebay_negotiation_message_summary
       description: |-
         Возвращает кол-во сообщений в папках inbox (входящие) и sent (исходящие),
         а также фильтрует входящие по подпапкам: read (прочитано), unread (непрочитано) и replied (отвечено).
       parameters:
-        - name: search
+        - name: marketplace_user_account_id
           in: query
-          description: A search term.
-          required: false
+          description: ID аккаунта маркетплейса
+          required: true
           type: string
-        - name: marketplace_user_account
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: folder_id
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: read
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: replied
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: start_date
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: end_date
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: response_enabled
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
       responses:
         '200':
           description: ''
@@ -2608,85 +2525,125 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseEbayMessage'
+      summary: Получение сводки по количеству сообщений eBay
       tags:
-        - work_in_process
+        - ebay_messages
     parameters: []
-  '/v1/ebay/negotiation/message/{marketplace_user_account}/remote_delete/':
+  /v1/ebay/messages/remote_delete/:
     delete:
       operationId: v1_ebay_negotiation_message_remote_delete
-      description: ''
-      parameters: []
+      description: Удаление одного или нескольких сообщений eBay одновременно из базы данных и с eBay.
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+        - type: array
+          in: query
+          name: message_ids
+          required: true
+          description: 'ID сообщений eBay, которые нужно удалить'
       responses:
         '204':
           description: ''
+      summary: Удаление сообщений eBay
       tags:
-        - work_in_process
-    parameters:
-      - name: marketplace_user_account
-        in: path
-        required: true
-        type: string
-  '/v1/ebay/negotiation/message/{marketplace_user_account}/remote_mark_as_read/':
+        - ebay_messages
+    parameters: []
+  /v1/ebay/messages/remote_mark_as_read/:
     post:
       operationId: v1_ebay_negotiation_message_remote_mark_as_read
-      description: ''
+      description: Отмечивание одного или нескольких сообщений eBay как прочитанных.
       parameters:
         - name: data
           in: body
           required: true
           schema:
             $ref: '#/definitions/BaseEbayMessage'
+          x-examples: {}
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/BaseEbayMessage'
+          x-examples:
+            example-1: {}
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+          required: true
+        - type: array
+          in: query
+          name: message_ids
+          required: true
+          description: 'ID сообщений eBay, которые нужно отметить прочитанными'
       responses:
         '201':
           description: ''
           schema:
             $ref: '#/definitions/BaseEbayMessage'
+      summary: Отметить сообщения eBay прочитанными
       tags:
-        - work_in_process
-    parameters:
-      - name: marketplace_user_account
-        in: path
-        required: true
-        type: string
-  '/v1/ebay/negotiation/message/{message_id}/':
+        - ebay_messages
+    parameters: []
+  '/v1/ebay/messages/{message_id}/':
     get:
       operationId: v1_ebay_negotiation_message_read
-      description: ''
+      description: Получение из базы данных сообщения eBay по его ID.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseEbayMessage'
+      summary: Получение сообщения eBay
       tags:
-        - work_in_process
+        - ebay_messages
     parameters:
       - name: message_id
         in: path
         required: true
         type: string
-  '/v1/ebay/negotiation/message/{message_id}/remote_reply/':
+        description: ID сообщения
+  '/v1/ebay/messages/{message_id}/remote_reply/':
     post:
       operationId: v1_ebay_negotiation_message_remote_reply
-      description: ''
+      description: Отправить ответ на входящее сообщение eBay.
       parameters:
         - name: data
           in: body
           required: true
           schema:
             $ref: '#/definitions/BaseEbayMessage'
+          description: ''
+          x-examples:
+            example-1:
+              message_body: Test message
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/BaseEbayMessage'
+          description: ''
+          x-examples:
+            example-1: {}
       responses:
         '201':
           description: ''
           schema:
             $ref: '#/definitions/BaseEbayMessage'
       tags:
-        - work_in_process
+        - ebay_messages
+      summary: Ответ на сообщение eBay
     parameters:
       - name: message_id
         in: path
         required: true
         type: string
+        description: |
+          ID входящего сообщения от пользователя eBay, на которое отправляется ответ
   /v1/ebay/notification/process/:
     post:
       operationId: v1_ebay_notification_process_create
