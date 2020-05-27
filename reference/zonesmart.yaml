@@ -7779,6 +7779,115 @@ paths:
           name: marketplace_user_account_id
           description: ID аккаунта маркетплейса
           required: true
+  /v1/ebay/billing/summary/:
+    get:
+      summary: Получение сводки по балансу аккаунта eBay
+      tags:
+        - ebay_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              is_overdue:
+                type: boolean
+                description: Просрочена ли оплата
+              current_balance:
+                type: number
+                description: Текущий баланс
+              overdue_balance:
+                type: number
+                description: Просроченный баланс
+              currency_code:
+                type: string
+                description: Код валюты
+              payment_method:
+                type: string
+                description: Метод оплаты
+      operationId: get-v1-ebay-billing-summary
+      description: 'Получение информации о балансе, задолженности и методе оплаты счетов аккаунта eBay.'
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+          required: true
+  /v1/ebay/billing/:
+    get:
+      summary: Получение денежный списаний аккаунта eBay
+      tags:
+        - ebay_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+              previous:
+                type: string
+              results:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    charge_type:
+                      type: string
+                      description: Тип списания
+                    charge_id:
+                      type: string
+                      description: ID списания в системе eBay
+                    title:
+                      type: string
+                      description: 'Название листинга, за выкладывание которого произошло списание'
+                    description:
+                      type: string
+                      description: Описание
+                    creation:
+                      type: string
+                      description: Дата и время списания
+                    vat_percent:
+                      type: string
+                      description: НДС
+                    amount:
+                      type: string
+                      description: Сумма списания
+                    currency_code:
+                      type: string
+                      description: Код валюты
+      operationId: get-v1-ebay-billing
+      description: Получение списка денежный списаний аккаунта eBay.
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID маркетплейса
+          required: true
+  /v1/ebay/billing/remote_download_list/:
+    get:
+      summary: Получение денежный списаний аккаунта с eBay
+      tags:
+        - ebay_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-ebay-billing-remote_download_list
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+          required: true
+      description: Получение денежный списаний аккаунта с eBay.
 definitions:
   TokenObtainPair:
     type: object
