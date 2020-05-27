@@ -7737,7 +7737,8 @@ paths:
   /v1/ebay/policy/fulfillment/remote_get_shipping_details/:
     get:
       summary: Получение списков курьерских служб и сервисов
-      tags: []
+      tags:
+        - ebay_fulfillment_policy
       responses:
         '200':
           description: OK
