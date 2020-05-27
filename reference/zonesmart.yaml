@@ -7871,7 +7871,7 @@ paths:
           required: true
   /v1/ebay/billing/remote_download_list/:
     get:
-      summary: Получение денежный списаний аккаунта с eBay
+      summary: Скачивание денежный списаний аккаунта с eBay
       tags:
         - ebay_billing
       responses:
@@ -7887,7 +7887,7 @@ paths:
           name: marketplace_user_account_id
           description: ID аккаунта маркетплейса
           required: true
-      description: Получение денежный списаний аккаунта с eBay.
+      description: Скачивание денежный списаний аккаунта с eBay.
 definitions:
   TokenObtainPair:
     type: object
