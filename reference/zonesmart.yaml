@@ -7696,7 +7696,7 @@ paths:
                     type: array
                     items:
                       type: array
-                      minItems: 0
+                      minItems: 2
                       maxItems: 2
                       items:
                         type: string
@@ -7705,28 +7705,73 @@ paths:
                     type: array
                     items:
                       type: array
-                      minItems: 0
+                      minItems: 2
                       maxItems: 2
                       items:
                         type: string
                         example: '["CN", "China"]'
                   excluded_regions:
-                    type: array
-                    items:
-                      type: array
-                      minItems: 0
-                      maxItems: 2
-                      items:
-                        type: string
-                        example: '["TJ", "Tajikistan"]'
-                  '':
-                    type: string
+                    type: object
+                    properties:
+                      '':
+                        type: array
+                        items:
+                          type: array
+                          minItems: 2
+                          maxItems: 2
+                          items:
+                            type: string
+                            example: '["Africa", "Africa" ]'
               errors:
                 type: string
               warnings:
                 type: string
       operationId: get-v1-ebay-policy-fulfillment-remote_get_general_details
       description: 'Получение различных данных, необходимых пользователю для заполнения формы создания политики фулфилмента eBay (в качестве возможных значений полей формы).'
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+          required: true
+  /v1/ebay/policy/fulfillment/remote_get_shipping_details/:
+    get:
+      summary: Получение списков курьерских служб и сервисов
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              shipping_carriers:
+                type: array
+                items:
+                  type: array
+                  minItems: 2
+                  maxItems: 2
+                  items:
+                    type: string
+                    example: '["UPS",  "UPS"]'
+              shipping_services:
+                type: object
+                properties:
+                  international:
+                    type: object
+                    properties:
+                      '':
+                        type: array
+                        items:
+                          $ref: '#/definitions/EbayFulfillmentPolicyShippingService'
+                  domestic:
+                    type: object
+                    properties:
+                      '':
+                        type: array
+                        items:
+                          $ref: '#/definitions/EbayFulfillmentPolicyShippingService'
+      operationId: get-v1-ebay-policy-fulfillment-remote_get_shipping_details
+      description: 'Получение списков курьерских служб и сервисов, допустимых для использования при создании новой политики фулфилмента eBay.'
       parameters:
         - type: string
           in: query
@@ -16791,3 +16836,24 @@ definitions:
         type: string
         format: uuid
         x-nullable: true
+  EbayFulfillmentPolicyShippingService:
+    title: EbayFulfillmentPolicyShippingService
+    type: object
+    properties:
+      service:
+        type: string
+        description: 'Название сервиса, сохраняемое в базе данных'
+      description:
+        type: string
+        description: Человекочитаемое название сервиса
+      days_min:
+        type: integer
+        description: Минимальное число дней на доставку
+        minimum: 0
+        exclusiveMinimum: true
+      days_max:
+        type: integer
+        description: Максимальное число дней на доставку
+        minimum: 0
+        exclusiveMinimum: true
+    description: 'Сервис доставки, используемый в политике фулфилмента eBay'
