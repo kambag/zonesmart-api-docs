@@ -7888,6 +7888,27 @@ paths:
           description: ID аккаунта маркетплейса
           required: true
       description: Скачивание денежный списаний аккаунта с eBay.
+  /v1/zonesmart/admin/groups/:
+    get:
+      summary: ZonesmartUserGroupsList
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+          examples:
+            example-1:
+              - admin
+              - support
+              - editor
+      operationId: get-v1-zonesmart-admin-groups
+      description: |-
+        Возвращает список всех существующих групп пользователей.
+        Необходимо обладать правами администратора и выше.
 definitions:
   TokenObtainPair:
     type: object
