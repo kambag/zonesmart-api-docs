@@ -7835,6 +7835,8 @@ paths:
             example-1: Пользователь успешно добавлен в группу администраторов.
         '':
           description: Возвращает сообщение об успешном добавлении в группу.
+          examples:
+            example-1: {}
       operationId: post-v1-zonesmart-admin-groups-add_admin
       description: |-
         Добавляет пользователя в группу администраторов.
@@ -7870,7 +7872,7 @@ paths:
           schema:
             type: string
           examples:
-            example-1: Пользователь успешно добавлен в группу администраторов.
+            example-1: Пользователь успешно добавлен в группу поддержки.
       operationId: post-v1-zonesmart-admin-groups-add_support
       parameters:
         - in: body
@@ -7910,6 +7912,114 @@ paths:
       operationId: post-v1-zonesmart-admin-groups-add_editor
       description: |-
         Добавляет пользователя в группу редакторов.
+        Необходимо обладать правами администратора и выше.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              '':
+                type: string
+          x-examples:
+            example-1: {}
+  /v1/zonesmart/admin/groups/delete_admin/:
+    delete:
+      summary: Удаление пользователя из группы администраторов
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно удален из группы администраторов.
+      operationId: delete-v1-zonesmart-admin-groups-delete_admin
+      description: |-
+        Удаляет пользователя из группы администраторов.
+        Необходимо обладать правами суперпользователя.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1: {}
+  /v1/zonesmart/admin/groups/delete_support/:
+    delete:
+      summary: Удаление пользователя из группы поддержки
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно удален из группы поддержки.
+      operationId: delete-v1-zonesmart-admin-groups-delete_support
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              '':
+                type: string
+          x-examples:
+            example-1: {}
+      description: |-
+        Удаляет пользователя из группы поддержки.
+        Необходимо обладать правами администратора и выше.
+  /v1/zonesmart/admin/groups/delete_editor/:
+    delete:
+      summary: Удаление пользователя из группы редакторов
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно удален из группы редакторов.
+      operationId: delete-v1-zonesmart-admin-groups-delete_editor
+      description: |-
+        Удаляет пользователя из группы редакторов.
         Необходимо обладать правами администратора и выше.
       parameters:
         - in: body
