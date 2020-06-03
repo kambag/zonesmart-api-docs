@@ -3726,13 +3726,8 @@ paths:
   /v1/ebay/policy/return/:
     get:
       operationId: v1_ebay_policy_return_list
-      description: Данный Endpoint используется для получения списка политик возврата.
+      description: Данный Endpoint используется для получения списка политик возврата eBay.
       parameters:
-        - name: channel
-          in: query
-          description: Идентификатор канала продаж.
-          required: false
-          type: string
         - name: limit
           in: query
           description: Количество результатов для возврата на страницу.
@@ -3798,12 +3793,12 @@ paths:
                   returnPeriod:
                     unit: string
                     value: 30
-      summary: Получение списка политик возврата
+      summary: Получение списка политик возврата eBay
       tags:
         - ebay_return_policy
     post:
       operationId: v1_ebay_policy_return_create
-      description: Данный Endpoint используется для получения списка политик возврата.
+      description: Данный Endpoint используется для локального создания политики возврата eBay.
       parameters:
         - name: data
           in: body
@@ -3858,11 +3853,11 @@ paths:
                 returnShippingCostPayer: BUYER
               returnPeriod:
                 value: 30
-      summary: Создание политики возврата
+      summary: Локальное создание политики возврата eBay
       tags:
         - ebay_return_policy
     parameters: []
-  '/v1/ebay/policy/return/remote_download_list/{channel_id}/':
+  /v1/ebay/policy/return/remote_download_list/:
     get:
       operationId: v1_ebay_policy_return_remote_download_list
       description: Данный Endpoint используется для скачивания списка политик возврата с eBay.
@@ -3881,13 +3876,7 @@ paths:
           schema:
             type: object
             properties: {}
-    parameters:
-      - name: channel_id
-        in: path
-        required: true
-        type: string
-        description: Идентификатор канала продаж.
-        format: uuid
+    parameters: []
   '/v1/ebay/policy/return/{id}/':
     get:
       operationId: v1_ebay_policy_return_read
@@ -3922,18 +3911,21 @@ paths:
               returnPeriod:
                 unit: string
                 value: 30
-      summary: Получение политики возврата
+        '':
+          schema:
+            $ref: '#/definitions/BaseReturnPolicy'
+      summary: Получение политики возврата eBay
       tags:
         - ebay_return_policy
     put:
       operationId: v1_ebay_policy_return_update
-      description: Данный Endpoint используется для обновления политики возврата по id.
+      description: Данный Endpoint используется для локального обновления политики возврата по id.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateReturnPolicy'
+            $ref: '#/definitions/CreateReturnPolicy'
           x-examples:
             Example:
               description: string
@@ -3962,7 +3954,7 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UpdateReturnPolicy'
+            $ref: '#/definitions/CreateReturnPolicy'
           examples:
             Example:
               description: string
@@ -3980,17 +3972,17 @@ paths:
                 returnShippingCostPayer: BUYER
               returnPeriod:
                 value: 30
-      summary: Обновление политики возврата
+      summary: Локальное обновление политики возврата eBay
       tags:
         - ebay_return_policy
     delete:
       operationId: v1_ebay_policy_return_delete
-      description: Данный Endpoint используется для удаления политики возврата по id.
+      description: Данный Endpoint используется для локального удаления политики возврата по id.
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление политики возврата
+      summary: Локальное удаление политики возврата eBay
       tags:
         - ebay_return_policy
     parameters:
@@ -4005,32 +3997,15 @@ paths:
       operationId: v1_ebay_policy_return_remote_create
       description: Данный Endpoint используется для удалённого создания или обновления политики возврата на eBay.
       parameters: []
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseReturnPolicy'
-          examples:
-            Example:
-              channel: string
-              description: string
-              name: string
-              categoryTypes:
-                - default: true
-              returnsAccepted: true
-              returnShippingCostPayer: BUYER
-              internationalOverride:
-                returnPeriod:
-                  unit: YEAR
-                  value: 0
-                returnMethod: string
-                returnsAccepted: true
-                returnShippingCostPayer: BUYER
-              returnPeriod:
-                value: 30
       summary: Создание или обновление политики возврата на eBay
       tags:
         - ebay_return_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -4046,7 +4021,7 @@ paths:
       responses:
         '204':
           description: ''
-      summary: Удаление политики возврата на ebay
+      summary: Удаление политики возврата с eBay
       tags:
         - ebay_return_policy
     parameters:
@@ -13491,79 +13466,8 @@ definitions:
       - value
   BaseReturnPolicy:
     type: object
-    title: BaseReturnPolicy
-    description: Используется для отображения политик возрата.
-    properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        readOnly: true
-        description: Идентификатор политики возврата.
-      channel:
-        title: Аккаунт пользователя eBay
-        type: string
-        format: uuid
-        description: Идентификатор канала продаж.
-      description:
-        title: Описание
-        type: string
-        maxLength: 250
-        x-nullable: true
-        description: Описание политики возврата.
-      name:
-        title: Название
-        type: string
-        maxLength: 64
-        minLength: 1
-        description: Название политики возврата.
-      policy_id:
-        title: Уникальный ID политики в системе eBay
-        type: string
-        readOnly: true
-        minLength: 1
-        description: Идентификатор политики возврата в системе ebay.
-      status:
-        title: Статус
-        type: string
-        enum:
-          - draft
-          - ready_to_be_published
-          - published
-          - update_required
-        readOnly: true
-        description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики возврата.
-        items:
-          $ref: '#/definitions/BaseReturnPolicyCategoryType'
-      returnMethod:
-        title: Метод возврата
-        type: string
-        readOnly: true
-        minLength: 1
-        description: Метод возврата.
-      returnsAccepted:
-        title: Возврат разрешён
-        type: boolean
-        description: Возврат разрешён.
-      returnShippingCostPayer:
-        title: ReturnShippingCostPayer
-        type: string
-        enum:
-          - BUYER
-          - SELLER
-        x-nullable: true
-        description: Кто оплачивает возврат.
-      internationalOverride:
-        $ref: '#/definitions/BaseInternationalOverride'
-      returnPeriod:
-        $ref: '#/definitions/ReturnPolicyReturnPeriod'
-    required:
-      - channel
-      - name
-      - returnsAccepted
+    title: EbayReturnPolicy
+    description: Используется для отображения политик возрата eBay.
     x-examples:
       Example:
         id: string
@@ -13588,8 +13492,6 @@ definitions:
         returnPeriod:
           unit: string
           value: 30
-  CreateReturnPolicy:
-    type: object
     properties:
       id:
         title: Id
@@ -13630,39 +13532,34 @@ definitions:
           - update_required
         readOnly: true
         description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики возврата.
-        items:
-          $ref: '#/definitions/BaseReturnPolicyCategoryType'
-      returnMethod:
-        title: Метод возврата
+      category_type:
         type: string
-        readOnly: true
-        minLength: 1
-        description: Метод возврата.
-      returnsAccepted:
-        title: Возврат разрешён
+        description: Категория политики
+      domestic_returns_accepted:
         type: boolean
-        description: Возврат разрешён.
-      returnShippingCostPayer:
-        title: ReturnShippingCostPayer
+        description: Внутренний возврат разрешён
+      international_returns_accepted:
+        type: boolean
+        description: Международный возврат разрешён
+      domestic_return_cost_payer:
         type: string
-        enum:
-          - BUYER
-          - SELLER
-        x-nullable: true
-        description: Кто оплачивает возврат.
-      internationalOverride:
-        $ref: '#/definitions/BaseInternationalOverride'
-      returnPeriod:
-        $ref: '#/definitions/ReturnPolicyReturnPeriod'
+        description: Плательщик за внутренний возврат
+      international_return_cost_payer:
+        type: string
+        description: Плательщик за международный возврат
+      domestic_return_period_days:
+        type: integer
+        description: Период внутреннего возврата
+      international_return_period_days:
+        type: integer
+        description: Период международного возврата
     required:
       - channel
       - name
-      - returnsAccepted
-    description: Используется для создания политики возврата.
-    title: CreateReturnPolicy
+  CreateReturnPolicy:
+    type: object
+    description: Используется для локального создания или обновления политики возврата eBay.
+    title: CreateOrUpdateEbayReturnPolicy
     x-examples:
       Example:
         channel: string
@@ -13681,6 +13578,48 @@ definitions:
           returnShippingCostPayer: BUYER
         returnPeriod:
           value: 30
+    properties:
+      channel:
+        title: Аккаунт пользователя eBay
+        type: string
+        format: uuid
+        description: Идентификатор канала продаж.
+      description:
+        title: Описание
+        type: string
+        maxLength: 250
+        x-nullable: true
+        description: Описание политики возврата.
+      name:
+        title: Название
+        type: string
+        maxLength: 64
+        minLength: 1
+        description: Название политики возврата.
+      category_type:
+        type: string
+        description: Категория политики
+      domestic_return_cost_payer:
+        type: string
+        description: Плательщик за внутренний возврат
+      domestic_return_period_days:
+        type: integer
+        description: Период внутреннего возврата
+      domestic_returns_accepted:
+        type: boolean
+        description: Внутренний возврат разрешён
+      international_return_cost_payer:
+        type: string
+        description: Плательщик за международный возврат
+      international_return_period_days:
+        type: integer
+        description: Период международного возврата
+      international_returns_accepted:
+        type: boolean
+        description: Международный возврат разрешён
+    required:
+      - channel
+      - name
   UpdateReturnPolicy:
     type: object
     properties:
