@@ -7802,7 +7802,7 @@ paths:
       description: Скачивание денежный списаний аккаунта с eBay.
   /v1/zonesmart/admin/groups/:
     get:
-      summary: ZonesmartUserGroupsList
+      summary: Получение списка всех существующих групп пользователей
       tags:
         - admin
       responses:
