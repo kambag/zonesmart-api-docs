@@ -2136,11 +2136,11 @@ paths:
   /v1/ebay/location/:
     get:
       operationId: v1_ebay_location_list
-      description: ViewSet for ebay location model
+      description: Получение списка складов eBay
       parameters:
         - name: status
           in: query
-          description: ''
+          description: Статус
           required: false
           type: string
         - name: limit
@@ -2153,6 +2153,10 @@ paths:
           description: The initial index from which to return the results.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -2177,89 +2181,94 @@ paths:
                 items:
                   $ref: '#/definitions/BaseEbayLocation'
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Получение списка складов eBay
     post:
       operationId: v1_ebay_location_create
-      description: ViewSet for ebay location model
+      description: Локальное создание склада eBay
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      tags:
-        - work_in_process
-    parameters: []
-  '/v1/ebay/location/remote_download_list/{marketplace_user_account_id}/':
-    get:
-      operationId: v1_ebay_location_remote_download_list
-      description: ViewSet for ebay location model
-      parameters:
-        - name: status
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
             type: object
             properties:
-              count:
-                type: integer
-              next:
+              marketplace_user_account:
                 type: string
-                format: uri
-                x-nullable: true
-              previous:
+                description: ID аккаунта маркетплейса
+              name:
                 type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/BaseEbayLocation'
+                description: Название склада
+              addressLine1:
+                type: string
+                description: Адрес
+              city:
+                type: string
+                description: Город
+              country:
+                type: string
+                description: Код страны
+                example: RU
+              phone:
+                type: string
+                description: Телефон
+              postalCode:
+                type: string
+                description: Почтовый индекс
+            required:
+              - marketplace_user_account
+              - name
+              - city
+              - country
       tags:
-        - work_in_process
-    parameters:
-      - name: marketplace_user_account_id
-        in: path
-        required: true
-        type: string
+        - ebay_location
+      summary: Локальное создание склада eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+    parameters: []
+  /v1/ebay/location/remote_download_list/:
+    get:
+      operationId: v1_ebay_location_remote_download_list
+      description: Скачивание складов с eBay
+      parameters:
+        - name: marketplace_user_account_id
+          in: query
+          description: ID аккаунта маркетплейса
+          required: false
+          type: string
+      tags:
+        - ebay_location
+      summary: Скачивание складов с eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+    parameters: []
   '/v1/ebay/location/{id}/':
     get:
       operationId: v1_ebay_location_read
-      description: ViewSet for ebay location model
+      description: Получение склада eBay по ID
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseEbayLocation'
+        '':
+          schema:
+            $ref: ''
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Получение склада eBay
     put:
       operationId: v1_ebay_location_update
-      description: ViewSet for ebay location model
+      description: Локальное обновление склада eBay
       parameters:
         - name: data
           in: body
@@ -2272,54 +2281,37 @@ paths:
           schema:
             $ref: '#/definitions/UpdateEbayLocation'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_location_partial_update
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateEbayLocation'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateEbayLocation'
-      tags:
-        - work_in_process
+        - ebay_location
+      summary: Локальное обновление склада eBay
     delete:
       operationId: v1_ebay_location_delete
-      description: ViewSet for ebay location model
+      description: Локальное удаление склада eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Локальное удаление склада eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
-  '/v1/ebay/location/{id}/remote_create/':
+  '/v1/ebay/location/{id}/remote_create_or_update/':
     post:
       operationId: v1_ebay_location_remote_create
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
+      description: Создание или обновление склада на eBay
+      parameters: []
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Создание или обновление склада на eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -2328,35 +2320,14 @@ paths:
   '/v1/ebay/location/{id}/remote_delete/':
     delete:
       operationId: v1_ebay_location_remote_delete
-      description: ViewSet for ebay location model
+      description: Удаление склада с eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  '/v1/ebay/location/{id}/remote_update/':
-    put:
-      operationId: v1_ebay_location_remote_update
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      tags:
-        - work_in_process
+        - ebay_location
+      summary: Удаление склада с eBay
     parameters:
       - name: id
         in: path
@@ -3420,13 +3391,13 @@ paths:
         - ebay_payment_policy
     post:
       operationId: v1_ebay_policy_payment_create
-      description: Данный Endpoint используется для создания политики оплаты.
+      description: Данный Endpoint используется для локального создания политики оплаты.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CreatePaymentPolicy'
+            $ref: '#/definitions/UpdatePaymentPolicy'
           x-examples:
             Example:
               channel: string
@@ -3471,7 +3442,7 @@ paths:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/CreatePaymentPolicy'
+            $ref: '#/definitions/UpdatePaymentPolicy'
           examples:
             Example:
               channel: string
@@ -3504,11 +3475,11 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Создание политики оплаты
+      summary: Локальное создание политики оплаты eBay
       tags:
         - ebay_payment_policy
     parameters: []
-  '/v1/ebay/policy/payment/remote_download_list/{channel_id}/':
+  /v1/ebay/policy/payment/remote_download_list/:
     get:
       operationId: v1_ebay_policy_payment_remote_download_list
       description: Данный Endpoint используется для скачивания списка политик оплаты с eBay.
@@ -3527,13 +3498,7 @@ paths:
           schema:
             type: object
             properties: {}
-    parameters:
-      - name: channel_id
-        in: path
-        required: true
-        type: string
-        format: uuid
-        description: Идентификатор канала продаж.
+    parameters: []
   '/v1/ebay/policy/payment/{id}/':
     get:
       operationId: v1_ebay_policy_payment_read
@@ -3581,7 +3546,10 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Получение политики оплаты
+        '':
+          schema:
+            $ref: '#/definitions/BasePaymentPolicy'
+      summary: Получение политики оплаты eBay
       tags:
         - ebay_payment_policy
     put:
@@ -3667,17 +3635,17 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Обновление политики оплаты
+      summary: Локальное обновление политики оплаты eBay
       tags:
         - ebay_payment_policy
     delete:
       operationId: v1_ebay_policy_payment_delete
-      description: Данный Endpoint используется для удаления политики оплаты по id.
+      description: Данный Endpoint используется для локального удаления политики оплаты по id.
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление политики оплаты
+      summary: Локальное удаление политики оплаты eBay
       tags:
         - ebay_payment_policy
     parameters:
@@ -3692,46 +3660,15 @@ paths:
       operationId: v1_ebay_policy_payment_remote_create
       description: Данный Endpoint используется для удалённого создания или обновления политики фулфилментa на eBay.
       parameters: []
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BasePaymentPolicy'
-          examples:
-            Example:
-              channel: string
-              description: string
-              name: string
-              categoryTypes:
-                - default: true
-                  name: MOTORS_VEHICLES
-              immediatePay: true
-              paymentInstructions: string
-              deposit:
-                amount:
-                  currency: RUB
-                  value: 0
-                dueIn:
-                  value: 24
-                paymentMethods:
-                  - brands:
-                      - AMERICAN_EXPRESS
-                    recipientAccountReference:
-                      referenceId: string
-                      referenceType: PAYPAL_EMAIL
-                    paymentMethodType: CREDIT_CARD
-              fullPaymentDueIn:
-                value: 3
-              paymentMethods:
-                - brands:
-                    - AMERICAN_EXPRESS
-                  recipientAccountReference:
-                    referenceId: string
-                    referenceType: PAYPAL_EMAIL
-                  paymentMethodType: CREDIT_CARD
       summary: Создание или обновление политики оплаты на eBay
       tags:
         - ebay_payment_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -3747,7 +3684,7 @@ paths:
       responses:
         '204':
           description: ''
-      summary: Удаление политики оплаты на ebay
+      summary: Удаление политики оплаты с eBay
       tags:
         - ebay_payment_policy
     parameters:
@@ -3760,13 +3697,8 @@ paths:
   /v1/ebay/policy/return/:
     get:
       operationId: v1_ebay_policy_return_list
-      description: Данный Endpoint используется для получения списка политик возврата.
+      description: Данный Endpoint используется для получения списка политик возврата eBay.
       parameters:
-        - name: channel
-          in: query
-          description: Идентификатор канала продаж.
-          required: false
-          type: string
         - name: limit
           in: query
           description: Количество результатов для возврата на страницу.
@@ -3832,12 +3764,12 @@ paths:
                   returnPeriod:
                     unit: string
                     value: 30
-      summary: Получение списка политик возврата
+      summary: Получение списка политик возврата eBay
       tags:
         - ebay_return_policy
     post:
       operationId: v1_ebay_policy_return_create
-      description: Данный Endpoint используется для получения списка политик возврата.
+      description: Данный Endpoint используется для локального создания политики возврата eBay.
       parameters:
         - name: data
           in: body
@@ -3892,11 +3824,11 @@ paths:
                 returnShippingCostPayer: BUYER
               returnPeriod:
                 value: 30
-      summary: Создание политики возврата
+      summary: Локальное создание политики возврата eBay
       tags:
         - ebay_return_policy
     parameters: []
-  '/v1/ebay/policy/return/remote_download_list/{channel_id}/':
+  /v1/ebay/policy/return/remote_download_list/:
     get:
       operationId: v1_ebay_policy_return_remote_download_list
       description: Данный Endpoint используется для скачивания списка политик возврата с eBay.
@@ -3915,13 +3847,7 @@ paths:
           schema:
             type: object
             properties: {}
-    parameters:
-      - name: channel_id
-        in: path
-        required: true
-        type: string
-        description: Идентификатор канала продаж.
-        format: uuid
+    parameters: []
   '/v1/ebay/policy/return/{id}/':
     get:
       operationId: v1_ebay_policy_return_read
@@ -3956,18 +3882,21 @@ paths:
               returnPeriod:
                 unit: string
                 value: 30
-      summary: Получение политики возврата
+        '':
+          schema:
+            $ref: '#/definitions/BaseReturnPolicy'
+      summary: Получение политики возврата eBay
       tags:
         - ebay_return_policy
     put:
       operationId: v1_ebay_policy_return_update
-      description: Данный Endpoint используется для обновления политики возврата по id.
+      description: Данный Endpoint используется для локального обновления политики возврата по id.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateReturnPolicy'
+            $ref: '#/definitions/CreateReturnPolicy'
           x-examples:
             Example:
               description: string
@@ -3996,7 +3925,7 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/UpdateReturnPolicy'
+            $ref: '#/definitions/CreateReturnPolicy'
           examples:
             Example:
               description: string
@@ -4014,17 +3943,17 @@ paths:
                 returnShippingCostPayer: BUYER
               returnPeriod:
                 value: 30
-      summary: Обновление политики возврата
+      summary: Локальное обновление политики возврата eBay
       tags:
         - ebay_return_policy
     delete:
       operationId: v1_ebay_policy_return_delete
-      description: Данный Endpoint используется для удаления политики возврата по id.
+      description: Данный Endpoint используется для локального удаления политики возврата по id.
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление политики возврата
+      summary: Локальное удаление политики возврата eBay
       tags:
         - ebay_return_policy
     parameters:
@@ -4039,32 +3968,15 @@ paths:
       operationId: v1_ebay_policy_return_remote_create
       description: Данный Endpoint используется для удалённого создания или обновления политики возврата на eBay.
       parameters: []
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseReturnPolicy'
-          examples:
-            Example:
-              channel: string
-              description: string
-              name: string
-              categoryTypes:
-                - default: true
-              returnsAccepted: true
-              returnShippingCostPayer: BUYER
-              internationalOverride:
-                returnPeriod:
-                  unit: YEAR
-                  value: 0
-                returnMethod: string
-                returnsAccepted: true
-                returnShippingCostPayer: BUYER
-              returnPeriod:
-                value: 30
       summary: Создание или обновление политики возврата на eBay
       tags:
         - ebay_return_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -4080,7 +3992,7 @@ paths:
       responses:
         '204':
           description: ''
-      summary: Удаление политики возврата на ebay
+      summary: Удаление политики возврата с eBay
       tags:
         - ebay_return_policy
     parameters:
@@ -10977,11 +10889,8 @@ definitions:
         maxLength: 50
         minLength: 1
   BaseEbayLocation:
-    required:
-      - marketplace_user_account
-      - name
-      - countryCode
     type: object
+    title: EbayLocation
     properties:
       id:
         title: Id
@@ -11007,14 +10916,6 @@ definitions:
         type: string
         maxLength: 36
         minLength: 1
-      locationTypes:
-        type: array
-        items:
-          type: string
-          enum:
-            - WAREHOUSE
-            - STORE
-            - BOTH
       status:
         title: Статус
         type: string
@@ -11038,7 +10939,7 @@ definitions:
         type: string
         maxLength: 128
         x-nullable: true
-      countryCode:
+      country:
         title: Страна
         type: string
         enum:
@@ -11306,318 +11207,38 @@ definitions:
         type: string
         maxLength: 128
         x-nullable: true
-  UpdateEbayLocation:
+      created:
+        type: string
+      modified:
+        type: string
+      published_at:
+        type: string
     required:
+      - marketplace_user_account
       - name
-      - countryCode
+      - country
+  UpdateEbayLocation:
     type: object
+    title: UpdateEbayLocation
     properties:
       name:
         title: Название
         type: string
         maxLength: 1000
         minLength: 1
-      merchantLocationKey:
-        title: ID склада
-        type: string
-        maxLength: 36
-        minLength: 1
-      locationTypes:
-        type: array
-        items:
-          type: string
-          enum:
-            - WAREHOUSE
-            - STORE
-            - BOTH
+        description: Название склада
       phone:
-        title: Телефонный номер владельца
         type: string
-        maxLength: 36
-        x-nullable: true
-      addressLine1:
-        title: Первая строка адреса
+        description: Телефонный номер владельца
+      locationWebUrl:
         type: string
-        maxLength: 128
-        x-nullable: true
-      addressLine2:
-        title: Вторая строка адреса
+        description: 'URL, ассоциированный с местоположением'
+      locationInstructions:
         type: string
-        maxLength: 128
-        x-nullable: true
-      city:
-        title: Населённый пункт
+        description: Инструкции по местоположению
+      locationAdditionalInformation:
         type: string
-        maxLength: 128
-        x-nullable: true
-      countryCode:
-        title: Страна
-        type: string
-        enum:
-          - AD
-          - AE
-          - AF
-          - AG
-          - AI
-          - AL
-          - AM
-          - AN
-          - AO
-          - AQ
-          - AR
-          - AS
-          - AT
-          - AU
-          - AW
-          - AX
-          - AZ
-          - BA
-          - BB
-          - BD
-          - BE
-          - BF
-          - BG
-          - BH
-          - BI
-          - BJ
-          - BL
-          - BM
-          - BN
-          - BO
-          - BQ
-          - BR
-          - BS
-          - BT
-          - BV
-          - BW
-          - BY
-          - BZ
-          - CA
-          - CC
-          - CD
-          - CF
-          - CG
-          - CH
-          - CI
-          - CK
-          - CL
-          - CM
-          - CN
-          - CO
-          - CR
-          - CU
-          - CV
-          - CW
-          - CX
-          - CY
-          - CZ
-          - DE
-          - DJ
-          - DK
-          - DM
-          - DO
-          - DZ
-          - EC
-          - EE
-          - EG
-          - EH
-          - ER
-          - ES
-          - ET
-          - FI
-          - FJ
-          - FK
-          - FM
-          - FO
-          - FR
-          - GA
-          - GB
-          - GD
-          - GE
-          - GF
-          - GG
-          - GH
-          - GI
-          - GL
-          - GM
-          - GN
-          - GP
-          - GQ
-          - GR
-          - GS
-          - GT
-          - GU
-          - GW
-          - GY
-          - HK
-          - HM
-          - HN
-          - HR
-          - HT
-          - HU
-          - ID
-          - IE
-          - IL
-          - IM
-          - IN
-          - IO
-          - IQ
-          - IR
-          - IS
-          - IT
-          - JE
-          - JM
-          - JO
-          - JP
-          - KE
-          - KG
-          - KH
-          - KI
-          - KM
-          - KN
-          - KP
-          - KR
-          - KW
-          - KY
-          - KZ
-          - LA
-          - LB
-          - LC
-          - LI
-          - LK
-          - LR
-          - LS
-          - LT
-          - LU
-          - LV
-          - LY
-          - MA
-          - MC
-          - MD
-          - ME
-          - MF
-          - MG
-          - MH
-          - MK
-          - ML
-          - MM
-          - MN
-          - MO
-          - MP
-          - MQ
-          - MR
-          - MS
-          - MT
-          - MU
-          - MV
-          - MW
-          - MX
-          - MY
-          - MZ
-          - NA
-          - NC
-          - NE
-          - NF
-          - NG
-          - NI
-          - NL
-          - 'NO'
-          - NP
-          - NR
-          - NU
-          - NZ
-          - OM
-          - PA
-          - PE
-          - PF
-          - PG
-          - PH
-          - PK
-          - PL
-          - PM
-          - PN
-          - PR
-          - PS
-          - PT
-          - PW
-          - PY
-          - QA
-          - RE
-          - RO
-          - RS
-          - RU
-          - RW
-          - SA
-          - SB
-          - SC
-          - SD
-          - SE
-          - SG
-          - SH
-          - SI
-          - SJ
-          - SK
-          - SL
-          - SM
-          - SN
-          - SO
-          - SR
-          - ST
-          - SV
-          - SX
-          - SY
-          - SZ
-          - TC
-          - TD
-          - TF
-          - TG
-          - TH
-          - TJ
-          - TK
-          - TL
-          - TM
-          - TN
-          - TO
-          - TR
-          - TT
-          - TV
-          - TW
-          - TZ
-          - UA
-          - UG
-          - UM
-          - US
-          - UY
-          - UZ
-          - VA
-          - VC
-          - VE
-          - VG
-          - VI
-          - VN
-          - VU
-          - WF
-          - WS
-          - YE
-          - YT
-          - ZA
-          - ZM
-          - ZW
-      county:
-        title: Округ
-        type: string
-        maxLength: 50
-        x-nullable: true
-      postalCode:
-        title: Почтовый индекс
-        type: string
-        maxLength: 16
-        x-nullable: true
-      stateOrProvince:
-        title: Штат или провинция
-        type: string
-        maxLength: 128
-        x-nullable: true
+        description: Дополнительная информация об адресе
   EbayMessageList:
     required:
       - message_id
@@ -13170,6 +12791,45 @@ definitions:
         paymentMethodType: CREDIT_CARD
   BasePaymentPolicy:
     type: object
+    title: EbayPaymentPolicy
+    description: Используется для отображения политики оплаты eBay.
+    x-examples:
+      Example:
+        id: string
+        channel: string
+        description: string
+        name: string
+        policy_id: string
+        status: draft
+        categoryTypes:
+          - default: true
+            name: MOTORS_VEHICLES
+        immediatePay: true
+        paymentInstructions: string
+        deposit:
+          amount:
+            currency: RUB
+            value: 0
+          dueIn:
+            unit: string
+            value: 24
+          paymentMethods:
+            - brands:
+                - AMERICAN_EXPRESS
+              recipientAccountReference:
+                referenceId: string
+                referenceType: PAYPAL_EMAIL
+              paymentMethodType: CREDIT_CARD
+        fullPaymentDueIn:
+          unit: string
+          value: 3
+        paymentMethods:
+          - brands:
+              - AMERICAN_EXPRESS
+            recipientAccountReference:
+              referenceId: string
+              referenceType: PAYPAL_EMAIL
+            paymentMethodType: CREDIT_CARD
     properties:
       id:
         title: Id
@@ -13210,71 +12870,21 @@ definitions:
           - update_required
         readOnly: true
         description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentPolicyCategoryType'
-      immediatePay:
-        title: Immediate pay
-        type: boolean
-        description: Немедленная оплата.
-      paymentInstructions:
-        title: Payment instructions
+      category_type:
         type: string
-        maxLength: 1000
-        x-nullable: true
-        description: Инструкция по оплате.
-      deposit:
-        $ref: '#/definitions/BasePaymentPolicyDeposit'
-      fullPaymentDueIn:
-        $ref: '#/definitions/BaseFullPaymentDueIn'
-      paymentMethods:
-        type: array
-        items:
-          $ref: '#/definitions/BasePaymentMethod'
+        description: Категория политики
+      payment_instructions:
+        type: string
+        description: Инструкции по оплате
+      paypal_email:
+        type: string
+        description: PayPal email
+      full_payment_due_in_days:
+        type: string
+        description: Срок для полной оплаты
     required:
       - channel
       - name
-    title: BasePaymentPolicy
-    description: Используется для отображения политики оплаты.
-    x-examples:
-      Example:
-        id: string
-        channel: string
-        description: string
-        name: string
-        policy_id: string
-        status: draft
-        categoryTypes:
-          - default: true
-            name: MOTORS_VEHICLES
-        immediatePay: true
-        paymentInstructions: string
-        deposit:
-          amount:
-            currency: RUB
-            value: 0
-          dueIn:
-            unit: string
-            value: 24
-          paymentMethods:
-            - brands:
-                - AMERICAN_EXPRESS
-              recipientAccountReference:
-                referenceId: string
-                referenceType: PAYPAL_EMAIL
-              paymentMethodType: CREDIT_CARD
-        fullPaymentDueIn:
-          unit: string
-          value: 3
-        paymentMethods:
-          - brands:
-              - AMERICAN_EXPRESS
-            recipientAccountReference:
-              referenceId: string
-              referenceType: PAYPAL_EMAIL
-            paymentMethodType: CREDIT_CARD
   CreatePaymentPolicy:
     type: object
     title: CreatePaymentPolicy
@@ -13380,8 +12990,8 @@ definitions:
       - name
   UpdatePaymentPolicy:
     type: object
-    title: UpdatePaymentPolicy
-    description: Используется для обновления политик оплат.
+    title: CreateOrUpdateEbayPaymentPolicy
+    description: Используется для локального создания или обновления политики оплаты eBay.
     x-examples:
       Example:
         description: string
@@ -13414,12 +13024,6 @@ definitions:
               referenceType: PAYPAL_EMAIL
             paymentMethodType: CREDIT_CARD
     properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        readOnly: true
-        description: Идентификатор политики оплаты.
       channel:
         title: Канал
         type: string
@@ -13438,46 +13042,18 @@ definitions:
         maxLength: 64
         minLength: 1
         description: Название политики оплаты.
-      policy_id:
-        title: Уникальный ID политики в системе eBay
+      category_type:
         type: string
-        readOnly: true
-        minLength: 1
-        description: Идентификатор политики оплаты в сервисе ebay.
-      status:
-        title: Статус
+        description: Категория политики
+      full_payment_due_in_days:
         type: string
-        enum:
-          - draft
-          - ready_to_be_published
-          - published
-          - update_required
-        readOnly: true
-        description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentPolicyCategoryType'
-      immediatePay:
-        title: Immediate pay
-        type: boolean
-        description: Немедленная оплата.
-      paymentInstructions:
-        title: Payment instructions
+        description: Срок для полной оплаты
+      payment_instructions:
         type: string
-        maxLength: 1000
-        x-nullable: true
-        description: Инструкция оплаты.
-      deposit:
-        $ref: '#/definitions/BasePaymentPolicyDeposit'
-      fullPaymentDueIn:
-        $ref: '#/definitions/BaseFullPaymentDueIn'
-      paymentMethods:
-        type: array
-        description: Метод оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentMethod'
+        description: Инструкции по оплате
+      paypal_email:
+        type: string
+        description: PayPal email
     required:
       - name
   BaseReturnPolicyCategoryType:
@@ -13591,79 +13167,8 @@ definitions:
       - value
   BaseReturnPolicy:
     type: object
-    title: BaseReturnPolicy
-    description: Используется для отображения политик возрата.
-    properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        readOnly: true
-        description: Идентификатор политики возврата.
-      channel:
-        title: Аккаунт пользователя eBay
-        type: string
-        format: uuid
-        description: Идентификатор канала продаж.
-      description:
-        title: Описание
-        type: string
-        maxLength: 250
-        x-nullable: true
-        description: Описание политики возврата.
-      name:
-        title: Название
-        type: string
-        maxLength: 64
-        minLength: 1
-        description: Название политики возврата.
-      policy_id:
-        title: Уникальный ID политики в системе eBay
-        type: string
-        readOnly: true
-        minLength: 1
-        description: Идентификатор политики возврата в системе ebay.
-      status:
-        title: Статус
-        type: string
-        enum:
-          - draft
-          - ready_to_be_published
-          - published
-          - update_required
-        readOnly: true
-        description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики возврата.
-        items:
-          $ref: '#/definitions/BaseReturnPolicyCategoryType'
-      returnMethod:
-        title: Метод возврата
-        type: string
-        readOnly: true
-        minLength: 1
-        description: Метод возврата.
-      returnsAccepted:
-        title: Возврат разрешён
-        type: boolean
-        description: Возврат разрешён.
-      returnShippingCostPayer:
-        title: ReturnShippingCostPayer
-        type: string
-        enum:
-          - BUYER
-          - SELLER
-        x-nullable: true
-        description: Кто оплачивает возврат.
-      internationalOverride:
-        $ref: '#/definitions/BaseInternationalOverride'
-      returnPeriod:
-        $ref: '#/definitions/ReturnPolicyReturnPeriod'
-    required:
-      - channel
-      - name
-      - returnsAccepted
+    title: EbayReturnPolicy
+    description: Используется для отображения политик возрата eBay.
     x-examples:
       Example:
         id: string
@@ -13688,8 +13193,6 @@ definitions:
         returnPeriod:
           unit: string
           value: 30
-  CreateReturnPolicy:
-    type: object
     properties:
       id:
         title: Id
@@ -13730,39 +13233,34 @@ definitions:
           - update_required
         readOnly: true
         description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики возврата.
-        items:
-          $ref: '#/definitions/BaseReturnPolicyCategoryType'
-      returnMethod:
-        title: Метод возврата
+      category_type:
         type: string
-        readOnly: true
-        minLength: 1
-        description: Метод возврата.
-      returnsAccepted:
-        title: Возврат разрешён
+        description: Категория политики
+      domestic_returns_accepted:
         type: boolean
-        description: Возврат разрешён.
-      returnShippingCostPayer:
-        title: ReturnShippingCostPayer
+        description: Внутренний возврат разрешён
+      international_returns_accepted:
+        type: boolean
+        description: Международный возврат разрешён
+      domestic_return_cost_payer:
         type: string
-        enum:
-          - BUYER
-          - SELLER
-        x-nullable: true
-        description: Кто оплачивает возврат.
-      internationalOverride:
-        $ref: '#/definitions/BaseInternationalOverride'
-      returnPeriod:
-        $ref: '#/definitions/ReturnPolicyReturnPeriod'
+        description: Плательщик за внутренний возврат
+      international_return_cost_payer:
+        type: string
+        description: Плательщик за международный возврат
+      domestic_return_period_days:
+        type: integer
+        description: Период внутреннего возврата
+      international_return_period_days:
+        type: integer
+        description: Период международного возврата
     required:
       - channel
       - name
-      - returnsAccepted
-    description: Используется для создания политики возврата.
-    title: CreateReturnPolicy
+  CreateReturnPolicy:
+    type: object
+    description: Используется для локального создания или обновления политики возврата eBay.
+    title: CreateOrUpdateEbayReturnPolicy
     x-examples:
       Example:
         channel: string
@@ -13781,6 +13279,48 @@ definitions:
           returnShippingCostPayer: BUYER
         returnPeriod:
           value: 30
+    properties:
+      channel:
+        title: Аккаунт пользователя eBay
+        type: string
+        format: uuid
+        description: Идентификатор канала продаж.
+      description:
+        title: Описание
+        type: string
+        maxLength: 250
+        x-nullable: true
+        description: Описание политики возврата.
+      name:
+        title: Название
+        type: string
+        maxLength: 64
+        minLength: 1
+        description: Название политики возврата.
+      category_type:
+        type: string
+        description: Категория политики
+      domestic_return_cost_payer:
+        type: string
+        description: Плательщик за внутренний возврат
+      domestic_return_period_days:
+        type: integer
+        description: Период внутреннего возврата
+      domestic_returns_accepted:
+        type: boolean
+        description: Внутренний возврат разрешён
+      international_return_cost_payer:
+        type: string
+        description: Плательщик за международный возврат
+      international_return_period_days:
+        type: integer
+        description: Период международного возврата
+      international_returns_accepted:
+        type: boolean
+        description: Международный возврат разрешён
+    required:
+      - channel
+      - name
   UpdateReturnPolicy:
     type: object
     properties:
