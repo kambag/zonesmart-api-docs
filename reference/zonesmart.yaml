@@ -7821,6 +7821,116 @@ paths:
       description: |-
         Возвращает список всех существующих групп пользователей.
         Необходимо обладать правами администратора и выше.
+  /v1/zonesmart/admin/groups/add_admin/:
+    post:
+      summary: Добавление пользователя в группу администраторов
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно добавлен в группу администраторов.
+        '':
+          description: Возвращает сообщение об успешном добавлении в группу.
+      operationId: post-v1-zonesmart-admin-groups-add_admin
+      description: |-
+        Добавляет пользователя в группу администраторов.
+        Необходимо обладать правами суперпользователя.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1: {}
+  /v1/zonesmart/admin/groups/add_support/:
+    post:
+      summary: Добавление пользователя в группу поддержки
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно добавлен в группу администраторов.
+      operationId: post-v1-zonesmart-admin-groups-add_support
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1: {}
+      description: |-
+        Добавляет пользователя в группу поддержки.
+        Необходимо обладать правами администратора и выше.
+  /v1/zonesmart/admin/groups/add_editor/:
+    post:
+      summary: Добавление пользователя в группу редакторов
+      tags:
+        - admin
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+          examples:
+            example-1: Пользователь успешно добавлен в группу редакторов.
+      operationId: post-v1-zonesmart-admin-groups-add_editor
+      description: |-
+        Добавляет пользователя в группу редакторов.
+        Необходимо обладать правами администратора и выше.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          x-examples:
+            example-1:
+              id: c1afcb6b-ca46-4bf6-9019-80f8c234f2bb
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              '':
+                type: string
+          x-examples:
+            example-1: {}
 definitions:
   TokenObtainPair:
     type: object
