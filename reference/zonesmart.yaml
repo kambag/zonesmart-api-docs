@@ -2136,11 +2136,11 @@ paths:
   /v1/ebay/location/:
     get:
       operationId: v1_ebay_location_list
-      description: ViewSet for ebay location model
+      description: Получение списка складов eBay
       parameters:
         - name: status
           in: query
-          description: ''
+          description: Статус
           required: false
           type: string
         - name: limit
@@ -2153,6 +2153,10 @@ paths:
           description: The initial index from which to return the results.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -2177,89 +2181,94 @@ paths:
                 items:
                   $ref: '#/definitions/BaseEbayLocation'
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Получение списка складов eBay
     post:
       operationId: v1_ebay_location_create
-      description: ViewSet for ebay location model
+      description: Локальное создание склада eBay
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      tags:
-        - work_in_process
-    parameters: []
-  '/v1/ebay/location/remote_download_list/{marketplace_user_account_id}/':
-    get:
-      operationId: v1_ebay_location_remote_download_list
-      description: ViewSet for ebay location model
-      parameters:
-        - name: status
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
             type: object
             properties:
-              count:
-                type: integer
-              next:
+              marketplace_user_account:
                 type: string
-                format: uri
-                x-nullable: true
-              previous:
+                description: ID аккаунта маркетплейса
+              name:
                 type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/BaseEbayLocation'
+                description: Название склада
+              addressLine1:
+                type: string
+                description: Адрес
+              city:
+                type: string
+                description: Город
+              country:
+                type: string
+                description: Код страны
+                example: RU
+              phone:
+                type: string
+                description: Телефон
+              postalCode:
+                type: string
+                description: Почтовый индекс
+            required:
+              - marketplace_user_account
+              - name
+              - city
+              - country
       tags:
-        - work_in_process
-    parameters:
-      - name: marketplace_user_account_id
-        in: path
-        required: true
-        type: string
+        - ebay_location
+      summary: Локальное создание склада eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+    parameters: []
+  /v1/ebay/location/remote_download_list/:
+    get:
+      operationId: v1_ebay_location_remote_download_list
+      description: Скачивание складов с eBay
+      parameters:
+        - name: marketplace_user_account_id
+          in: query
+          description: ID аккаунта маркетплейса
+          required: false
+          type: string
+      tags:
+        - ebay_location
+      summary: Скачивание складов с eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+    parameters: []
   '/v1/ebay/location/{id}/':
     get:
       operationId: v1_ebay_location_read
-      description: ViewSet for ebay location model
+      description: Получение склада eBay по ID
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseEbayLocation'
+        '':
+          schema:
+            $ref: ''
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Получение склада eBay
     put:
       operationId: v1_ebay_location_update
-      description: ViewSet for ebay location model
+      description: Локальное обновление склада eBay
       parameters:
         - name: data
           in: body
@@ -2272,54 +2281,37 @@ paths:
           schema:
             $ref: '#/definitions/UpdateEbayLocation'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_location_partial_update
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateEbayLocation'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateEbayLocation'
-      tags:
-        - work_in_process
+        - ebay_location
+      summary: Локальное обновление склада eBay
     delete:
       operationId: v1_ebay_location_delete
-      description: ViewSet for ebay location model
+      description: Локальное удаление склада eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Локальное удаление склада eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
-  '/v1/ebay/location/{id}/remote_create/':
+  '/v1/ebay/location/{id}/remote_create_or_update/':
     post:
       operationId: v1_ebay_location_remote_create
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
+      description: Создание или обновление склада на eBay
+      parameters: []
       tags:
-        - work_in_process
+        - ebay_location
+      summary: Создание или обновление склада на eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -2328,35 +2320,14 @@ paths:
   '/v1/ebay/location/{id}/remote_delete/':
     delete:
       operationId: v1_ebay_location_remote_delete
-      description: ViewSet for ebay location model
+      description: Удаление склада с eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  '/v1/ebay/location/{id}/remote_update/':
-    put:
-      operationId: v1_ebay_location_remote_update
-      description: ViewSet for ebay location model
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/BaseEbayLocation'
-      tags:
-        - work_in_process
+        - ebay_location
+      summary: Удаление склада с eBay
     parameters:
       - name: id
         in: path
@@ -10897,11 +10868,8 @@ definitions:
         maxLength: 50
         minLength: 1
   BaseEbayLocation:
-    required:
-      - marketplace_user_account
-      - name
-      - countryCode
     type: object
+    title: EbayLocation
     properties:
       id:
         title: Id
@@ -10927,14 +10895,6 @@ definitions:
         type: string
         maxLength: 36
         minLength: 1
-      locationTypes:
-        type: array
-        items:
-          type: string
-          enum:
-            - WAREHOUSE
-            - STORE
-            - BOTH
       status:
         title: Статус
         type: string
@@ -10958,7 +10918,7 @@ definitions:
         type: string
         maxLength: 128
         x-nullable: true
-      countryCode:
+      country:
         title: Страна
         type: string
         enum:
@@ -11226,318 +11186,38 @@ definitions:
         type: string
         maxLength: 128
         x-nullable: true
-  UpdateEbayLocation:
+      created:
+        type: string
+      modified:
+        type: string
+      published_at:
+        type: string
     required:
+      - marketplace_user_account
       - name
-      - countryCode
+      - country
+  UpdateEbayLocation:
     type: object
+    title: UpdateEbayLocation
     properties:
       name:
         title: Название
         type: string
         maxLength: 1000
         minLength: 1
-      merchantLocationKey:
-        title: ID склада
-        type: string
-        maxLength: 36
-        minLength: 1
-      locationTypes:
-        type: array
-        items:
-          type: string
-          enum:
-            - WAREHOUSE
-            - STORE
-            - BOTH
+        description: Название склада
       phone:
-        title: Телефонный номер владельца
         type: string
-        maxLength: 36
-        x-nullable: true
-      addressLine1:
-        title: Первая строка адреса
+        description: Телефонный номер владельца
+      locationWebUrl:
         type: string
-        maxLength: 128
-        x-nullable: true
-      addressLine2:
-        title: Вторая строка адреса
+        description: 'URL, ассоциированный с местоположением'
+      locationInstructions:
         type: string
-        maxLength: 128
-        x-nullable: true
-      city:
-        title: Населённый пункт
+        description: Инструкции по местоположению
+      locationAdditionalInformation:
         type: string
-        maxLength: 128
-        x-nullable: true
-      countryCode:
-        title: Страна
-        type: string
-        enum:
-          - AD
-          - AE
-          - AF
-          - AG
-          - AI
-          - AL
-          - AM
-          - AN
-          - AO
-          - AQ
-          - AR
-          - AS
-          - AT
-          - AU
-          - AW
-          - AX
-          - AZ
-          - BA
-          - BB
-          - BD
-          - BE
-          - BF
-          - BG
-          - BH
-          - BI
-          - BJ
-          - BL
-          - BM
-          - BN
-          - BO
-          - BQ
-          - BR
-          - BS
-          - BT
-          - BV
-          - BW
-          - BY
-          - BZ
-          - CA
-          - CC
-          - CD
-          - CF
-          - CG
-          - CH
-          - CI
-          - CK
-          - CL
-          - CM
-          - CN
-          - CO
-          - CR
-          - CU
-          - CV
-          - CW
-          - CX
-          - CY
-          - CZ
-          - DE
-          - DJ
-          - DK
-          - DM
-          - DO
-          - DZ
-          - EC
-          - EE
-          - EG
-          - EH
-          - ER
-          - ES
-          - ET
-          - FI
-          - FJ
-          - FK
-          - FM
-          - FO
-          - FR
-          - GA
-          - GB
-          - GD
-          - GE
-          - GF
-          - GG
-          - GH
-          - GI
-          - GL
-          - GM
-          - GN
-          - GP
-          - GQ
-          - GR
-          - GS
-          - GT
-          - GU
-          - GW
-          - GY
-          - HK
-          - HM
-          - HN
-          - HR
-          - HT
-          - HU
-          - ID
-          - IE
-          - IL
-          - IM
-          - IN
-          - IO
-          - IQ
-          - IR
-          - IS
-          - IT
-          - JE
-          - JM
-          - JO
-          - JP
-          - KE
-          - KG
-          - KH
-          - KI
-          - KM
-          - KN
-          - KP
-          - KR
-          - KW
-          - KY
-          - KZ
-          - LA
-          - LB
-          - LC
-          - LI
-          - LK
-          - LR
-          - LS
-          - LT
-          - LU
-          - LV
-          - LY
-          - MA
-          - MC
-          - MD
-          - ME
-          - MF
-          - MG
-          - MH
-          - MK
-          - ML
-          - MM
-          - MN
-          - MO
-          - MP
-          - MQ
-          - MR
-          - MS
-          - MT
-          - MU
-          - MV
-          - MW
-          - MX
-          - MY
-          - MZ
-          - NA
-          - NC
-          - NE
-          - NF
-          - NG
-          - NI
-          - NL
-          - 'NO'
-          - NP
-          - NR
-          - NU
-          - NZ
-          - OM
-          - PA
-          - PE
-          - PF
-          - PG
-          - PH
-          - PK
-          - PL
-          - PM
-          - PN
-          - PR
-          - PS
-          - PT
-          - PW
-          - PY
-          - QA
-          - RE
-          - RO
-          - RS
-          - RU
-          - RW
-          - SA
-          - SB
-          - SC
-          - SD
-          - SE
-          - SG
-          - SH
-          - SI
-          - SJ
-          - SK
-          - SL
-          - SM
-          - SN
-          - SO
-          - SR
-          - ST
-          - SV
-          - SX
-          - SY
-          - SZ
-          - TC
-          - TD
-          - TF
-          - TG
-          - TH
-          - TJ
-          - TK
-          - TL
-          - TM
-          - TN
-          - TO
-          - TR
-          - TT
-          - TV
-          - TW
-          - TZ
-          - UA
-          - UG
-          - UM
-          - US
-          - UY
-          - UZ
-          - VA
-          - VC
-          - VE
-          - VG
-          - VI
-          - VN
-          - VU
-          - WF
-          - WS
-          - YE
-          - YT
-          - ZA
-          - ZM
-          - ZW
-      county:
-        title: Округ
-        type: string
-        maxLength: 50
-        x-nullable: true
-      postalCode:
-        title: Почтовый индекс
-        type: string
-        maxLength: 16
-        x-nullable: true
-      stateOrProvince:
-        title: Штат или провинция
-        type: string
-        maxLength: 128
-        x-nullable: true
+        description: Дополнительная информация об адресе
   EbayMessageList:
     required:
       - message_id
