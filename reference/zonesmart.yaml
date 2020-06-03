@@ -3420,13 +3420,13 @@ paths:
         - ebay_payment_policy
     post:
       operationId: v1_ebay_policy_payment_create
-      description: Данный Endpoint используется для создания политики оплаты.
+      description: Данный Endpoint используется для локального создания политики оплаты.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CreatePaymentPolicy'
+            $ref: '#/definitions/UpdatePaymentPolicy'
           x-examples:
             Example:
               channel: string
@@ -3471,7 +3471,7 @@ paths:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/CreatePaymentPolicy'
+            $ref: '#/definitions/UpdatePaymentPolicy'
           examples:
             Example:
               channel: string
@@ -3504,11 +3504,11 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Создание политики оплаты
+      summary: Локальное создание политики оплаты eBay
       tags:
         - ebay_payment_policy
     parameters: []
-  '/v1/ebay/policy/payment/remote_download_list/{channel_id}/':
+  /v1/ebay/policy/payment/remote_download_list/:
     get:
       operationId: v1_ebay_policy_payment_remote_download_list
       description: Данный Endpoint используется для скачивания списка политик оплаты с eBay.
@@ -3527,13 +3527,7 @@ paths:
           schema:
             type: object
             properties: {}
-    parameters:
-      - name: channel_id
-        in: path
-        required: true
-        type: string
-        format: uuid
-        description: Идентификатор канала продаж.
+    parameters: []
   '/v1/ebay/policy/payment/{id}/':
     get:
       operationId: v1_ebay_policy_payment_read
@@ -3581,7 +3575,10 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Получение политики оплаты
+        '':
+          schema:
+            $ref: '#/definitions/BasePaymentPolicy'
+      summary: Получение политики оплаты eBay
       tags:
         - ebay_payment_policy
     put:
@@ -3667,17 +3664,17 @@ paths:
                     referenceId: string
                     referenceType: PAYPAL_EMAIL
                   paymentMethodType: CREDIT_CARD
-      summary: Обновление политики оплаты
+      summary: Локальное обновление политики оплаты eBay
       tags:
         - ebay_payment_policy
     delete:
       operationId: v1_ebay_policy_payment_delete
-      description: Данный Endpoint используется для удаления политики оплаты по id.
+      description: Данный Endpoint используется для локального удаления политики оплаты по id.
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление политики оплаты
+      summary: Локальное удаление политики оплаты eBay
       tags:
         - ebay_payment_policy
     parameters:
@@ -3692,46 +3689,15 @@ paths:
       operationId: v1_ebay_policy_payment_remote_create
       description: Данный Endpoint используется для удалённого создания или обновления политики фулфилментa на eBay.
       parameters: []
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/BasePaymentPolicy'
-          examples:
-            Example:
-              channel: string
-              description: string
-              name: string
-              categoryTypes:
-                - default: true
-                  name: MOTORS_VEHICLES
-              immediatePay: true
-              paymentInstructions: string
-              deposit:
-                amount:
-                  currency: RUB
-                  value: 0
-                dueIn:
-                  value: 24
-                paymentMethods:
-                  - brands:
-                      - AMERICAN_EXPRESS
-                    recipientAccountReference:
-                      referenceId: string
-                      referenceType: PAYPAL_EMAIL
-                    paymentMethodType: CREDIT_CARD
-              fullPaymentDueIn:
-                value: 3
-              paymentMethods:
-                - brands:
-                    - AMERICAN_EXPRESS
-                  recipientAccountReference:
-                    referenceId: string
-                    referenceType: PAYPAL_EMAIL
-                  paymentMethodType: CREDIT_CARD
       summary: Создание или обновление политики оплаты на eBay
       tags:
         - ebay_payment_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
@@ -3747,7 +3713,7 @@ paths:
       responses:
         '204':
           description: ''
-      summary: Удаление политики оплаты на ebay
+      summary: Удаление политики оплаты с eBay
       tags:
         - ebay_payment_policy
     parameters:
@@ -13149,6 +13115,45 @@ definitions:
         paymentMethodType: CREDIT_CARD
   BasePaymentPolicy:
     type: object
+    title: EbayPaymentPolicy
+    description: Используется для отображения политики оплаты eBay.
+    x-examples:
+      Example:
+        id: string
+        channel: string
+        description: string
+        name: string
+        policy_id: string
+        status: draft
+        categoryTypes:
+          - default: true
+            name: MOTORS_VEHICLES
+        immediatePay: true
+        paymentInstructions: string
+        deposit:
+          amount:
+            currency: RUB
+            value: 0
+          dueIn:
+            unit: string
+            value: 24
+          paymentMethods:
+            - brands:
+                - AMERICAN_EXPRESS
+              recipientAccountReference:
+                referenceId: string
+                referenceType: PAYPAL_EMAIL
+              paymentMethodType: CREDIT_CARD
+        fullPaymentDueIn:
+          unit: string
+          value: 3
+        paymentMethods:
+          - brands:
+              - AMERICAN_EXPRESS
+            recipientAccountReference:
+              referenceId: string
+              referenceType: PAYPAL_EMAIL
+            paymentMethodType: CREDIT_CARD
     properties:
       id:
         title: Id
@@ -13189,71 +13194,21 @@ definitions:
           - update_required
         readOnly: true
         description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentPolicyCategoryType'
-      immediatePay:
-        title: Immediate pay
-        type: boolean
-        description: Немедленная оплата.
-      paymentInstructions:
-        title: Payment instructions
+      category_type:
         type: string
-        maxLength: 1000
-        x-nullable: true
-        description: Инструкция по оплате.
-      deposit:
-        $ref: '#/definitions/BasePaymentPolicyDeposit'
-      fullPaymentDueIn:
-        $ref: '#/definitions/BaseFullPaymentDueIn'
-      paymentMethods:
-        type: array
-        items:
-          $ref: '#/definitions/BasePaymentMethod'
+        description: Категория политики
+      payment_instructions:
+        type: string
+        description: Инструкции по оплате
+      paypal_email:
+        type: string
+        description: PayPal email
+      full_payment_due_in_days:
+        type: string
+        description: Срок для полной оплаты
     required:
       - channel
       - name
-    title: BasePaymentPolicy
-    description: Используется для отображения политики оплаты.
-    x-examples:
-      Example:
-        id: string
-        channel: string
-        description: string
-        name: string
-        policy_id: string
-        status: draft
-        categoryTypes:
-          - default: true
-            name: MOTORS_VEHICLES
-        immediatePay: true
-        paymentInstructions: string
-        deposit:
-          amount:
-            currency: RUB
-            value: 0
-          dueIn:
-            unit: string
-            value: 24
-          paymentMethods:
-            - brands:
-                - AMERICAN_EXPRESS
-              recipientAccountReference:
-                referenceId: string
-                referenceType: PAYPAL_EMAIL
-              paymentMethodType: CREDIT_CARD
-        fullPaymentDueIn:
-          unit: string
-          value: 3
-        paymentMethods:
-          - brands:
-              - AMERICAN_EXPRESS
-            recipientAccountReference:
-              referenceId: string
-              referenceType: PAYPAL_EMAIL
-            paymentMethodType: CREDIT_CARD
   CreatePaymentPolicy:
     type: object
     title: CreatePaymentPolicy
@@ -13359,8 +13314,8 @@ definitions:
       - name
   UpdatePaymentPolicy:
     type: object
-    title: UpdatePaymentPolicy
-    description: Используется для обновления политик оплат.
+    title: CreateOrUpdateEbayPaymentPolicy
+    description: Используется для локального создания или обновления политики оплаты eBay.
     x-examples:
       Example:
         description: string
@@ -13393,12 +13348,6 @@ definitions:
               referenceType: PAYPAL_EMAIL
             paymentMethodType: CREDIT_CARD
     properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        readOnly: true
-        description: Идентификатор политики оплаты.
       channel:
         title: Канал
         type: string
@@ -13417,46 +13366,18 @@ definitions:
         maxLength: 64
         minLength: 1
         description: Название политики оплаты.
-      policy_id:
-        title: Уникальный ID политики в системе eBay
+      category_type:
         type: string
-        readOnly: true
-        minLength: 1
-        description: Идентификатор политики оплаты в сервисе ebay.
-      status:
-        title: Статус
+        description: Категория политики
+      full_payment_due_in_days:
         type: string
-        enum:
-          - draft
-          - ready_to_be_published
-          - published
-          - update_required
-        readOnly: true
-        description: Статус.
-      categoryTypes:
-        type: array
-        description: Тип категорий политики оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentPolicyCategoryType'
-      immediatePay:
-        title: Immediate pay
-        type: boolean
-        description: Немедленная оплата.
-      paymentInstructions:
-        title: Payment instructions
+        description: Срок для полной оплаты
+      payment_instructions:
         type: string
-        maxLength: 1000
-        x-nullable: true
-        description: Инструкция оплаты.
-      deposit:
-        $ref: '#/definitions/BasePaymentPolicyDeposit'
-      fullPaymentDueIn:
-        $ref: '#/definitions/BaseFullPaymentDueIn'
-      paymentMethods:
-        type: array
-        description: Метод оплаты.
-        items:
-          $ref: '#/definitions/BasePaymentMethod'
+        description: Инструкции по оплате
+      paypal_email:
+        type: string
+        description: PayPal email
     required:
       - name
   BaseReturnPolicyCategoryType:
