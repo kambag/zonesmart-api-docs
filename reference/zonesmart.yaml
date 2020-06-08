@@ -558,6 +558,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -5946,6 +5950,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -16742,3 +16750,37 @@ definitions:
         minimum: 0
         exclusiveMinimum: true
     description: 'Сервис доставки, используемый в политике фулфилмента eBay'
+  EbayChannelDefaults:
+    title: EbayChannelDefaults
+    type: object
+    properties:
+      fulfillmentPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики фулфлимента eBay
+          name:
+            type: string
+            description: Название политики фулфлимента eBay
+      paymentPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики оплаты eBay
+          name:
+            type: string
+            description: Название политики оплаты eBay
+      returnPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики возврата eBay
+          name:
+            type: string
+            description: Название политики возврата eBay
