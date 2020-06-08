@@ -8044,7 +8044,7 @@ paths:
             example-1: {}
     parameters: []
 
-/v1/ebay/account/{id}/channel_defaults/:
+  '/v1/ebay/account/{id}/channel_defaults/':
     parameters:
       - type: string
         name: id
@@ -8105,7 +8105,7 @@ paths:
                   - string
                   - 'null'
                 description: ID политики возврата eBay
-/v1/ebay/account/{id}/account_defaults/:
+  '/v1/ebay/account/{id}/account_defaults/':
     parameters:
       - type: string
         name: id
@@ -8169,8 +8169,6 @@ paths:
               - location_id
       tags:
         - ebay_account
-
-
 definitions:
   TokenObtainPair:
     type: object
