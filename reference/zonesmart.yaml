@@ -8043,6 +8043,134 @@ paths:
           x-examples:
             example-1: {}
     parameters: []
+
+/v1/ebay/account/{id}/channel_defaults/:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID аккаунта eBay
+    get:
+      summary: Получение значений по умолчанию для канала продаж eBay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EbayChannelDefaults'
+      operationId: get-v1-ebay-account-id-channel_defaults
+      description: Получение значений по умолчанию для канала продаж eBay
+      parameters:
+        - type: string
+          in: query
+          name: channel_id
+          description: ID канала продаж данного аккаунта eBay
+          required: true
+    put:
+      summary: Обновление значений по умолчанию для канала продаж eBay
+      operationId: put-v1-ebay-account-id-channel_defaults
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EbayChannelDefaults'
+      description: Обновление значений по умолчанию для канала продаж eBay
+      tags:
+        - ebay_account
+      parameters:
+        - type: string
+          in: query
+          required: true
+          description: ID канала продаж данного аккаунта eBay
+          name: channel_id
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              fulfillmentPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики фулфилмента eBay
+              paymentPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики оплаты eBay
+              returnPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики возврата eBay
+/v1/ebay/account/{id}/account_defaults/:
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID аккаунта eBay
+    get:
+      summary: Получение значений по умолчанию для аккаунта eBay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              location:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID склада eBay
+                  name:
+                    type: string
+                    description: Название склада eBay
+      operationId: get-v1-ebay-account-id-account_defaults
+      description: Получение значений по умолчанию для аккаунта eBay
+    put:
+      summary: Обновление значений по умолчанию для аккаунта eBay
+      operationId: put-v1-ebay-account-id-account_defaults
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              location:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID склада eBay
+                  name:
+                    type: string
+                    description: Название склада eBay
+      description: Обновление значений по умолчанию для аккаунта eBay
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              location_id:
+                type:
+                  - string
+                  - 'null'
+                description: ID склада eBay
+            required:
+              - location_id
+      tags:
+        - ebay_account
+
+
 definitions:
   TokenObtainPair:
     type: object
