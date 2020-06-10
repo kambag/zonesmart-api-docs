@@ -7222,6 +7222,14 @@ paths:
           in: query
           name: update_date
           description: Нижняя граница даты последнего обновления
+        - type: string
+          in: query
+          name: marketplace
+          description: ID маркетплейса
+        - type: string
+          in: query
+          name: domain
+          description: ID домена маркетплейса
       responses:
         '200':
           description: ''
@@ -8325,6 +8333,24 @@ paths:
             properties:
               channel_id:
                 type: string
+  /v1/zonesmart/order/sync/:
+    get:
+      summary: Скачивание заказов с подключенных маркетплейсов
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-zonesmart-order-sync
+      tags:
+        - order
+      description: 'Скачивание заказов со всех интегрированных пользователем маркетплейсов. На данный момент поддерживается скачивание заказов со всех аккаунтов eBay, со всех аккаунтов Etsy и со всех каналов продаж всех аккаунтов Amazon, подключенных пользователем. Если требуется ограничить число маркетплейсов для скачивания, можно определить get-параметр запроса "marketplaces", например, "?marketplaces=ebay,amazon" или "?marketplaces=etsy".'
+      parameters:
+        - type: array
+          in: query
+          name: marketplaces
+          description: 'Список маркетплейсов, с аккаунтов которых нужно скачать заказы. По умолчанию: "ebay,etsy"'
 definitions:
   TokenObtainPair:
     type: object
