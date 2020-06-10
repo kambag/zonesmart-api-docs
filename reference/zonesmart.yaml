@@ -1201,26 +1201,21 @@ paths:
   /v1/ebay/listing/:
     get:
       operationId: v1_ebay_listing_list
-      description: ''
+      description: Получение списка листингов eBay
       parameters:
-        - name: title
-          in: query
-          description: ''
-          required: false
-          type: string
         - name: status
           in: query
-          description: ''
+          description: Статус листинга eBay
           required: false
           type: string
         - name: channel
           in: query
-          description: ''
+          description: ID канала продаж
           required: false
           type: string
         - name: marketplace_user_account
           in: query
-          description: ''
+          description: ID аккаунта маркетплейса
           required: false
           type: string
         - name: limit
@@ -1257,10 +1252,11 @@ paths:
                 items:
                   $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение списка листингов eBay
     post:
       operationId: v1_ebay_listing_create
-      description: ''
+      description: Локальное создание листинга eBay
       parameters:
         - name: data
           in: body
@@ -1273,7 +1269,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание листинга eBay
     parameters: []
   /v1/ebay/listing/file_download/:
     get:
@@ -1568,72 +1565,27 @@ paths:
   '/v1/ebay/listing/remote_download_list/{channel_id}/':
     get:
       operationId: v1_ebay_listing_remote_download_list
-      description: ''
-      parameters:
-        - name: title
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: status
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: channel
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: marketplace_user_account
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: Скачивание листингов eBay с канала продаж
+      parameters: []
+      tags:
+        - ebay_listing
+      summary: Скачивание листингов с eBay
       responses:
         '200':
-          description: ''
+          description: OK
           schema:
-            required:
-              - count
-              - results
             type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/EbayListing'
-      tags:
-        - work_in_process
+            properties: {}
     parameters:
       - name: channel_id
         in: path
         required: true
         type: string
+        description: ID канала продаж
   '/v1/ebay/listing/{id}/':
     get:
       operationId: v1_ebay_listing_read
-      description: ''
+      description: Получение листинга eBay по ID
       parameters: []
       responses:
         '200':
@@ -1641,10 +1593,11 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение листинга eBay
     put:
       operationId: v1_ebay_listing_update
-      description: ''
+      description: Локальное обновление листинга eBay
       parameters:
         - name: data
           in: body
@@ -1657,96 +1610,89 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление листинга eBay
     delete:
       operationId: v1_ebay_listing_delete
-      description: ''
+      description: Локальное удаление листинга eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление листинга eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/link/':
     post:
       operationId: v1_ebay_listing_link
-      description: Creates base listing depends on listing data if no base listing specified before.
+      description: 'Если в теле запроса задано значение "base_listing_id", то листинг eBay привязывается к базовому листингу с таким ID. В противном случае на основе листинга eBay создается новый базовый листинг, к которому привязывается данный листинг eBay.'
       parameters:
-        - name: data
-          in: body
-          required: true
+        - in: body
+          name: body
           schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
+            type: object
+            properties:
+              base_listing_id:
+                type: string
+                description: ID базового листинга
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Привязывание листинга eBay к базовому листингу
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/remote_delete/':
     delete:
       operationId: v1_ebay_listing_remote_delete
-      description: ''
+      description: Удаление листинга с eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Удаление листинга с eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/remote_sync/':
     post:
       operationId: v1_ebay_listing_remote_sync
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
+      description: Создание листинга на eBay
+      parameters: []
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Создание листинга на eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/send_offer_to_buyers/':
     post:
       operationId: v1_ebay_listing_send_offer_to_buyers
@@ -2134,22 +2080,6 @@ paths:
             $ref: '#/definitions/UpdateCompatibility'
       tags:
         - work_in_process
-    patch:
-      operationId: v1_ebay_listing_compatibility_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateCompatibility'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateCompatibility'
-      tags:
-        - work_in_process
     delete:
       operationId: v1_ebay_listing_compatibility_delete
       description: ''
@@ -2171,7 +2101,7 @@ paths:
   '/v1/ebay/listing/{listing_id}/product/':
     get:
       operationId: v1_ebay_listing_product_list
-      description: ''
+      description: Получение списка продуктов eBay
       parameters:
         - name: limit
           in: query
@@ -2206,13 +2136,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/EbayProduct'
+      summary: Получение списка продуктов eBay
       tags:
-        - work_in_process
+        - ebay_listing
     post:
       operationId: v1_ebay_listing_product_create
-      description: |-
-        Переопределение метода создания,
-        т.к. необходимо передать listing_id из url в сериализатор.
+      description: Создание продукта eBay
       parameters:
         - name: data
           in: body
@@ -2225,16 +2154,18 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание продукта eBay
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
-  '/v1/ebay/listing/{listing_id}/product/{id}/':
+        description: ID листинга eBay
+  '/v1/ebay/listing/{listing_id}/product/{product_id}/':
     get:
       operationId: v1_ebay_listing_product_read
-      description: ''
+      description: Получение продукта eBay
       parameters: []
       responses:
         '200':
@@ -2242,10 +2173,11 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение продукта eBay
     put:
       operationId: v1_ebay_listing_product_update
-      description: ''
+      description: Обновление продукта eBay
       parameters:
         - name: data
           in: body
@@ -2258,45 +2190,33 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_product_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayProduct'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayProduct'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление продукта eBay
     delete:
       operationId: v1_ebay_listing_product_delete
-      description: ''
+      description: Удаление продукта eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление продукта eBay
     parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
+      - type: string
+        name: product_id
+        in: path
+        required: true
+        description: ID продукта eBay
   '/v1/ebay/listing/{listing_id}/product/{product_id}/specification/':
     get:
       operationId: v1_ebay_listing_product_specification_list
-      description: ''
+      description: Получение спецификаций продукта eBay
       parameters:
         - name: limit
           in: query
@@ -2331,11 +2251,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Specification'
+      summary: Получение спецификаций продукта eBay
       tags:
-        - work_in_process
+        - ebay_listing
     post:
       operationId: v1_ebay_listing_product_specification_create
-      description: ''
+      description: Создание спецификации продукта eBay
       parameters:
         - name: data
           in: body
@@ -2348,31 +2269,35 @@ paths:
           schema:
             $ref: '#/definitions/CreateSpecification'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание спецификации продукта eBay
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта eBay
   '/v1/ebay/listing/{listing_id}/product/{product_id}/specification/{id}/':
     get:
       operationId: v1_ebay_listing_product_specification_read
-      description: ''
+      description: Получение спецификации продукта eBay
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Specification'
+      summary: Получение спецификации продукта eBay
       tags:
-        - work_in_process
+        - ebay_listing
     put:
       operationId: v1_ebay_listing_product_specification_update
-      description: ''
+      description: Обновление спецификации продукта eBay
       parameters:
         - name: data
           in: body
@@ -2385,45 +2310,34 @@ paths:
           schema:
             $ref: '#/definitions/UpdateSpecification'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_product_specification_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateSpecification'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateSpecification'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление спецификации продукта eBay
     delete:
       operationId: v1_ebay_listing_product_specification_delete
-      description: ''
+      description: Удаление спецификации продукта eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление спецификации продукта eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID спецификации
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта eBay
   /v1/ebay/location/:
     get:
       operationId: v1_ebay_location_list
@@ -8382,6 +8296,25 @@ paths:
             properties: {}
       operationId: get-v1-ebay-category-id-aspect
       description: Получение аспектов категории eBay
+  '/v1/ebay/listing/{id}/unlink/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID листинга eBay
+    get:
+      summary: Отвязывание листинга eBay от базового листинга
+      tags:
+        - ebay_listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-ebay-listing-id-unlink
+      description: 'Отвязывание листинга eBay от базового листинга, к которому он привязан. Если листинг eBay не привязан к какому-либо базовому листингу, произойдет ошибка.'
 definitions:
   TokenObtainPair:
     type: object
@@ -12007,6 +11940,7 @@ definitions:
           type: string
           format: uuid
         uniqueItems: true
+    title: EbayProduct
   Specification:
     required:
       - name
