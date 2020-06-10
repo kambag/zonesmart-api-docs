@@ -4,8 +4,7 @@ info:
   description: 'API Zonesmart — API бэкенда сайта zonesmart, с которым должно происходить взаимодействие фронтенда. Через API Zonesmart можно взаимодействовать с API интегрированных с системой маркетплейсов, например, с API Ebay.'
   contact:
     email: dev@zonesmart.ru
-  license:
-    name: GNU General Public License v3.0
+  license: {}
   version: v1.0
 host: zonesmart.su
 schemes:
@@ -16,12 +15,12 @@ consumes:
 produces:
   - application/json
 securityDefinitions:
-  API Key - 1:
-    name: API Key
+  Authorization:
+    name: 'JWT {JWT}'
     type: apiKey
-    in: query
+    in: header
 security:
-  - Basic: []
+  - API Key - 1: []
 paths:
   /auth/jwt/create/:
     post:
@@ -469,6 +468,282 @@ paths:
         description: A unique integer value identifying this Пользователь.
         required: true
         type: integer
+  /v1/aliexpress/account/:
+    get:
+      operationId: v1_aliexpress_account_list
+      description: Данный endpoint используется для получения списка аккаунтов Aliexpress.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Кол-во вернувшихся объектов.
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение следующей группы объектов.
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
+              results:
+                type: array
+                description: Список аккаунтов Aliexpress.
+                items:
+                  $ref: '#/definitions/AliexpressUserAccountList'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 0
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  marketplace_user_account:
+                    id: string
+                    marketplace_name: string
+                    username: string
+                    user: 0
+                    marketplace: 0
+                  access_token_expiry: '2020-06-10T07:31:20Z'
+                  sandbox: true
+      summary: Получение списка аккаунтов Aliexpress
+      tags:
+        - aliexpress_account
+    parameters: []
+  /v1/aliexpress/account/complete/:
+    get:
+      operationId: v1_aliexpress_account_complete
+      description: 'Авторизовывает пользователя с помощью кода, который Aliexpress возвращает при авторизации.'
+      parameters:
+        - name: code
+          in: query
+          description: 'Код, полученный от Aliexpress'
+          required: true
+          type: string
+      summary: Подключение или обновление аккаунта Aliexpress
+      responses:
+        '200':
+          description: OK
+          schema: {}
+      tags:
+        - aliexpress_account
+    parameters: []
+  /v1/aliexpress/account/login/:
+    get:
+      operationId: v1_aliexpress_account_login
+      description: Перенаправляет пользователя на сайт Aliexpress для авторизации.
+      parameters: []
+      summary: Переход на страницу подключения аккаунта Aliexpress
+      responses:
+        '302':
+          description: ''
+          schema: {}
+      tags:
+        - aliexpress_account
+    parameters: []
+  '/v1/aliexpress/account/{id}/':
+    get:
+      operationId: v1_aliexpress_account_read
+      description: Данный endpoint используется для получения аккаунта Aliexpress по id.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AliexpressUserAccount'
+          examples:
+            Example:
+              id: string
+              marketplace_user_account:
+                id: string
+                marketplace_name: string
+                username: string
+                user: 0
+                marketplace: 0
+              shop:
+                id: string
+                merchant_login_id: string
+                shop_id: -2147483648
+                title: string
+                url: 'http://example.com'
+                country_code: stri
+                shop_type: string
+                product_posting_forbidden: true
+              access_token_expiry: '2020-06-10T07:31:20Z'
+              sandbox: true
+      summary: Получение аккаунта Aliexpress
+      tags:
+        - aliexpress_account
+    delete:
+      operationId: v1_aliexpress_account_delete
+      description: Данный endpoint используется для удаления аккаунта Aliexpress по id.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      summary: Удаление аккаунта Aliexpress
+      tags:
+        - aliexpress_account
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор аккаунта Aliexpress.
+  /v1/aliexpress/listing/:
+    get:
+      operationId: v1_aliexpress_listing_list
+      description: List of AliexpressListing instances
+      parameters:
+        - name: title
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: status
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: channel
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/BaseAliexpressListing'
+      tags:
+        - work_in_process
+    post:
+      operationId: v1_aliexpress_listing_create
+      description: Create AliexpressListing instance
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CreateAliexpressListing'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/CreateAliexpressListing'
+      tags:
+        - work_in_process
+    parameters: []
+  '/v1/aliexpress/listing/{id}/':
+    get:
+      operationId: v1_aliexpress_listing_read
+      description: Retrieve AliexpressListing instance
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/BaseAliexpressListing'
+      tags:
+        - work_in_process
+    put:
+      operationId: v1_aliexpress_listing_update
+      description: Update AliexpressListing instance
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateAliexpressListing'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateAliexpressListing'
+      tags:
+        - work_in_process
+    patch:
+      operationId: v1_aliexpress_listing_partial_update
+      description: Patch AliexpressListing instance
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateAliexpressListing'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UpdateAliexpressListing'
+      tags:
+        - work_in_process
+    delete:
+      operationId: v1_aliexpress_listing_delete
+      description: Delete AliexpressListing instance
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - work_in_process
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
   /v1/amazon/account/:
     get:
       operationId: v1_amazon_account_list
@@ -558,6 +833,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -5946,6 +6225,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -6899,18 +7182,8 @@ paths:
   /v1/zonesmart/order/:
     get:
       operationId: v1_zonesmart_order_list
-      description: ''
+      description: Получение списка заказов
       parameters:
-        - name: is_paid
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: channel
-          in: query
-          description: ''
-          required: false
-          type: string
         - name: limit
           in: query
           description: Number of results to return per page.
@@ -6921,6 +7194,34 @@ paths:
           description: The initial index from which to return the results.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account
+          description: ID аккаунта маркетплейса
+        - type: string
+          in: query
+          name: channel
+          description: ID канала продаж
+        - type: string
+          in: query
+          name: status
+          description: Статус фулфилмента
+        - type: boolean
+          in: query
+          name: is_paid
+          description: Оплачен ли заказ
+        - type: boolean
+          in: query
+          name: is_shipped
+          description: Отправлен ли заказ
+        - type: string
+          in: query
+          name: create_date
+          description: Нижняя граница даты создания
+        - type: string
+          in: query
+          name: update_date
+          description: Нижняя граница даты последнего обновления
       responses:
         '200':
           description: ''
@@ -6944,67 +7245,49 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Order'
+      summary: Получение списка заказов
       tags:
-        - work_in_process
+        - order
     parameters: []
   /v1/zonesmart/order/download_pdf/:
     get:
       operationId: v1_zonesmart_order_download_pdf_list
       description: ''
       parameters:
-        - name: limit
+        - type: array
           in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+          required: true
+          name: order_ids
+          description: Спикок ID заказов
+      summary: Скачивание PDF-файла с информацией о заказах
       responses:
         '200':
-          description: ''
+          description: OK
           schema:
-            required:
-              - count
-              - results
             type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/PDFOrder'
+            properties: {}
       tags:
-        - work_in_process
+        - order
     parameters: []
   '/v1/zonesmart/order/{id}/':
     get:
       operationId: v1_zonesmart_order_read
-      description: ''
+      description: Получение заказа по ID
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Order'
+      summary: Получение заказа
       tags:
-        - work_in_process
+        - order
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID заказа
   '/v1/zonesmart/order/{id}/ship/':
     post:
       operationId: v1_zonesmart_order_ship
@@ -7022,148 +7305,13 @@ paths:
             $ref: '#/definitions/Order'
       tags:
         - work_in_process
+      summary: ''
     parameters:
       - name: id
         in: path
         required: true
         type: string
-  '/v1/zonesmart/order/{order_id}/item/':
-    get:
-      operationId: v1_zonesmart_order_item_list
-      description: ''
-      parameters:
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/OrderItem'
-      tags:
-        - work_in_process
-    parameters:
-      - name: order_id
-        in: path
-        required: true
-        type: string
-  '/v1/zonesmart/order/{order_id}/item/{id}/':
-    get:
-      operationId: v1_zonesmart_order_item_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/OrderItem'
-      tags:
-        - work_in_process
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-      - name: order_id
-        in: path
-        required: true
-        type: string
-  '/v1/zonesmart/order/{order_id}/shipment/':
-    get:
-      operationId: v1_zonesmart_order_shipment_list
-      description: ''
-      parameters:
-        - name: date
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-              - count
-              - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/Shipment'
-      tags:
-        - work_in_process
-    parameters:
-      - name: order_id
-        in: path
-        required: true
-        type: string
-  '/v1/zonesmart/order/{order_id}/shipment/{id}/':
-    get:
-      operationId: v1_zonesmart_order_shipment_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Shipment'
-      tags:
-        - work_in_process
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-      - name: order_id
-        in: path
-        required: true
-        type: string
+        description: ID заказа
   /v1/zonesmart/support_requests/:
     get:
       operationId: v1_zonesmart_support_requests_list
@@ -7985,6 +8133,131 @@ paths:
           x-examples:
             example-1: {}
     parameters: []
+  '/v1/ebay/account/{id}/channel_defaults/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID аккаунта eBay
+    get:
+      summary: Получение значений по умолчанию для канала продаж eBay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EbayChannelDefaults'
+      operationId: get-v1-ebay-account-id-channel_defaults
+      description: Получение значений по умолчанию для канала продаж eBay
+      parameters:
+        - type: string
+          in: query
+          name: channel_id
+          description: ID канала продаж данного аккаунта eBay
+          required: true
+    put:
+      summary: Обновление значений по умолчанию для канала продаж eBay
+      operationId: put-v1-ebay-account-id-channel_defaults
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EbayChannelDefaults'
+      description: Обновление значений по умолчанию для канала продаж eBay
+      tags:
+        - ebay_account
+      parameters:
+        - type: string
+          in: query
+          required: true
+          description: ID канала продаж данного аккаунта eBay
+          name: channel_id
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              fulfillmentPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики фулфилмента eBay
+              paymentPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики оплаты eBay
+              returnPolicy:
+                type:
+                  - string
+                  - 'null'
+                description: ID политики возврата eBay
+  '/v1/ebay/account/{id}/account_defaults/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID аккаунта eBay
+    get:
+      summary: Получение значений по умолчанию для аккаунта eBay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              location:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID склада eBay
+                  name:
+                    type: string
+                    description: Название склада eBay
+      operationId: get-v1-ebay-account-id-account_defaults
+      description: Получение значений по умолчанию для аккаунта eBay
+    put:
+      summary: Обновление значений по умолчанию для аккаунта eBay
+      operationId: put-v1-ebay-account-id-account_defaults
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              location:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: ID склада eBay
+                  name:
+                    type: string
+                    description: Название склада eBay
+      description: Обновление значений по умолчанию для аккаунта eBay
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              location_id:
+                type:
+                  - string
+                  - 'null'
+                description: ID склада eBay
+            required:
+              - location_id
+      tags:
+        - ebay_account
 definitions:
   TokenObtainPair:
     type: object
@@ -8327,6 +8600,620 @@ definitions:
         username: Ivan123
         user: 1
         marketplace: 1
+  AliexpressShop:
+    title: AliexpressShop
+    type: object
+    description: Используется для отображения магазина Aliexpress.
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор магазина.
+      merchant_login_id:
+        title: ID продовца
+        type: string
+        maxLength: 30
+        minLength: 1
+        description: Идентификатор логина продовца.
+      shop_id:
+        title: ID магазина Aliexpress
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        description: Идентификатор магазина в системе Aliexpress.
+      title:
+        title: Название магазина
+        type: string
+        maxLength: 300
+        minLength: 1
+        description: Название магазина.
+      url:
+        title: URL магазина
+        type: string
+        format: uri
+        maxLength: 200
+        x-nullable: true
+        description: Ссылка на магазин.
+      country_code:
+        title: Страна регистрации магазина
+        type: string
+        maxLength: 4
+        minLength: 1
+        description: Код страны.
+      shop_type:
+        title: Тип магазина
+        type: string
+        maxLength: 60
+        minLength: 1
+        description: Тип магазина.
+      product_posting_forbidden:
+        title: Запрет на создания листингов
+        type: boolean
+        description: Запрет на создание листинга.
+    required:
+      - merchant_login_id
+      - shop_id
+      - title
+      - country_code
+      - shop_type
+    x-examples:
+      Example:
+        id: string
+        merchant_login_id: string
+        shop_id: -2147483648
+        title: string
+        url: 'http://example.com'
+        country_code: stri
+        shop_type: string
+        product_posting_forbidden: true
+  AliexpressUserAccount:
+    type: object
+    title: AliexpressUserAccount
+    description: Используется для отображения аккаунта Aliexpress.
+    x-examples:
+      Example:
+        id: string
+        marketplace_user_account:
+          id: string
+          marketplace_name: string
+          username: string
+          user: 0
+          marketplace: 0
+        shop:
+          id: string
+          merchant_login_id: string
+          shop_id: -2147483648
+          title: string
+          url: 'http://example.com'
+          country_code: stri
+          shop_type: string
+          product_posting_forbidden: true
+        access_token_expiry: '2020-06-10T07:31:20Z'
+        sandbox: true
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор аккаунта.
+      marketplace_user_account:
+        $ref: '#/definitions/MarketplaceUserAccount'
+      shop:
+        $ref: '#/definitions/AliexpressShop'
+      access_token_expiry:
+        title: Токен доступа годен до
+        type: string
+        format: date-time
+        description: Дата и время истечения токена доступа.
+      sandbox:
+        title: Тестовый аккаунт
+        type: boolean
+        description: Является тестовым аккаунтом.
+    required:
+      - shop
+  AliexpressUserAccountList:
+    type: object
+    x-examples:
+      Example:
+        id: string
+        marketplace_user_account:
+          id: string
+          marketplace_name: string
+          username: string
+          user: 0
+          marketplace: 0
+        access_token_expiry: '2020-06-10T07:31:20Z'
+        sandbox: true
+    title: AliexpressUserAccountList
+    description: Используется для отображения списка аккаунтов Aliexpress.
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор аккаунта.
+      marketplace_user_account:
+        $ref: '#/definitions/MarketplaceUserAccount'
+      access_token_expiry:
+        title: Токен доступа годен до
+        type: string
+        format: date-time
+        description: Дата и время истечения токена доступа.
+      sandbox:
+        title: Тестовый аккаунт
+        type: boolean
+        description: Является тестовым аккаунтов.
+  AliexpressProductAttribute:
+    required:
+      - product
+    type: object
+    properties:
+      value:
+        title: Значение атрибута
+        type: string
+        maxLength: 30
+        x-nullable: true
+      name:
+        title: Название атрибута
+        type: string
+        maxLength: 50
+        x-nullable: true
+      value_id:
+        title: ID значение атрибута
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      name_id:
+        title: ID название атрибута
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      product:
+        title: Product
+        type: string
+        format: uuid
+  BaseAliexpressProduct:
+    required:
+      - attributes
+      - sku
+      - price
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/AliexpressProductAttribute'
+      sku:
+        title: SKU
+        type: string
+        maxLength: 50
+        minLength: 1
+      price:
+        title: Цена
+        type: number
+      quantity:
+        title: Количество
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      _order:
+        title: order
+        type: integer
+        readOnly: true
+      main_image:
+        title: Изображение вариации
+        type: string
+        format: uuid
+        x-nullable: true
+  AliexpressListingAttribute:
+    required:
+      - listing
+    type: object
+    properties:
+      value:
+        title: Значение атрибута
+        type: string
+        maxLength: 30
+        x-nullable: true
+      name:
+        title: Название атрибута
+        type: string
+        maxLength: 50
+        x-nullable: true
+      value_id:
+        title: ID значение атрибута
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      name_id:
+        title: ID название атрибута
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        x-nullable: true
+      listing:
+        title: Listing
+        type: string
+        format: uuid
+  BaseAliexpressListing:
+    required:
+      - products
+      - title
+      - description_web
+      - description_mobile
+      - service_policy_id
+      - shipping_lead_time
+      - channel
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/BaseAliexpressProduct'
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/AliexpressListingAttribute'
+      created:
+        title: Created
+        type: string
+        format: date-time
+        readOnly: true
+      modified:
+        title: Modified
+        type: string
+        format: date-time
+        readOnly: true
+      status:
+        title: Статус
+        type: string
+        enum:
+          - draft
+          - ready_to_be_published
+          - published
+          - update_required
+      published_at:
+        title: Время публикации
+        type: string
+        format: date-time
+      title:
+        title: Наименование
+        type: string
+        maxLength: 128
+        minLength: 1
+      description_web:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      description_mobile:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      listing_id:
+        title: ID листинга
+        type: string
+        maxLength: 32
+        x-nullable: true
+      language:
+        title: Код языка локализации
+        type: string
+        enum:
+          - ru_RU
+          - es_ES
+      inventory_deduction_strategy:
+        title: Стратегия вычета продукта
+        type: string
+        enum:
+          - place_order_withhold
+          - payment_success_deduct
+      service_policy_id:
+        title: Service policy id
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      shipping_lead_time:
+        title: Shipping lead time
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      channel:
+        title: Пользовательский канал продаж
+        type: string
+        format: uuid
+      base_listing:
+        title: Базовый листинг
+        type: string
+        format: uuid
+        x-nullable: true
+      category:
+        title: Категория листинга Aliexpress
+        type: string
+        format: uuid
+        x-nullable: true
+      shipping_template:
+        title: Политика доставки
+        type: string
+        format: uuid
+        x-nullable: true
+      extra_images:
+        type: array
+        items:
+          title: Дополнительные изображения
+          type: string
+          format: uuid
+        uniqueItems: true
+  CreateAliexpressProduct:
+    required:
+      - sku
+      - price
+    type: object
+    properties:
+      sku:
+        title: SKU
+        type: string
+        maxLength: 50
+        minLength: 1
+      price:
+        title: Цена
+        type: number
+      quantity:
+        title: Количество
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+  CreateAliexpressListing:
+    required:
+      - title
+      - description_web
+      - description_mobile
+      - service_policy_id
+      - shipping_lead_time
+      - channel
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/CreateAliexpressProduct'
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/AliexpressListingAttribute'
+      created:
+        title: Created
+        type: string
+        format: date-time
+        readOnly: true
+      modified:
+        title: Modified
+        type: string
+        format: date-time
+        readOnly: true
+      status:
+        title: Статус
+        type: string
+        enum:
+          - draft
+          - ready_to_be_published
+          - published
+          - update_required
+      published_at:
+        title: Время публикации
+        type: string
+        format: date-time
+      title:
+        title: Наименование
+        type: string
+        maxLength: 128
+        minLength: 1
+      description_web:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      description_mobile:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      language:
+        title: Код языка локализации
+        type: string
+        enum:
+          - ru_RU
+          - es_ES
+      inventory_deduction_strategy:
+        title: Стратегия вычета продукта
+        type: string
+        enum:
+          - place_order_withhold
+          - payment_success_deduct
+      service_policy_id:
+        title: Service policy id
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      shipping_lead_time:
+        title: Shipping lead time
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      channel:
+        title: Пользовательский канал продаж
+        type: string
+        format: uuid
+      base_listing:
+        title: Базовый листинг
+        type: string
+        format: uuid
+        x-nullable: true
+      category:
+        title: Категория листинга Aliexpress
+        type: string
+        format: uuid
+        x-nullable: true
+      shipping_template:
+        title: Политика доставки
+        type: string
+        format: uuid
+        x-nullable: true
+  UpdateAliexpressProduct:
+    required:
+      - attributes
+      - sku
+      - price
+      - listing
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/AliexpressProductAttribute'
+      sku:
+        title: SKU
+        type: string
+        maxLength: 50
+        minLength: 1
+      price:
+        title: Цена
+        type: number
+      quantity:
+        title: Количество
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+      _order:
+        title: order
+        type: integer
+        readOnly: true
+      listing:
+        title: Listing
+        type: string
+        format: uuid
+      main_image:
+        title: Изображение вариации
+        type: string
+        format: uuid
+        x-nullable: true
+  UpdateAliexpressListing:
+    required:
+      - title
+      - service_policy_id
+      - shipping_lead_time
+    type: object
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/UpdateAliexpressProduct'
+      attributes:
+        type: array
+        items:
+          $ref: '#/definitions/AliexpressListingAttribute'
+      created:
+        title: Created
+        type: string
+        format: date-time
+        readOnly: true
+      modified:
+        title: Modified
+        type: string
+        format: date-time
+        readOnly: true
+      status:
+        title: Статус
+        type: string
+        enum:
+          - draft
+          - ready_to_be_published
+          - published
+          - update_required
+      published_at:
+        title: Время публикации
+        type: string
+        format: date-time
+      title:
+        title: Наименование
+        type: string
+        maxLength: 128
+        minLength: 1
+      description_web:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      description_mobile:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+      language:
+        title: Код языка локализации
+        type: string
+        enum:
+          - ru_RU
+          - es_ES
+      inventory_deduction_strategy:
+        title: Стратегия вычета продукта
+        type: string
+        enum:
+          - place_order_withhold
+          - payment_success_deduct
+      service_policy_id:
+        title: Service policy id
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      shipping_lead_time:
+        title: Shipping lead time
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+      channel:
+        title: Пользовательский канал продаж
+        type: string
+        format: uuid
+      base_listing:
+        title: Базовый листинг
+        type: string
+        format: uuid
+        x-nullable: true
+      category:
+        title: Категория листинга Aliexpress
+        type: string
+        format: uuid
+        x-nullable: true
+      shipping_template:
+        title: Политика доставки
+        type: string
+        format: uuid
+        x-nullable: true
   BusinessAddress:
     title: BusinessAddress
     type: object
@@ -16025,69 +16912,100 @@ definitions:
         type: string
         format: uuid
   Order:
-    required:
-      - shipping_address
-      - order_id
-      - create_date
-      - update_date
-      - is_paid
-      - is_shipped
-      - shipping_method
-      - buyer
-      - total_price
-      - currency_code
-      - marketplace_user_account
     type: object
+    title: BaseOrder
+    description: Базовый заказ
+    x-examples:
+      example-1:
+        id: 5a7c6750-c0b5-483a-b971-cdad6ec9aa24
+        items:
+          - sku: BN386255-A.3.2.5
+            title: LEGO Marvel Super Heroes - Sony PlayStation 3 - Greatest Hits NEW
+            quantity: 1
+            price: 17.41
+            currency: USD
+        shipping_address:
+          first_line: 189-02 64th ave. APT 4A
+          second_line: null
+          city: Fresh Meadows
+          state: NY
+          country_code: US
+          zip_code: 11365-3830
+        shipments: []
+        order_id: 11-05186-73058
+        status: open
+        create_date: '2020-06-08T16:30:44+03:00'
+        update_date: '2020-06-08T17:35:13+03:00'
+        is_paid: true
+        paid_info: null
+        is_shipped: false
+        shipping_method: default
+        buyer: jeongtae kim
+        total_price: 17.41
+        total_tax_cost: 1.42
+        total_shipping_cost: 0
+        currency_code: USD
+        invisible: false
+        marketplace_user_account: ae565d64-f13f-439f-a6c9-3deea5459376
     properties:
       id:
         title: Id
         type: string
         format: uuid
-      shipping_address:
-        $ref: '#/definitions/ShippingAddress'
       order_id:
         title: ID в системе маркетплейса
         type: string
         maxLength: 30
         minLength: 1
+        description: ID заказа
       create_date:
         title: Дата и время создания
         type: string
         format: date-time
+        description: Дата и время создания
       update_date:
         title: Дата и время обновления
         type: string
         format: date-time
+        description: Дата и время последнего обновления
       is_paid:
         title: Оплачен
         type: boolean
+        description: Оплачено
       paid_info:
         title: Информация об оплате
         type: string
         maxLength: 255
         x-nullable: true
+        description: Информация об оплате
       is_shipped:
         title: Отправлен
         type: boolean
+        description: Отправлено
       shipping_method:
         title: Тип доставки
         type: string
         maxLength: 255
         minLength: 1
+        description: Метод отправки
       buyer:
         title: Покупатель
         type: string
         maxLength: 255
         minLength: 1
+        description: Имя покупателя
       total_price:
         title: 'Итоговая цена с учетом налогов, доставки и дополнительных комиссий'
         type: number
+        description: Стоимость заказа
       total_tax_cost:
         title: Сумма налогов
         type: number
+        description: Налоги
       total_shipping_cost:
         title: Итоговая цена доставки
         type: number
+        description: Стоимость доставки
       currency_code:
         title: Валюта
         type: string
@@ -16247,10 +17165,66 @@ definitions:
           - ZAR
           - ZMW
           - ZWL
+        description: Валюта
       marketplace_user_account:
         title: Пользовательский аккаунт маркетплейса
         type: string
         format: uuid
+        description: ID аккаунта маркетплейса
+      items:
+        type: array
+        description: Заказанные товары
+        items:
+          type: object
+          properties:
+            sku:
+              type: string
+              description: SKU товара
+            title:
+              type: string
+              description: Название товара
+            quantity:
+              type: string
+              description: Заказанное количество единиц товара
+            price:
+              type: string
+              description: Цена единицы товара
+            currency:
+              type: string
+              description: Валюта
+      shipping_address:
+        type: object
+        description: Адрес покупателя
+        properties:
+          first_line:
+            type: string
+            description: Первая строка адреса
+          second_line:
+            type: string
+            description: Вторая строка адреса
+          city:
+            type: string
+            description: Город
+          state:
+            type: string
+            description: Штат
+          country_code:
+            type: string
+            description: Код страны
+          zip_code:
+            type: string
+            description: Почтовый индекс
+    required:
+      - order_id
+      - create_date
+      - update_date
+      - is_paid
+      - is_shipped
+      - shipping_method
+      - buyer
+      - total_price
+      - currency_code
+      - marketplace_user_account
   OrderItem:
     required:
       - sku
@@ -16692,3 +17666,37 @@ definitions:
         minimum: 0
         exclusiveMinimum: true
     description: 'Сервис доставки, используемый в политике фулфилмента eBay'
+  EbayChannelDefaults:
+    title: EbayChannelDefaults
+    type: object
+    properties:
+      fulfillmentPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики фулфлимента eBay
+          name:
+            type: string
+            description: Название политики фулфлимента eBay
+      paymentPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики оплаты eBay
+          name:
+            type: string
+            description: Название политики оплаты eBay
+      returnPolicy:
+        type: object
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: ID политики возврата eBay
+          name:
+            type: string
+            description: Название политики возврата eBay
