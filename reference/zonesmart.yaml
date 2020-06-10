@@ -6484,32 +6484,65 @@ paths:
       summary: Получить все базовые листинги
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
+          examples:
+            example-1: {}
       operationId: get-v1-zonesmart-listing
       description: ''
     post:
       summary: Создать базовый листинг
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
       operationId: post-v1-zonesmart-listing
+      description: ''
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
     parameters: []
     put:
       summary: Обновить базовый листинг
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
       operationId: put-v1-zonesmart-listing
-    delete:
-      summary: Удалить базовый листинг
-      tags:
-        - listing
-      responses: {}
-      operationId: delete-v1-zonesmart-listing
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
+    patch:
+      summary: ''
+      operationId: patch-v1-zonesmart-listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
   '/v1/zonesmart/listing/{id}/':
     get:
       operationId: v1_zonesmart_listing_read
-      description: Listing view.
+      description: ''
       parameters: []
       responses:
         '200':
@@ -6517,10 +6550,11 @@ paths:
           schema:
             $ref: '#/definitions/Listing'
       tags:
-        - work_in_process
+        - listing
+      summary: Получить базовый листинг
     put:
       operationId: v1_zonesmart_listing_update
-      description: Listing view.
+      description: ''
       parameters:
         - name: data
           in: body
@@ -6534,9 +6568,10 @@ paths:
             $ref: '#/definitions/Listing'
       tags:
         - work_in_process
+      summary: Обновить базовый листинг
     patch:
       operationId: v1_zonesmart_listing_partial_update
-      description: Listing view.
+      description: ''
       parameters:
         - name: data
           in: body
@@ -6550,15 +6585,17 @@ paths:
             $ref: '#/definitions/Listing'
       tags:
         - work_in_process
+      summary: Частично обновить базовый листинг
     delete:
       operationId: v1_zonesmart_listing_delete
-      description: Listing view.
+      description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - listing
+      summary: Удалить базовый листинг
     parameters:
       - name: id
         in: path
@@ -6637,7 +6674,7 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Кол-во результатов на странице
           required: false
           type: integer
         - name: offset
@@ -6669,28 +6706,30 @@ paths:
                 items:
                   $ref: '#/definitions/Product'
       tags:
-        - work_in_process
-    post:
-      operationId: v1_zonesmart_listing_product_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Product'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Product'
-      tags:
-        - work_in_process
+        - listing
+        - product
+      summary: Получение всех продуктов для выбранного листинга
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+    post:
+      summary: Создание продукта для выбранного листинга
+      operationId: post-v1-zonesmart-listing-listing_id-product
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Product'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Product'
+      tags:
+        - listing
+        - product
   '/v1/zonesmart/listing/{listing_id}/product/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_read
@@ -6701,8 +6740,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Получение конкретного продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     put:
       operationId: v1_zonesmart_listing_product_update
       description: ''
@@ -6717,8 +6758,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Обновление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     patch:
       operationId: v1_zonesmart_listing_product_partial_update
       description: ''
@@ -6733,8 +6776,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Частичное обновление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     delete:
       operationId: v1_zonesmart_listing_product_delete
       description: ''
@@ -6742,8 +6787,10 @@ paths:
       responses:
         '204':
           description: ''
+      summary: Удаление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     parameters:
       - name: id
         in: path
@@ -6791,8 +6838,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseAttribute'
+      summary: Получить все атрибуты для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     post:
       operationId: v1_zonesmart_listing_product_attribute_create
       description: ''
@@ -6807,8 +6856,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Создать атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     parameters:
       - name: listing_id
         in: path
@@ -6828,8 +6879,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Получить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     put:
       operationId: v1_zonesmart_listing_product_attribute_update
       description: ''
@@ -6844,8 +6897,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Обновить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     patch:
       operationId: v1_zonesmart_listing_product_attribute_partial_update
       description: ''
@@ -6860,8 +6915,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Частично обновить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     delete:
       operationId: v1_zonesmart_listing_product_attribute_delete
       description: ''
@@ -6869,8 +6926,10 @@ paths:
       responses:
         '204':
           description: ''
+      summary: Удалить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     parameters:
       - name: id
         in: path
@@ -8265,7 +8324,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Конвертирует базовый листинг в листинг для конкретной интеграции
+      summary: Конвертация базового листинга в листинг для конкретной интеграции
       tags:
         - listing
         - converter
@@ -16430,6 +16489,7 @@ definitions:
       user:
         title: Пользователь
         type: integer
+    description: ''
   Feedback:
     required:
       - feedback_id
