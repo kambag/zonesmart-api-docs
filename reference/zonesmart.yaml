@@ -8286,21 +8286,37 @@ paths:
         При успешном создании будет возвращен id созданного листинга, который можно будет посмотреть в списке листингов для конкретной интеграции.
 
         Пример с eBay:
-        1) Отправляем запрос на создание (/v1/zonesmart/listing/{id}/convert) со следующими данными:
+        1) Отправляем запрос на создание
 
-        ae565d64-f13f-439f-a6c9-3deea5459376 - id нашего канала продаж, который мы взяли из /v1/zonesmart/channel/.
-
+        ```json http
         {
-          "channel_id": "ae565d64-f13f-439f-a6c9-3deea5459376"
+          "method": "POST",
+          "url": "/v1/zonesmart/listing/{id}/convert",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "channel_id": "ae565d64-f13f-439f-a6c9-3deea5459376"
+          }
         }
+        ```
 
         2) Получаем ответ такого вида:
 
+        ```json
         {
           "id": "14ea83cb-901b-46ae-943e-e240689fcb79"
         }
+        ```
 
-        3) Переходим по запросу /v1/ebay/listing/14ea83cb-901b-46ae-943e-e240689fcb79/ и видим наш новый созданный листинг.
+        3) Переходим по запросу на получение листинга и видим наш новый созданный листинг.
+
+        ```json http
+        {
+          "method": "GET",
+          "url": "/v1/ebay/listing/14ea83cb-901b-46ae-943e-e240689fcb79/"
+        }
+        ```
       parameters:
         - in: body
           name: body
