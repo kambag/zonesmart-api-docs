@@ -6727,6 +6727,9 @@ paths:
           name: body
           schema:
             $ref: '#/definitions/Product'
+      tags:
+        - listing
+        - product
   '/v1/zonesmart/listing/{listing_id}/product/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_read
