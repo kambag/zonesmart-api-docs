@@ -6484,32 +6484,82 @@ paths:
       summary: Получить все базовые листинги
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
+          examples:
+            example-1: {}
       operationId: get-v1-zonesmart-listing
       description: ''
     post:
       summary: Создать базовый листинг
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
       operationId: post-v1-zonesmart-listing
+      description: ''
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
     parameters: []
     put:
       summary: Обновить базовый листинг
       tags:
         - listing
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
       operationId: put-v1-zonesmart-listing
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
     delete:
       summary: Удалить базовый листинг
       tags:
         - listing
-      responses: {}
+      responses:
+        '204':
+          description: No Content
+          schema: {}
+          examples:
+            example-1: {}
+        '400':
+          description: Bad Request
+          schema:
+            type: object
+            properties: {}
       operationId: delete-v1-zonesmart-listing
+      parameters: []
+    patch:
+      summary: ''
+      operationId: patch-v1-zonesmart-listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Listing'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Listing'
   '/v1/zonesmart/listing/{id}/':
     get:
       operationId: v1_zonesmart_listing_read
-      description: Listing view.
+      description: ''
       parameters: []
       responses:
         '200':
@@ -6517,10 +6567,11 @@ paths:
           schema:
             $ref: '#/definitions/Listing'
       tags:
-        - work_in_process
+        - listing
+      summary: Получить базовый листинг
     put:
       operationId: v1_zonesmart_listing_update
-      description: Listing view.
+      description: ''
       parameters:
         - name: data
           in: body
@@ -6534,9 +6585,10 @@ paths:
             $ref: '#/definitions/Listing'
       tags:
         - work_in_process
+      summary: Обновить базовый листинг
     patch:
       operationId: v1_zonesmart_listing_partial_update
-      description: Listing view.
+      description: ''
       parameters:
         - name: data
           in: body
@@ -6550,15 +6602,17 @@ paths:
             $ref: '#/definitions/Listing'
       tags:
         - work_in_process
+      summary: Частично обновить базовый листинг
     delete:
       operationId: v1_zonesmart_listing_delete
-      description: Listing view.
+      description: ''
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - listing
+      summary: Удалить базовый листинг
     parameters:
       - name: id
         in: path
@@ -16430,6 +16484,7 @@ definitions:
       user:
         title: Пользователь
         type: integer
+    description: ''
   Feedback:
     required:
       - feedback_id
