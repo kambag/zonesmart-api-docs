@@ -6714,6 +6714,19 @@ paths:
         in: path
         required: true
         type: string
+    post:
+      summary: Создание продукта для выбранного листинга
+      operationId: post-v1-zonesmart-listing-listing_id-product
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Product'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Product'
   '/v1/zonesmart/listing/{listing_id}/product/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_read
@@ -6784,15 +6797,6 @@ paths:
         in: path
         required: true
         type: string
-    post:
-      summary: Создание продукта для выбранного листинга
-      operationId: post-v1-zonesmart-listing-listing_id-product-id
-      responses:
-        '200':
-          description: OK
-      tags:
-        - listing
-        - product
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_list
