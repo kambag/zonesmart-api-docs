@@ -6838,8 +6838,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseAttribute'
+      summary: Получить все атрибуты для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     post:
       operationId: v1_zonesmart_listing_product_attribute_create
       description: ''
@@ -6854,8 +6856,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Создать атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     parameters:
       - name: listing_id
         in: path
@@ -6875,8 +6879,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Получить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     put:
       operationId: v1_zonesmart_listing_product_attribute_update
       description: ''
@@ -6891,8 +6897,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Обновить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     patch:
       operationId: v1_zonesmart_listing_product_attribute_partial_update
       description: ''
@@ -6907,8 +6915,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
+      summary: Частично обновить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     delete:
       operationId: v1_zonesmart_listing_product_attribute_delete
       description: ''
@@ -6916,8 +6926,10 @@ paths:
       responses:
         '204':
           description: ''
+      summary: Удалить атрибут для выбранного продукта
       tags:
-        - work_in_process
+        - listing
+        - attribute
     parameters:
       - name: id
         in: path
