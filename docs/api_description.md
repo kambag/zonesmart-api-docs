@@ -234,16 +234,28 @@ tags: [general]
 Подобно базовому листингу, листинг eBay имеет привязанные к нему продукты eBay, а они в свою очередь - привязанные к ним атрибуты типа "ключ-значение". Между продуктами и атрибутами базового листинга и продуктами и атрибутами созданного на его основе листинга eBay существует однозначное соответствие. 
 
 Важные вызовы:
-1) [Получение списка листингов eBay]()
-2) [Получение листинга eBay]()
-3) [Локальное создание листинга eBay]()
-4) [Локальное обновление листинга eBay]()
-5) [Локальное удаление листинга eBay]()
-6) [Привязывание листинга eBay к базовому листингу]()
-7) [Отвязывание листинга eBay от базового листинга]()
-8) [Скачивание листингов eBay]()
-9) [Создание или обновление листинга на eBay]()
-10) [Удаление листинга с eBay]()
+
+* Локальные вызовы:
+1) [Получение списка листингов eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1/get&group=ebay_listing) (вместе с продуктами и атрибутами)
+2) [Получение листинга eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1/get&group=ebay_listing) (вместе с продуктами и атрибутами)
+3) [Локальное создание листинга eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1/post&group=ebay_listing) (без создания продуктов и атрибутов)
+4) [Локальное создание продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1/post&group=ebay_listing) (без создания атрибутов)
+5) [Локальное создание атрибута продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1%7Bproduct_id%7D~1specification~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1{product_id}~1specification~1/post&group=ebay_listing)
+6) [Локальное обновление листинга eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1/put?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1/put&group=ebay_listing) (без обновления продуктов и атрибутов)
+7) [Локальное обновление продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1%7Bproduct_id%7D~1/put?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1{product_id}~1/put&group=ebay_listing) (без обновления атрибутов)
+8) [Локальное обновление атрибута продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1%7Bproduct_id%7D~1specification~1%7Bid%7D~1/put?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1{product_id}~1specification~1{id}~1/put&group=ebay_listing)
+9) [Локальное удаление листинга eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1/delete&group=ebay_listing) (вместе с продуктами и атрибутами)
+10) [Локальное удаление продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1%7Bproduct_id%7D~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1{product_id}~1/delete&group=ebay_listing) (вместе с атрибутами)
+11) [Локальное удаление атрибута продукта eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Blisting_id%7D~1product~1%7Bproduct_id%7D~1specification~1%7Bid%7D~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{listing_id}~1product~1{product_id}~1specification~1{id}~1/delete&group=ebay_listing)
+
+* Удаленные вызовы:
+1) [Скачивание листингов с eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1remote_download_list~1%7Bchannel_id%7D~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1remote_download_list~1{channel_id}~1/get&group=ebay_listing)
+2) [Создание или обновление листинга на eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1remote_sync~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1remote_sync~1/post&group=ebay_listing)
+3) [Удаление листинга с eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1remote_delete~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1remote_delete~1/delete&group=ebay_listing)
+
+* Другое:
+1) [Привязывание листинга eBay к базовому листингу](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1link~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1link~1/post&group=ebay_listing)
+2) [Отвязывание листинга eBay от базового листинга](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1%7Bid%7D~1unlink~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1listing~1{id}~1unlink~1/get&group=ebay_listing)
 
 
 ### Etsy
