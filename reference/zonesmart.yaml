@@ -112,7 +112,7 @@ paths:
   /users/:
     get:
       operationId: users_list
-      description: ''
+      description: Получение списка пользователей Zonesmart
       parameters:
         - name: limit
           in: query
@@ -148,7 +148,8 @@ paths:
                 items:
                   $ref: '#/definitions/ZonesmartUser'
       tags:
-        - work_in_process
+        - user
+      summary: Получение списка пользователей
     post:
       operationId: users_create
       description: ''
@@ -187,25 +188,12 @@ paths:
   /users/me/:
     get:
       operationId: users_me_read
-      description: ''
-      parameters:
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: 'Получение информации о своем пользователе, то есть пользователе, которому принаджежит используемый токен доступа.'
+      parameters: []
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
@@ -219,11 +207,13 @@ paths:
                 format: uri
                 x-nullable: true
               results:
-                type: array
-                items:
-                  $ref: '#/definitions/User'
+                $ref: '#/definitions/User'
+            required:
+              - count
+              - results
       tags:
-        - work_in_process
+        - user
+      summary: Получение собственного пользователя
     put:
       operationId: users_me_update
       description: ''

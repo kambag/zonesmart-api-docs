@@ -42,7 +42,7 @@ tags: [general]
 
 Вызовы:
 
-[Создание токена](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1create~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1create~1/post&group=master) ()
+[Создание токена](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1create~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1create~1/post&group=master)
 
 [Обновление токена](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1refresh~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1auth~1jwt~1refresh~1/post&group=master)
 
