@@ -6674,7 +6674,7 @@ paths:
       parameters:
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Кол-во результатов на странице
           required: false
           type: integer
         - name: offset
@@ -6706,23 +6706,9 @@ paths:
                 items:
                   $ref: '#/definitions/Product'
       tags:
-        - work_in_process
-    post:
-      operationId: v1_zonesmart_listing_product_create
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Product'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Product'
-      tags:
-        - work_in_process
+        - listing
+        - product
+      summary: Получение всех продуктов для выбранного листинга
     parameters:
       - name: listing_id
         in: path
@@ -6738,8 +6724,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Получение конкретного продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     put:
       operationId: v1_zonesmart_listing_product_update
       description: ''
@@ -6754,8 +6742,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Обновление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     patch:
       operationId: v1_zonesmart_listing_product_partial_update
       description: ''
@@ -6770,8 +6760,10 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Product'
+      summary: Частичное обновление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     delete:
       operationId: v1_zonesmart_listing_product_delete
       description: ''
@@ -6779,8 +6771,10 @@ paths:
       responses:
         '204':
           description: ''
+      summary: Удаление продукта для выбранного листинга
       tags:
-        - work_in_process
+        - listing
+        - product
     parameters:
       - name: id
         in: path
@@ -6790,6 +6784,15 @@ paths:
         in: path
         required: true
         type: string
+    post:
+      summary: Создание продукта для выбранного листинга
+      operationId: post-v1-zonesmart-listing-listing_id-product-id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - listing
+        - product
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_list
