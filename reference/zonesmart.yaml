@@ -1067,41 +1067,41 @@ paths:
   /v1/ebay/category/:
     get:
       operationId: v1_ebay_category_list
-      description: ''
+      description: Получение списка категорий eBay
       parameters:
         - name: parent_id
           in: query
-          description: ''
+          description: ID родительской категории
           required: false
           type: string
         - name: level
           in: query
-          description: ''
+          description: Уровень вложенности категории
           required: false
           type: number
         - name: domain_id
           in: query
-          description: ''
+          description: 'ID домена маркетплейса, к которому относится категория'
           required: false
           type: number
         - name: is_leaf
           in: query
-          description: ''
+          description: Является ли категория листовой
           required: false
           type: string
         - name: category_id
           in: query
-          description: ''
+          description: ID категории в eBay
           required: false
           type: string
         - name: variations_supported
           in: query
-          description: ''
+          description: Поддерживаются ли вариации
           required: false
           type: string
         - name: transport_supported
           in: query
-          description: ''
+          description: Поддерживается ли транспорт
           required: false
           type: string
         - name: limit
@@ -1138,12 +1138,13 @@ paths:
                 items:
                   $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: Получение списка категорий eBay
     parameters: []
   '/v1/ebay/category/{id}/':
     get:
       operationId: v1_ebay_category_read
-      description: ''
+      description: Получение категории eBay по ID.
       parameters: []
       responses:
         '200':
@@ -1151,7 +1152,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: Получение категории eBay
     parameters:
       - name: id
         in: path
@@ -1168,7 +1170,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: ''
     parameters:
       - name: id
         in: path
@@ -1185,7 +1188,7 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
     parameters:
       - name: id
         in: path
@@ -8360,6 +8363,25 @@ paths:
           in: query
           name: marketplaces
           description: 'Список маркетплейсов, с аккаунтов которых нужно скачать заказы. По умолчанию: "ebay,etsy"'
+  '/v1/ebay/category/{id}/aspect/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID категории eBay
+    get:
+      summary: Получение аспектов категории eBay
+      tags:
+        - ebay_category
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-ebay-category-id-aspect
+      description: Получение аспектов категории eBay
 definitions:
   TokenObtainPair:
     type: object
@@ -11488,13 +11510,6 @@ definitions:
       - profile
       - sandbox
   EbayCategory:
-    required:
-      - domain_id
-      - category_id
-      - parent_id
-      - level
-      - name
-      - is_leaf
     type: object
     properties:
       id:
@@ -11504,39 +11519,56 @@ definitions:
       domain_id:
         title: Domain id
         type: integer
+        description: 'ID домена маркетплейса, к которому относится категория'
       category_id:
         title: ID категории
         type: string
         maxLength: 15
         minLength: 1
+        description: ID категории в eBay
       parent_id:
         title: ID родительской категории или 0
         type: string
         maxLength: 15
         minLength: 1
+        description: ID родительской категории
       level:
         title: Уровень вложенности категории
         type: integer
         maximum: 32767
         minimum: 0
+        description: Уровень вложенности категории
       name:
         title: Название категории
         type: string
         maxLength: 100
         minLength: 1
+        description: Название категории
       name_path:
         title: Путь к категории
         type: string
         maxLength: 500
+        description: Путь категории
       is_leaf:
         title: Является листом дерева категорий
         type: boolean
+        description: Является ли категория листовой
       variationsSupported:
         title: Доступно для групп товаров
         type: boolean
+        description: Поддерживаются ли вариации
       transportSupported:
         title: Транспортная категория
         type: boolean
+        description: Поддерживается ли транспорт
+    required:
+      - domain_id
+      - category_id
+      - parent_id
+      - level
+      - name
+      - is_leaf
+    title: EbayCategory
   EbayListing:
     required:
       - listing_sku
