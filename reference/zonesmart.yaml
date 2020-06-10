@@ -25,17 +25,28 @@ paths:
   /auth/jwt/create/:
     post:
       operationId: auth_jwt_create_create
-      description: Данный Endpoint используется для создания jwt токена.
+      description: 'Обменивание логина и пароля пользователя Zonesmart на токены доступа и обновления. Токен доступа используется для авторизованных вызовов к API Zonesmart, а токен обновления используется для обновления токена доступа при его устаревании.'
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/TokenObtainPair'
+            type: object
+            properties:
+              email:
+                type: string
+                description: Email пользователя
+              password:
+                type: string
+                description: Пароль пользователя
+            required:
+              - email
+              - password
           x-examples:
             Example:
               email: 123@gmail.com
               password: '123123'
+          description: ''
         - name: data
           in: body
           required: true
@@ -43,31 +54,38 @@ paths:
             $ref: '#/definitions/TokenObtainPair'
           x-examples:
             example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenObtainPair'
-          examples:
-            Example:
-              email: 123@gmail.com
-              password: '123123'
       tags:
         - auth
-      summary: Создание токена доступа
+      summary: Получение JWT-токенов
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+                description: Токен обновления
+              access:
+                type: string
+                description: Токен доступа
     parameters: []
   /auth/jwt/refresh/:
     post:
       operationId: auth_jwt_refresh_create
-      description: |-
-        Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
+      description: Обменивание токена обновления на токен доступа.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/TokenRefresh'
+            type: object
+            properties:
+              refresh:
+                type: string
+                description: Токен обновления
+            required:
+              - refresh
           x-examples:
             Example:
               refresh: 123-333-123
@@ -78,17 +96,18 @@ paths:
             $ref: '#/definitions/TokenRefresh'
           x-examples:
             example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenRefresh'
-          examples:
-            Example:
-              refresh: 123-333-123
       tags:
         - auth
       summary: Обновление токена доступа
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              access:
+                type: string
+                description: Токен доступа
     parameters: []
   /users/:
     get:
