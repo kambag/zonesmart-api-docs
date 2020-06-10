@@ -170,14 +170,16 @@ tags: [general]
 
 
 #### Ebay Category
-Получение категорий товаров для различных доменов eBay.
+Получение категорий товаров для различных доменов eBay и их аспектов.
+
+Аспекты категории представляют из себя возможные ключи и значения для атрибутов продуктов листингов eBay. Для каждой категории аспекты свои, причем некоторые из них могут быть обязательными для заполнения при создании листинга eBay. Таким образом, получение аспектов eBay может понадобиться при создании листинга eBay после того, как пользователь выберет категорию eBay.
 
 Категории доступны в базе данных без предварительного скачивания или создания и обновляются автоматически.
 
 Важные вызовы:
-1) [Получение списка категорий eBay]()
-2) [Получение категории eBay]()
-3) [Получение аспектов категории eBay]()
+1) [Получение списка категорий eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1/get&group=ebay_listing)
+2) [Получение категории eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1%7Bid%7D~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1{id}~1/get&group=ebay_listing)
+3) [Получение аспектов категории eBay](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1%7Bid%7D~1aspect~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1ebay~1category~1{id}~1aspect~1/get&group=ebay_listing)
 
 
 #### Ebay Location
@@ -232,12 +234,16 @@ tags: [general]
 Подобно базовому листингу, листинг eBay имеет привязанные к нему продукты eBay, а они в свою очередь - привязанные к ним атрибуты типа "ключ-значение". Между продуктами и атрибутами базового листинга и продуктами и атрибутами созданного на его основе листинга eBay существует однозначное соответствие. 
 
 Важные вызовы:
-1) []()
-2) []()
-3) []()
-4) []()
-5) []()
-6) []()
+1) [Получение списка листингов eBay]()
+2) [Получение листинга eBay]()
+3) [Локальное создание листинга eBay]()
+4) [Локальное обновление листинга eBay]()
+5) [Локальное удаление листинга eBay]()
+6) [Привязывание листинга eBay к базовому листингу]()
+7) [Отвязывание листинга eBay от базового листинга]()
+8) [Скачивание листингов eBay]()
+9) [Создание или обновление листинга на eBay]()
+10) [Удаление листинга с eBay]()
 
 
 ### Etsy
