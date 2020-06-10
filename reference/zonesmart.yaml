@@ -6526,23 +6526,6 @@ paths:
           name: body
           schema:
             $ref: '#/definitions/Listing'
-    delete:
-      summary: Удалить базовый листинг
-      tags:
-        - listing
-      responses:
-        '204':
-          description: No Content
-          schema: {}
-          examples:
-            example-1: {}
-        '400':
-          description: Bad Request
-          schema:
-            type: object
-            properties: {}
-      operationId: delete-v1-zonesmart-listing
-      parameters: []
     patch:
       summary: ''
       operationId: patch-v1-zonesmart-listing
