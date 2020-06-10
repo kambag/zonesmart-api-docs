@@ -8258,6 +8258,57 @@ paths:
               - location_id
       tags:
         - ebay_account
+  '/v1/zonesmart/listing/{id}/convert/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Конвертирует базовый листинг в листинг для конкретной интеграции
+      tags:
+        - listing
+        - converter
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+      operationId: post-v1-zonesmart-listing-id-convert
+      description: |-
+        Конвертирует базовый листинг в листинг конкретной интеграции (eBay, Etsy и так далее).
+
+        Для конвертации требуется передать id канала продаж, для которого будет создан новый листинг.
+
+        При успешном создании будет возвращен id созданного листинга, который можно будет посмотреть в списке листингов для конкретной интеграции.
+
+        Пример с eBay:
+        1) Отправляем запрос на создание (/v1/zonesmart/listing/{id}/convert) со следующими данными:
+
+        ae565d64-f13f-439f-a6c9-3deea5459376 - id нашего канала продаж, который мы взяли из /v1/zonesmart/channel/.
+
+        {
+          "channel_id": "ae565d64-f13f-439f-a6c9-3deea5459376"
+        }
+
+        2) Получаем ответ такого вида:
+
+        {
+          "id": "14ea83cb-901b-46ae-943e-e240689fcb79"
+        }
+
+        3) Переходим по запросу /v1/ebay/listing/14ea83cb-901b-46ae-943e-e240689fcb79/ и видим наш новый созданный листинг.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              channel_id:
+                type: string
 definitions:
   TokenObtainPair:
     type: object
