@@ -124,6 +124,7 @@ tags: [listing, product, attribute]
 ```
 
 > b458fd2d-26c4-4557-a9f0-0007c20b191a - идентификатор созданного ранее листинга.
+
 > ba6d3417-ee3f-4200-bf5b-ee2f01adedfe - идетификатор созданного ранее продукта.
 
 В ответ на запрос мы получим следующий результат:
@@ -132,5 +133,110 @@ tags: [listing, product, attribute]
     "product": "ba6d3417-ee3f-4200-bf5b-ee2f01adedfe", // идентификатор атрибута продукта.
     "name": "Color", // наименование атрибута (цвет, размер, тип ткани и так далее).
     "value": "Green" // значение атрибута.
+}
+```
+
+## Обновление
+
+Предположим, что мы хотим изменить цену для нашего товара, тогда нам необходимо будет выполнить следующий запрос:
+```json http
+{
+  "method": "patch",
+  "url": "v1/zonesmart/listing/b458fd2d-26c4-4557-a9f0-0007c20b191a/product/ba6d3417-ee3f-4200-bf5b-ee2f01adedfe/",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+	  "price": 2000
+  }
+}
+```
+> b458fd2d-26c4-4557-a9f0-0007c20b191a - идентификатор созданного ранее листинга.
+
+> ba6d3417-ee3f-4200-bf5b-ee2f01adedfe - идетификатор созданного ранее продукта.
+
+В ответ на запрос мы получим обновленные данные о нашем продуте:
+```json
+{
+    "id": "ba6d3417-ee3f-4200-bf5b-ee2f01adedfe",
+    "created": "2020-06-10T19:25:32.605693+03:00",
+    "modified": "2020-06-11T12:13:36.150563+03:00",
+    "is_removed": false,
+    "sku": "TSHIRT-1",
+    "quantity": 0,
+    "price": 2000.0,
+    "product_code": null,
+    "condition": null,
+    "condition_note": null,
+    "listing": "b458fd2d-26c4-4557-a9f0-0007c20b191a",
+    "main_image": null,
+    "product_code_type": null,
+    "extra_images": []
+}
+```
+
+## Удаление
+
+Предположим, что мы хотим удалить один из товаров, тогда мы должны сделать следующий запрос, который удалит нашу футболку с SKU - "TSHIRT-1":
+
+```json http
+{
+  "method": "delete",
+  "url": "/v1/zonesmart/listing/b458fd2d-26c4-4557-a9f0-0007c20b191a/product/ba6d3417-ee3f-4200-bf5b-ee2f01adedfe/"
+}
+```
+
+В ответ мы получим пустой ответ со статусом 204 (No Content).
+
+## Примечания к запросам
+
+Для удобства работы с отображением данных о листингах при запросе к листингу методом GET отдается полная информация (включая продукты и их атрибуты). Предположим, что у нас есть листинг с id **3fad5961-9f4b-4f5e-ba6f-35a8c8b5f077**, тогда при следующем запросе мы получим полные данные о нем:
+
+```json http
+{
+  "method": "get",
+  "url": "/v1/zonesmart/listing/3fad5961-9f4b-4f5e-ba6f-35a8c8b5f077/"
+}
+```
+
+```json
+{
+    "id": "3fad5961-9f4b-4f5e-ba6f-35a8c8b5f077",
+    "products": [
+        {
+            "id": "16e43ee4-0765-4795-bf59-7d17df9bfdae",
+            "attributes": [
+                {
+                    "id": "0314ddd4-fea3-413a-996f-c9080932af21",
+                    "name": "Color",
+                    "value": "Blue",
+                    "_order": 0,
+                    "product": "16e43ee4-0765-4795-bf59-7d17df9bfdae"
+                }
+            ],
+            "created": "2020-06-11T12:20:49.939190+03:00",
+            "modified": "2020-06-11T12:21:22.365553+03:00",
+            "is_removed": false,
+            "sku": "TSHIRT-2",
+            "quantity": 10,
+            "price": 1000.0,
+            "product_code": null,
+            "condition": null,
+            "condition_note": null,
+            "listing": "3fad5961-9f4b-4f5e-ba6f-35a8c8b5f077",
+            "main_image": null,
+            "product_code_type": null,
+            "extra_images": []
+        }
+    ],
+    "created": "2020-06-11T12:20:18.029700+03:00",
+    "modified": "2020-06-11T12:20:18.029931+03:00",
+    "is_removed": false,
+    "title": "Футболка",
+    "description": "Отличная футболка",
+    "category_name": null,
+    "currency": "RUB",
+    "brand": "Nike",
+    "user": 1
 }
 ```
