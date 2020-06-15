@@ -8491,7 +8491,7 @@ paths:
                   type: string
                   description: 'Количество единиц элемента заказа, не добавленных в какое-либо отправление'
       operationId: get-v1-zonesmart-order-order_id-shipment-items_to_ship
-      description: Локальное обновление отправления заказа.
+      description: 'Получение списка элементов заказа, которые были отправлены не в полном объеме, и количества единиц элементов заказа, которые нужно добавить в отправление для полной обработки заказа.'
   '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/mark_as_shipped/':
     parameters:
       - type: string
