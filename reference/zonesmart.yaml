@@ -7281,30 +7281,6 @@ paths:
         required: true
         type: string
         description: ID заказа
-  '/v1/zonesmart/order/{id}/ship/':
-    post:
-      operationId: v1_zonesmart_order_ship
-      description: Экшн на отправку посылки.
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Order'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Order'
-      tags:
-        - work_in_process
-      summary: ''
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-        description: ID заказа
   /v1/zonesmart/support_requests/:
     get:
       operationId: v1_zonesmart_support_requests_list
@@ -8330,12 +8306,12 @@ paths:
       operationId: get-v1-zonesmart-order-sync
       tags:
         - order
-      description: 'Скачивание заказов со всех интегрированных пользователем маркетплейсов. На данный момент поддерживается скачивание заказов со всех аккаунтов eBay, со всех аккаунтов Etsy и со всех каналов продаж всех аккаунтов Amazon, подключенных пользователем. Если требуется ограничить число маркетплейсов для скачивания, можно определить get-параметр запроса "marketplaces", например, "?marketplaces=ebay,amazon" или "?marketplaces=etsy".'
+      description: 'Скачивание заказов с интегрированных пользователем маркетплейсов. На данный момент поддерживается скачивание заказов со всех аккаунтов eBay, со всех аккаунтов Etsy и со всех каналов продаж всех аккаунтов Amazon, подключенных пользователем. Если требуется ограничить число маркетплейсов для скачивания, можно определить get-параметр запроса "marketplaces", передав список ID интересующих маркетплейсов, например, "?marketplaces=1,5" или "?marketplaces=1".'
       parameters:
         - type: array
           in: query
           name: marketplaces
-          description: 'Список маркетплейсов, с аккаунтов которых нужно скачать заказы. По умолчанию: "ebay,etsy"'
+          description: 'Список ID маркетплейсов, с аккаунтов которых нужно скачать заказы.'
   '/v1/ebay/category/{id}/aspect/':
     parameters:
       - type: string
@@ -8374,6 +8350,163 @@ paths:
             properties: {}
       operationId: get-v1-ebay-listing-id-unlink
       description: 'Отвязывание листинга eBay от базового листинга, к которому он привязан. Если листинг eBay не привязан к какому-либо базовому листингу, произойдет ошибка.'
+  '/v1/zonesmart/order/{order_id}/shipment/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+        description: ID заказа
+    get:
+      summary: Получение списка отправлений заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Shipment'
+      operationId: get-v1-zonesmart-order-order_id-shipment
+      description: Получение списка отправлений заказа
+    post:
+      summary: Локальное создание отправления заказа
+      operationId: post-v1-zonesmart-order-order_id-shipment
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      tags:
+        - order
+      description: 'Локальное создание отправления заказа. Если в теле запроса не определить элементы отправления (ключ "items"), то они будут сгенерированы автоматически из всех элементов заказа, которые еще не были добавлены в какое-либо из отправлений. '
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              carrier_name:
+                type: string
+                description: Курьерская служба
+              tracking_code:
+                type: string
+                description: Трек-код
+              shipped_date:
+                type: string
+                description: Дата отправления
+              items:
+                type: array
+                description: Элементы отправления
+                items:
+                  $ref: '#/definitions/ShipmentItem'
+  '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+        description: ID заказа
+      - type: string
+        name: shipment_id
+        in: path
+        required: true
+        description: ID отправления заказа
+    get:
+      summary: Получение отправления заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      operationId: get-v1-zonesmart-order-order_id-shipment-shipment_id
+      description: Получение отправления заказа
+    put:
+      summary: Локальное обновление отправления заказа
+      operationId: put-v1-zonesmart-order-order_id-shipment-shipment_id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      tags:
+        - order
+      description: Локальное обновление отправления заказа.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              carrier_name:
+                type: string
+                description: Курьерская служба
+              tracking_code:
+                type: string
+                description: Трек-код
+              shipped_date:
+                type: string
+                description: Дата отправления
+              items:
+                type: array
+                description: Элементы отправления
+                items:
+                  $ref: '#/definitions/ShipmentItem'
+    delete:
+      summary: Локальное удаление отправления заказа
+      operationId: delete-v1-zonesmart-order-order_id-shipment-shipment_id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - order
+      description: Локальное удаление отправления заказа.
+  '/v1/zonesmart/order/{order_id}/shipment/items_to_ship/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+    get:
+      summary: Получение неотправленных элементов заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              order_item:
+                type: string
+                description: ID элемента заказа
+              quantity:
+                type: string
+                description: 'Количество единиц элемента заказа, не добавленных в какое-либо отправление'
+      operationId: get-v1-zonesmart-order-order_id-shipment-items_to_ship
+      description: Локальное обновление отправления заказа.
+  '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/mark_as_shipped/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+      - type: string
+        name: shipment_id
+        in: path
+        required: true
+    post:
+      summary: Удаленное создание отправления заказа
+      operationId: post-v1-zonesmart-order-order_id-shipment-shipment_id-mark_as_shipped
+      responses:
+        '200':
+          description: OK
+      tags:
+        - order
+      description: 'Данный вызов используется для того, чтобы отметить локально созданное отправление заказа как отправленное, измененив его статус с "Заготовка" ("draft") на "Отправлено" ("shipped"). Как результат, отправление создается в маркетплейсе (покупатель на маркетплейсе видит, что часть заказа или весь заказ отправлен) и становится недоступным для локального обновления.'
 definitions:
   TokenObtainPair:
     type: object
@@ -17042,7 +17175,7 @@ definitions:
   Order:
     type: object
     title: BaseOrder
-    description: Базовый заказ
+    description: 'Заказ, его элементы и отправления'
     x-examples:
       example-1:
         id: 5a7c6750-c0b5-483a-b971-cdad6ec9aa24
@@ -17301,16 +17434,16 @@ definitions:
         description: ID аккаунта маркетплейса
       items:
         type: array
-        description: Заказанные товары
+        description: Элементы заказа
         items:
           type: object
           properties:
-            sku:
+            id:
               type: string
-              description: SKU товара
-            title:
+              description: ID элемента заказа
+            remote_id:
               type: string
-              description: Название товара
+              description: ID элемента заказа в маркетплейсе
             quantity:
               type: string
               description: Заказанное количество единиц товара
@@ -17320,6 +17453,14 @@ definitions:
             currency:
               type: string
               description: Валюта
+            sku:
+              type: string
+              description: SKU товара
+            title:
+              type: string
+              description: Название товара
+            base_product:
+              type: string
       shipping_address:
         type: object
         description: Адрес покупателя
@@ -17342,6 +17483,49 @@ definitions:
           zip_code:
             type: string
             description: Почтовый индекс
+      shipments:
+        type: array
+        description: Отправление
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID отправления
+            shipment_id:
+              type: string
+              description: ID отправления в маркетплейсе
+            tracking_code:
+              type: string
+              description: Трек-код
+            carrier_name:
+              type: string
+              description: Курьерская служба
+            carrier_service:
+              type: string
+              description: Сервис курьерской службы
+            shipped_date:
+              type: string
+              description: Дата отправки
+              format: date-time
+            status:
+              type: string
+              description: Статус отправления
+              enum:
+                - shipped
+                - draft
+            items:
+              type: array
+              description: Элементы отправления
+              items:
+                type: object
+                properties:
+                  order_item:
+                    type: string
+                    description: ID элемента заказа
+                  quantity:
+                    type: integer
+                    description: Количество единиц элемента заказа в отправлении
     required:
       - order_id
       - create_date
@@ -17561,39 +17745,54 @@ definitions:
       ship_to:
         $ref: '#/definitions/ShippingAddress'
   Shipment:
-    required:
-      - shipment_id
-      - shipped_date
-      - order
     type: object
+    title: Shipment
+    description: Отправление заказа
+    x-tags:
+      - order
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: ID отправления
       shipment_id:
         title: Уникальный идентификатор в системе маркетплейса
         type: string
         maxLength: 30
         minLength: 1
+        description: ID отправления в маркетплейсе
       tracking_code:
         title: Код отправления
         type: string
         maxLength: 255
         x-nullable: true
+        description: Трек-код
       carrier_name:
         title: Служба доставки
         type: string
         maxLength: 255
         x-nullable: true
-      shipped_date:
+        description: Курьерская служба
+      carrier_service:
+        type: string
         title: Дата и время отправления
+        description: Сервис курьерской службы
+      shipped_date:
         type: string
         format: date-time
-      order:
-        title: Заказ
+        description: Дата отправления
+      status:
         type: string
-        format: uuid
+        enum:
+          - draft
+          - shipped
+        description: Статус отправления
+      items:
+        type: array
+        description: Элементы отправления
+        items:
+          $ref: '#/definitions/ShipmentItem'
   Request:
     required:
       - creator
@@ -17828,3 +18027,16 @@ definitions:
           name:
             type: string
             description: Название политики возврата eBay
+  ShipmentItem:
+    title: ShipmentItem
+    type: object
+    description: Элемент отправления заказа
+    properties:
+      order_item:
+        type: string
+        description: ID элемента заказа
+      quantity:
+        type: integer
+        description: Количество единиц элемента заказа в отправлении
+    x-tags:
+      - order
