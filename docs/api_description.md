@@ -131,14 +131,30 @@ tags: [general]
 
 Заказ (базовый заказ) - сущность, содержащая информацию о заказе, полученном с какого-либо маркетплейса, причем набор полей данной модели не зависит от того, к какому маркетплейсу относится заказ (проводится маппинг соответствующих базовых полей заказов с неизбежной потерей потерей специфичных, но не существенных, для маркетплейса полей). Базовый заказ содержит информацию о дате, статусе, стоимости и покупателе. 
 
-К каждому базовому заказу привязан хотя бы один элемент заказа, соответствующий одному заказанному товару. Есть покупатель заказал (в рамках одного заказа) несколько различных товаров (листингов какого-то маркетплейса), то для каждого из товаров создается по элементу заказа. Элемент базового заказа содержит информацию о названии, SKU, цене и заказонном количестве товара. Если товар из заказа представлен в системе Zonesmart в виде базового листинга, то заказ привязывается к этому листингу, что открывает дополнительные возможности для его обработки.
+К каждому заказу привязан хотя бы один элемент заказа, соответствующий одному заказанному товару. Есть покупатель заказал (в рамках одного заказа) несколько различных товаров (листингов какого-то маркетплейса), то для каждого из товаров создается по элементу заказа. Элемент заказа содержит информацию о названии, SKU, цене и заказанном количестве единиц товара. Если товар из заказа представлен в системе Zonesmart в виде базового листинга, то заказ привязывается к этому листингу, что открывает дополнительные возможности для его обработки.
 
-Базовый товар можно отметить отправленным и следить за изменением статуса его фулфилмента. 
+Отправление заказа - это сущность, содержащая информацию о посылке, которую продавец отправляет покупателю, сделавшему заказ на маркетплейсе. Отправление может содержать все элементы заказа в полном объеме, либо только часть заказа. К отправлению заказа привязаны элементы отправления, каждый из которых привязан к одному из элементов заказа и содержит количество единиц данного элемента заказа, содержащееся в отправлении.
+
+Для того чтобы заказ считался полностью обработанным, нужно локально создать одно или несколько отправлений, содержащие суммарно в своих элементах все элементы заказа в полном объеме, а затем отметить каждое из этих отправлений отправленными (статус изменится с "draft" на "shipped"), то есть создать отправления удаленно.
+
+В зависимости от маркетплейса, заказ либо возможно отправить только полностью одним отправлением, либо по частям несколькими отправлениями.
+
+Ограничения по созданию отправлений на разных маркетплейсах:
+
+1) Ограничения eBay. Можно создать несколько отправлений, но нельзя дробить элемент заказа на несколько отправлений, то есть иметь более одного отправления, элементы которых ссылались бы на один и тот же элемент заказа. Таким образом, элемент заказа eBay нужно отправлять одним отправлением в полном объеме.
+
+2) Ограничения Etsy. Весь заказ должен быть отправлен одним отправлением. Таким образом, для обработки заказа Etsy нужно создать единственное отправление, элементы которого содержали бы все элементы заказа в полном объеме.
+
 
 Важные вызовы:
 1) [Получение списка заказов](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1/get&group=ebay_listing)
 2) [Получение заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Bid%7D~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{id}~1/get&group=ebay_listing)
 3) [Скачивание заказов с подключенных маркетплейсов](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1sync~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1sync~1/get&group=ebay_listing)
+4) [Локальное создание отправления заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Border_id%7D~1shipment~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{order_id}~1shipment~1/post&group=order)
+5) [Локальное обновление отправления заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Border_id%7D~1shipment~1%7Bshipment_id%7D~1/put?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{order_id}~1shipment~1{shipment_id}~1/put&group=order)
+6) [Локальное удаление отправления заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Border_id%7D~1shipment~1%7Bshipment_id%7D~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{order_id}~1shipment~1{shipment_id}~1/delete&group=order)
+7) [Удаленное создание отправления заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Border_id%7D~1shipment~1%7Bshipment_id%7D~1mark_as_shipped~1/post?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{order_id}~1shipment~1{shipment_id}~1mark_as_shipped~1/post&group=order)
+8) [Получение неотправленных элементов заказа](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1%7Border_id%7D~1shipment~1items_to_ship~1/get?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1order~1{order_id}~1shipment~1items_to_ship~1/get&group=order)
 
 
 ### Ebay
