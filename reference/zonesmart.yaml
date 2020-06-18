@@ -8511,6 +8511,125 @@ paths:
       tags:
         - order
       description: 'Данный вызов используется для того, чтобы отметить локально созданное отправление заказа как отправленное, измененив его статус с "Заготовка" ("draft") на "Отправлено" ("shipped"). Как результат, отправление создается в маркетплейсе (покупатель на маркетплейсе видит, что часть заказа или весь заказ отправлен) и становится недоступным для локального обновления.'
+  / v1/etsy/billing/:
+    get:
+      summary: Получение денежный списаний аккаунта Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              created:
+                type: string
+                description: Дата и время создания
+                format: date-time
+              last_modified:
+                type: string
+                description: Дата и время последнего обновления
+                format: date-time
+              bill_type:
+                type: string
+                description: Тип списания
+              bill_type_id:
+                type: string
+                description: ID объекта связанного со списанием
+              amount:
+                type: number
+                description: Сумма списания
+              currency_code:
+                type: string
+                description: Код валюты
+              bill_charge_id:
+                type: string
+                description: ID списания в системе Etsy
+      operationId: get-v1-etsy-billing-remote_download_billing
+      description: Получение денежный списаний аккаунта Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+    parameters: []
+  /v1/etsy/billing/remote_download_billing/:
+    get:
+      summary: Скачивание биллинговой информации пользователя Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-etsy-billing
+      description: Скачивание биллинговой информации пользователя Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+    parameters: []
+  /v1/etsy/billing/summary/:
+    get:
+      summary: Получение сводки по балансу аккаунта Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              is_overdue:
+                type: string
+                description: Просрочена ли задолженность
+              currency_code:
+                type: string
+                description: Код валюты
+              overdue_balance:
+                type: string
+                description: Пророченный баланс
+              balance_due:
+                type: string
+                description: Текущий баланс
+              total_balance:
+                type: string
+              date_due:
+                type: string
+                description: 'Дата, к которой задолженность должна быть погашена'
+        '':
+          schema:
+            type: object
+            properties:
+              is_overdue:
+                type: boolean
+                description: Просрочена ли задолженность
+              currency_code:
+                type: string
+                description: Код валюты
+              overdue_balance:
+                type: number
+                description: Просроченный баланс
+              balance_due:
+                type: number
+                description: Текущий баланс
+              total_balance:
+                type: number
+              date_due:
+                type: string
+                format: date-time
+                description: Дедлайн задолженности
+      operationId: get-v1-etsy-billing-summary
+      description: Получение сводки по балансу аккаунта Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
 definitions:
   TokenObtainPair:
     type: object
