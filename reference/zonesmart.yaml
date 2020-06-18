@@ -5195,7 +5195,7 @@ paths:
   /v1/etsy/policy/payment/:
     get:
       operationId: v1_etsy_policy_payment_list
-      description: Данный Endpoint используется для получения списка политик оплаты.
+      description: Получение списка политик оплаты Etsy
       parameters:
         - name: limit
           in: query
@@ -5261,14 +5261,14 @@ paths:
                   zip: string
                   channel: string
                   country: 0
-      summary: Получение списка политик оплаты
+      summary: Получение списка политик оплаты Etsy
       tags:
         - etsy_payment_policy
     parameters: []
   '/v1/etsy/policy/payment/{id}/':
     get:
       operationId: v1_etsy_policy_payment_read
-      description: Данный Endpoint используется для получения политики оплаты по id.
+      description: Получение политики оплаты Etsy по ID.
       parameters: []
       responses:
         '200':
@@ -5298,7 +5298,7 @@ paths:
               zip: string
               channel: string
               country: 0
-      summary: Получение политики оплаты
+      summary: Получение политики оплаты Etsy
       tags:
         - etsy_payment_policy
     parameters:
@@ -5311,7 +5311,7 @@ paths:
   /v1/etsy/policy/shipping/:
     get:
       operationId: v1_etsy_policy_shipping_list
-      description: Данный Endpoint используется для получения списка политик доставки.
+      description: Получение списка политик доставки Etsy
       parameters:
         - name: limit
           in: query
@@ -5368,44 +5368,45 @@ paths:
                   processing_days_display_label: string
                   marketplace_user_account: string
                   origin_country: 0
-      summary: Получение списка политик доставки
+      summary: Получение списка политик доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters: []
-  '/v1/etsy/policy/shipping/remote_download_list/{marketplace_user_account_id}/':
+    post:
+      summary: Локальное создание политики доставки Etsy
+      operationId: post-v1-etsy-policy-shipping
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Локальное создание политики доставки Etsy
+  /v1/etsy/policy/shipping/remote_download_list/:
     get:
       operationId: v1_etsy_policy_shipping_remote_download_list
-      description: Данный Endpoint используется для удалённого скачивания списка политик доставки с Etsy.
-      parameters: []
-      summary: Скачивание списка политик доставки
+      description: Скачивание списка политик доставки Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+      summary: Скачивание списка политик доставки Etsy
       tags:
         - etsy_shipping_policy
       responses:
-        '201':
+        '200':
           description: ''
           schema:
             type: string
             description: Сообщение о результате.
           examples:
             Example: Скачивание прошло успешно
-        '400':
-          description: ''
-          schema:
-            type: string
-            description: Сообщение о результате.
-          examples:
-            Example: Скачивание провалилось
-    parameters:
-      - name: marketplace_user_account_id
-        in: path
-        required: true
-        type: string
-        description: Идентификатор маркетплейс аккаунта пользователя.
-        format: uuid
+    parameters: []
   '/v1/etsy/policy/shipping/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_read
-      description: Данный Endpoint используется для получения политики оплаты по id.
+      description: Получение политики доставки Etsy
       parameters: []
       responses:
         '200':
@@ -5426,7 +5427,7 @@ paths:
               processing_days_display_label: string
               marketplace_user_account: string
               origin_country: 0
-      summary: Получение политики доставки
+      summary: Получение политики доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters:
@@ -5434,12 +5435,29 @@ paths:
         in: path
         required: true
         type: string
+        description: ID политики доставки Etsy
+    put:
+      summary: Локальное обновление политики доставки Etsy
+      operationId: put-v1-etsy-policy-shipping-id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Локальное обновление политики доставки Etsy
+    delete:
+      summary: Локальное удаление политики доставки Etsy
+      operationId: delete-v1-etsy-policy-shipping-id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Локальное удаление политики доставки Etsy
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/':
     get:
       operationId: v1_etsy_policy_shipping_entry_list
-      description: |-
-        Данный Endpoint используется для получения списка записей политик доставки.
-        Примечание: записи политик доставки не могут быть обновлены.
+      description: Получение списка записей политик доставки Etsy
       parameters:
         - name: limit
           in: query
@@ -5493,7 +5511,7 @@ paths:
                   shipping_template: string
                   destination_country: 0
                   destination_region: 0
-      summary: Получение списка записей политик доставки
+      summary: Получение списка записей политик доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters:
@@ -5502,13 +5520,20 @@ paths:
         required: true
         type: string
         format: uuid
-        description: Идентификатор политики доставки.
+        description: ID политики доставки Etsy
+    post:
+      summary: Локальное создание или обновление записи политики доставки Etsy
+      operationId: post-v1-etsy-policy-shipping-shipping_template_id-entry
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Локальное создание или обновление политики доставки Etsy
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_entry_read
-      description: |-
-        Данный Endpoint используется для получения записи политики доставки по id.
-        Примечание: записи политик доставки не могут быть обновлены.
+      description: Получение записи политики доставки Etsy
       parameters: []
       responses:
         '200':
@@ -5526,7 +5551,7 @@ paths:
               shipping_template: string
               destination_country: 0
               destination_region: 0
-      summary: Получение записи политики доставки
+      summary: Получение записи политики доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters:
@@ -5535,13 +5560,22 @@ paths:
         required: true
         type: string
         format: uuid
-        description: Идентификатор записи.
+        description: ID политики доставки Etsy
       - name: shipping_template_id
         in: path
         required: true
         type: string
         format: uuid
-        description: Идентификатор политики доставки.
+        description: ID записи политики доставки Etsy
+    delete:
+      summary: Локальное удаление записи политики доставки Etsy
+      operationId: delete-v1-etsy-policy-shipping-shipping_template_id-entry-id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Локальное удаление записи политики доставки Etsy
   /v1/etsy/region/:
     get:
       operationId: v1_etsy_region_list
@@ -8630,6 +8664,47 @@ paths:
           in: query
           name: marketplace_user_account_id
           description: ID аккаунта маркетплейса
+  /v1/etsy/policy/payment/remote_download_list/:
+    get:
+      summary: Скачивание политики оплаты Etsy
+      tags:
+        - etsy_payment_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-etsy-policy-payment-remote_download_list
+      description: Скачивание политики оплаты Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+  '/v1/etsy/policy/shipping/{id}/remote_create_or_update/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-v1-etsy-policy-shipping-id-remote_create_or_update
+  '/v1/etsy/policy/shipping/{id}/remote_delete/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-v1-etsy-policy-shipping-id-remote_delete
 definitions:
   TokenObtainPair:
     type: object
