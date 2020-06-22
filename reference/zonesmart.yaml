@@ -6966,6 +6966,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace
+          description: ID маркетплейса (фильтрация)
       responses:
         '200':
           description: ''
