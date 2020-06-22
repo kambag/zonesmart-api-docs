@@ -4509,7 +4509,7 @@ paths:
   /v1/etsy/country/:
     get:
       operationId: v1_etsy_country_list
-      description: ''
+      description: Получение списка стран в формате Etsy
       parameters:
         - name: limit
           in: query
@@ -4545,12 +4545,13 @@ paths:
                 items:
                   $ref: '#/definitions/BaseEtsyCountry'
       tags:
-        - work_in_process
+        - etsy_shipping_policy
+      summary: Получение списка стран в формате Etsy
     parameters: []
   '/v1/etsy/country/{country_id}/':
     get:
       operationId: v1_etsy_country_read
-      description: ''
+      description: Получение страны в формате Etsy
       parameters: []
       responses:
         '200':
@@ -4558,11 +4559,12 @@ paths:
           schema:
             $ref: '#/definitions/BaseEtsyCountry'
       tags:
-        - work_in_process
+        - etsy_shipping_policy
+      summary: Получение страны в формате Etsy
     parameters:
       - name: country_id
         in: path
-        description: A unique value identifying this Страна.
+        description: ID страны
         required: true
         type: integer
   /v1/etsy/listing/:
