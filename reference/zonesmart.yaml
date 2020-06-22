@@ -5352,22 +5352,34 @@ paths:
               - results
           examples:
             Example:
-              count: 1
-              next: 'http://example.com'
-              previous: 'http://example.com'
+              count: 3
+              next: null
+              previous: null
               results:
-                - id: string
-                  created: '2020-05-18T07:33:42Z'
-                  modified: '2020-05-18T07:33:42Z'
-                  status: draft
-                  published_at: '2020-05-18T07:33:42Z'
-                  shipping_template_id: string
-                  title: string
-                  max_processing_days: 0
-                  min_processing_days: 0
-                  processing_days_display_label: string
-                  marketplace_user_account: string
-                  origin_country: 0
+                - id: bc49daa5-6600-488e-85ba-78e5add894b4
+                  status: published
+                  shipping_template_id: '84628853766'
+                  title: test_976
+                  max_processing_days: 3
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 55
+                - id: 0c734bb8-78bd-44d7-84b0-eb50defe7f12
+                  status: published
+                  shipping_template_id: '97614462814'
+                  title: Sanya noo eto pizdetz
+                  max_processing_days: 3
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 55
+                - id: 5a128396-cfba-474d-b706-e6133335e7c5
+                  status: published
+                  shipping_template_id: '97610860268'
+                  title: asdasdas
+                  max_processing_days: 1
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 181
       summary: Получение списка политик доставки Etsy
       tags:
         - etsy_shipping_policy
@@ -5378,9 +5390,16 @@ paths:
       responses:
         '200':
           description: OK
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
       tags:
         - etsy_shipping_policy
       description: Локальное создание политики доставки Etsy
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
   /v1/etsy/policy/shipping/remote_download_list/:
     get:
       operationId: v1_etsy_policy_shipping_remote_download_list
@@ -5412,21 +5431,41 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/ShippingTemplate'
+            type: object
+            properties:
+              template:
+                $ref: '#/definitions/ShippingTemplate'
+              entries:
+                type: array
+                items:
+                  $ref: '#/definitions/ShippingTemplateEntry'
           examples:
             Example:
-              id: string
-              created: '2020-05-18T07:33:42Z'
-              modified: '2020-05-18T07:33:42Z'
-              status: draft
-              published_at: '2020-05-18T07:33:42Z'
-              shipping_template_id: string
-              title: string
-              max_processing_days: 0
-              min_processing_days: 0
-              processing_days_display_label: string
-              marketplace_user_account: string
-              origin_country: 0
+              id: bc49daa5-6600-488e-85ba-78e5add894b4
+              status: published
+              marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+              shipping_template_id: '84628853766'
+              title: test_976
+              origin_country_id: 55
+              min_processing_days: 1
+              max_processing_days: 3
+              entries:
+                - id: 390eb8c4-85ba-4fdb-8786-9f4e5b907ebc
+                  destination_country_id: 56
+                  destination_region_id: null
+                  is_removed: false
+                  shipping_template_entry_id: '19689842684'
+                  currency_code: USD
+                  primary_cost: 3
+                  secondary_cost: 4
+                - id: b71e4a6c-fbb8-463a-b7e9-b1906b3579c5
+                  destination_country_id: 71
+                  destination_region_id: null
+                  is_removed: false
+                  shipping_template_entry_id: '19689842546'
+                  currency_code: USD
+                  primary_cost: 1
+                  secondary_cost: 2
       summary: Получение политики доставки Etsy
       tags:
         - etsy_shipping_policy
@@ -5442,15 +5481,22 @@ paths:
       responses:
         '200':
           description: OK
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
       tags:
         - etsy_shipping_policy
       description: Локальное обновление политики доставки Etsy
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
     delete:
       summary: Локальное удаление политики доставки Etsy
       operationId: delete-v1-etsy-policy-shipping-id
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
       tags:
         - etsy_shipping_policy
       description: Локальное удаление политики доставки Etsy
@@ -5513,7 +5559,7 @@ paths:
                   destination_region: 0
       summary: Получение списка записей политик доставки Etsy
       tags:
-        - etsy_shipping_policy
+        - etsy_shipping_policy_entry
     parameters:
       - name: shipping_template_id
         in: path
@@ -5527,9 +5573,9 @@ paths:
       responses:
         '200':
           description: OK
-      tags:
-        - etsy_shipping_policy
       description: Локальное создание или обновление политики доставки Etsy
+      tags:
+        - etsy_shipping_policy_entry
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_entry_read
@@ -5553,7 +5599,7 @@ paths:
               destination_region: 0
       summary: Получение записи политики доставки Etsy
       tags:
-        - etsy_shipping_policy
+        - etsy_shipping_policy_entry
     parameters:
       - name: id
         in: path
@@ -5573,9 +5619,9 @@ paths:
       responses:
         '200':
           description: OK
-      tags:
-        - etsy_shipping_policy
       description: Локальное удаление записи политики доставки Etsy
+      tags:
+        - etsy_shipping_policy_entry
   /v1/etsy/region/:
     get:
       operationId: v1_etsy_region_list
@@ -8689,22 +8735,32 @@ paths:
         name: id
         in: path
         required: true
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-v1-etsy-policy-shipping-id-remote_create_or_update
+        description: ID политики доставки Etsy
+    post:
+      summary: Создание или обновление политики доставки в Etsy
+      operationId: post-v1-etsy-policy-shipping-id-remote_create_or_update
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Создание или обновление политики доставки в Etsy
   '/v1/etsy/policy/shipping/{id}/remote_delete/':
     parameters:
       - type: string
         name: id
         in: path
         required: true
-    get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-v1-etsy-policy-shipping-id-remote_delete
+        description: ID политики доставки Etsy
+    delete:
+      summary: Удаление политики доставки из Etsy
+      operationId: delete-v1-etsy-policy-shipping-id-remote_delete
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Удаление политики доставки из Etsy
 definitions:
   TokenObtainPair:
     type: object
@@ -15896,8 +15952,8 @@ definitions:
       - channel
   ShippingTemplate:
     type: object
-    title: ShippingTemplate
-    description: Используется для отображения политики доставки.
+    title: EtsyShippingTemplate
+    description: Используется для отображения политики доставки Etsy.
     x-examples:
       Example:
         id: string
@@ -15918,18 +15974,6 @@ definitions:
         type: string
         format: uuid
         description: Идентификатор политики доставки.
-      created:
-        title: Created
-        type: string
-        format: date-time
-        readOnly: true
-        description: Дата и время создания.
-      modified:
-        title: Modified
-        type: string
-        format: date-time
-        readOnly: true
-        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -15939,11 +15983,6 @@ definitions:
           - published
           - update_required
         description: Статус.
-      published_at:
-        title: Время публикации
-        type: string
-        format: date-time
-        description: Время публикации.
       shipping_template_id:
         title: ID политики доставки
         type: string
@@ -15970,18 +16009,12 @@ definitions:
         minimum: 0
         x-nullable: true
         description: Минимальное число дней на обработку заказа.
-      processing_days_display_label:
-        title: Отображаемое число дней на обработку заказа
-        type: string
-        maxLength: 100
-        x-nullable: true
-        description: Отображаемое число дней на обработку заказа.
       marketplace_user_account:
         title: Marketplace user account
         type: string
         format: uuid
         description: Идентификатор маркетплейс аккаунта пользователя.
-      origin_country:
+      origin_country_id:
         title: 'Страна, из которой отравляется заказ'
         type: integer
         x-nullable: true
@@ -15989,10 +16022,12 @@ definitions:
     required:
       - title
       - marketplace_user_account
+    x-tags:
+      - etsy_shipping_policy
   ShippingTemplateEntry:
     type: object
-    title: ShippingTemplateEntry
-    description: Используется для отображения записей политик доставки.
+    title: EtsyShippingTemplateEntry
+    description: Используется для отображения записей политик доставки Etsy.
     x-examples:
       Example:
         id: string
@@ -16036,22 +16071,17 @@ definitions:
       primary_cost:
         title: Плата за одиночную доставку
         type: number
-        description: Плата за одиночную доставку.
+        description: Плата за доставку одной единицы товара.
       secondary_cost:
         title: Плата за совместную доставку
         type: number
-        description: Плата за совместную доставку.
-      shipping_template:
-        title: Политика доставки
-        type: string
-        format: uuid
-        description: Идентификатор политики доставки.
-      destination_country:
+        description: Плата за доставку дополнительной единицы товара.
+      destination_country_id:
         title: 'Страна, в которую отравляется заказ'
         type: integer
         x-nullable: true
         description: 'Идентификатор страны, в которую отравляется заказ.'
-      destination_region:
+      destination_region_id:
         title: 'Регион, в который отравляется заказ'
         type: integer
         x-nullable: true
@@ -16059,7 +16089,8 @@ definitions:
     required:
       - primary_cost
       - secondary_cost
-      - shipping_template
+    x-tags:
+      - etsy_shipping_policy
   BaseEtsyRegion:
     required:
       - region_id
@@ -18238,3 +18269,43 @@ definitions:
         description: Количество единиц элемента заказа в отправлении
     x-tags:
       - order
+  CreateOrUpdateEtsyShippingTemplate:
+    title: CreateOrUpdateEtsyShippingTemplate
+    type: object
+    description: Тело запроса для создания или обновления политики доставки Etsy
+    properties:
+      marketplace_user_account:
+        type: string
+        description: ID аккаунта маркетплейса
+      title:
+        type: string
+        description: Название политики
+      min_processing_days:
+        type: integer
+        description: Минимальное количество дней на обработку заказа
+      max_processing_days:
+        type: integer
+        description: Максимальное количество дней на обработку заказа
+      origin_country_id:
+        type: string
+        description: 'ID страны, из которой отправляются заказы'
+      entries:
+        type: array
+        description: Записи политики
+        items:
+          type: object
+          properties:
+            destination_country_id:
+              type: string
+              description: 'ID страны, в которую отправляется заказ'
+            destination_region_id:
+              type: string
+              description: 'ID региона, в который отправляется заказ'
+            primary_cost:
+              type: number
+              description: Стоимость отправки одной единицы товара
+            secondary_cost:
+              type: number
+              description: Стоимость отправки дополнительной единицы товара
+    x-tags:
+      - etsy_shipping_policy
