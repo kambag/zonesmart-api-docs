@@ -299,3 +299,104 @@ GTIN - 7.
 * KG - килограмм.
 * LB - фунт.
 * OZ - унция.
+
+### Листинг Ebay
+
+Скачивание:
+
+```json http
+{
+  "method": "get",
+  "url": "v1/ebay/listing/file_download/"
+  "headers": {
+    "Content-Type": "text/csv"
+  }
+}
+```
+
+Загрузка:
+
+```json http
+{
+  "method": "post",
+  "url": "v1/ebay/listing/file_upload/"
+  "headers": {
+    "Content-Type": "multipart/form-data"
+  }
+}
+```
+
+Пример фида листинга Ebay: [ebay_listing_feed.csv](../ebay_listing_feed.csv)
+
+Структура фида листинга Ebay:
+
+Localized For |	Variation Group ID |	Variation Specific Name 1 |	Variation Specific Name 2 |	Variation Specific Name 3 |	Variation Specific Name 4 |	Variation Specific Name 5 |	Variation Specific Value 1 |	Variation Specific Value 2 |	Variation Specific Value 3 |	Variation Specific Value 4 |	Variation Specific Value 5 |	Title |	Subtitle |	Product Description |	Additional Info |	Group Picture URL |	Picture URL 1 |	Picture URL 2 |	Picture URL 3 |	Picture URL 4 |	Picture URL 5 |	Picture URL 6 |	Picture URL 7 |	Picture URL 8 |	Picture URL 9 |	Picture URL 10 |	Picture URL 11 |	Picture URL 12 |	UPC |	ISBN |	EAN |	MPN |	Brand |	ePID |	Attribute Name 1 |	Attribute Value 1 |	Attribute Name 2 |	Attribute Value 2 |	Attribute Name 3 |	Attribute Value 3 |	Attribute Name 4 |	Attribute Value 4 |	Attribute Name 5 |	Attribute Value 5 |	Attribute Name 6 |	Attribute Value 6 |	Attribute Name 7 |	Attribute Value 7 |	Attribute Name 8 |	Attribute Value 8 |	Attribute Name 9 |	Attribute Value 9 |	Attribute Name 10 |	Attribute Value 10 |	Attribute Name 11 |	Attribute Value 11 |	Attribute Name 12 |	Attribute Value 12 |	Attribute Name 13 |	Attribute Value 13 |	Attribute Name 14 |	Attribute Value 14 |	Attribute Name 15 |	Attribute Value 15 |	Attribute Name 16 |	Attribute Value 16 |	Attribute Name 17 |	Attribute Value 17 |	Attribute Name 18 |	Attribute Value 18 |	Attribute Name 19 |	Attribute Value 19 |	Attribute Name 20 |	Attribute Value 20 |	Attribute Name 21 |	Attribute Value 21 |	Attribute Name 22 |	Attribute Value 22 |	Attribute Name 23 |	Attribute Value 23 |	Attribute Name 24 |	Attribute Value 24 |	Attribute Name 25 |	Attribute Value 25 |	Condition	| Condition Description |	Measurement System |	Length	| Width |	Height |	Weight Major |	Weight Minor |	Package Type |	Total Ship To Home Quantity |	Channel ID |	Category |	Shipping Policy |	Payment Policy |	Return Policy	| List Price |	Max Quantity Per Buyer	| Strikethrough Price |	Minimum Advertised Price |	Minimum Advertised Price Handling |	Store Category Name 1 |	Store Category Name 2 |	Sold Off Ebay	| Sold On Ebay | Apply Tax |	SKU |	VAT Percent |	Include eBay Product Details |	Domestic Shipping P1 Cost |	Domestic Shipping P1 Additional Cost |	Domestic Shipping P1 Surcharge |	Domestic Shipping P2 Cost |	Domestic Shipping P2 Additional Cost |	Domestic Shipping P2 Surcharge |	Domestic Shipping P3 Cost |	Domestic Shipping P3 Additional Cost |	Domestic Shipping P3 Surcharge	| Domestic Shipping P4 Cost |	Domestic Shipping P4 Additional Cost |	Domestic Shipping P4 Surcharge |	International Shipping P1 Cost |	International Shipping P1 Additional Cost |	International Shipping P1 Surcharge |	International Shipping P2 Cost |	International Shipping P2 Additional Cost |	International Shipping P2 Surcharge |	International Shipping P3 Cost |	International Shipping P3 Additional Cost |	International Shipping P3 Surcharge |	International Shipping P4 Cost |	International Shipping P4 Additional Cost |	International Shipping P4 Surcharge |	International Shipping P5 Cost |	International Shipping P5 Additional Cost	| International Shipping P5 Surcharge |	TemplateName |	CustomFields |	Eligible For EbayPlus |	LocationID |	FulfillmentType |	Available |	FulfillmentTime |	Compatible Product 1 |	Compatible Product 2
+---------|----------
+en_US |	test_multiple_listing_sku_19 |	Color | | | | | Black | | | | | Наименование товара |	| Описание товара | |		https://picsum.photos/id/17/500/500 |	https://picsum.photos/id/15/500/500 |	https://picsum.photos/id/6/500/500 |	https://picsum.photos/id/10/500/500 |	https://picsum.photos/id/7/500/500 | | | | | | | | | | | | | | | Brand |	Zonesmart	| MPN |	1231241A-V | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | NEW | Описание состояния товара | | | | | | | | 1 | EBAY_US | 177845 | Fulfillment policy name | Payment policy name | Return policy name | 1.0 | | | | | | | | | | test_product_sku_28 | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Location ID | | | | | |
+
+#### Localized For
+
+Локализация листинга в системе Ebay.
+
+Тип поля: **необязательное**.
+
+Доступные значения: en_US, en_CA, en_GB, en_AU, de_AT, fr_BE, fr_FR, de_DE, it_IT, nl_BE, nl_NL, es_ES, de_CH, zh_TW, zh_HK, en_IE, en_PH, pl_PL, ru_RU, th_TH, fr_CA.
+
+#### Variation Group ID
+#### Variation Specific Name 1...5
+#### Variation Specific Value 1...5
+#### Title
+#### Subtitle
+#### Product Description
+#### Additional Info
+#### Group Picture URL
+#### Picture URL 1...12
+#### UPC
+#### ISBN
+#### EAN
+#### MPN
+#### Brand
+#### ePID
+#### Attribute Name 1...25
+#### Attribute Value 1...25
+#### Condition
+#### Condition Description
+#### Measurement System
+#### Length
+#### Width
+#### Height
+#### Weight Major
+#### Weight Minor
+#### Package Type
+#### Total Ship To Home Quantity
+#### Channel ID
+#### Category
+#### Shipping Policy
+#### Payment Policy
+#### Return Policy
+#### List Price
+#### Max Quantity Per Buyer
+#### Strikethrough Price
+#### Minimum Advertised Price
+#### Minimum Advertised Price Handling
+#### Store Category Name 1..2
+#### Sold Off Ebay
+#### Sold On Ebay
+#### Apply Tax
+#### SKU
+#### VAT Percent
+#### Include eBay Product Details
+#### Domestic Shipping P1...P4 Cost
+#### Domestic Shipping P1...P4 Additional Cost
+#### Domestic Shipping P1...P4 Surcharge
+#### International Shipping P1...P5 Cost
+#### International Shipping P1...P5 Additional Cost
+#### International Shipping P1...P5
+#### TemplateName
+#### CustomFields
+#### Eligible For EbayPlus
+#### LocationID
+#### FulfillmentType
+#### Available
+#### FulfillmentTime
+#### Compatible Product 1..2
