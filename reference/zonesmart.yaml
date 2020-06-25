@@ -4296,20 +4296,18 @@ paths:
   /v1/etsy/account/complete/:
     get:
       operationId: v1_etsy_account_complete
-      description: |-
-        Данных Endpoint используется для создание / обновление Etsy аккаунта пользователя.
-        Необходимо передавать oauth_token и oauth_verifier в query параметрах запроса.
+      description: Подключение нового или обновление существующего аккаунта Etsy пользователя.
       parameters:
         - type: string
           in: query
           name: oauth_token
           required: true
-          description: oauth токен.
+          description: ''
         - type: string
           in: query
           name: oauth_verifier
           required: true
-          description: oauth токен верификации.
+          description: ''
       responses:
         '201':
           description: ''
@@ -4331,7 +4329,7 @@ paths:
             description: Сообщение о результате.
           examples:
             Example: Аккаунт успешно создан
-      summary: Создание / обновление аккаунта etsy
+      summary: Создание или обновление аккаунта Etsy
       tags:
         - etsy_account
     parameters: []
@@ -7039,7 +7037,7 @@ paths:
   '/v1/zonesmart/marketplace/{marketplace_id}/domain/':
     get:
       operationId: v1_zonesmart_marketplace_domain_list
-      description: Данный Endpoint используется для получения списка доменов.
+      description: "Получение списка доменов маркетплейса. \nЕсли передать ID аккаунта маркетплейса пользователя \"marketplace_user_account_id\" в качестве параметра, то будут возвращены только те домены маркетплейса, для которых пользователь не создал канал продаж данного аккаунта маркетплейса."
       parameters:
         - name: limit
           in: query
@@ -7051,6 +7049,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
