@@ -756,7 +756,7 @@ paths:
   /v1/amazon/account/:
     get:
       operationId: v1_amazon_account_list
-      description: ''
+      description: Получение списка аккаунтов Amazon.
       parameters:
         - name: limit
           in: query
@@ -791,42 +791,100 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseAmazonUserAccount'
+          examples:
+            example-1:
+              count: 1
+              next: null
+              previous: null
+              results:
+                - id: aed608f0-ba9c-44ac-84e3-fe52f3e74907
+                  marketplace_user_account:
+                    id: ad565d64-f13f-438c-a6c9-3deea5459333
+                    marketplace_name: Amazon North America
+                    username: zonesmart
+                    user: 1
+                    marketplace: 3
+                  created: '2020-07-02T19:37:03.961398+03:00'
+                  modified: '2020-07-02T19:37:03.961409+03:00'
+                  access_token_expiry: '2021-05-28T20:42:33.922000+03:00'
+                  seller_id: A2RW18F8J3TTX6
       tags:
-        - work_in_process
+        - amazon_account
+      summary: Получение списка аккаунтов Amazon
     post:
       operationId: v1_amazon_account_create
-      description: ''
+      description: 'Локальное создание аккаунта Amazon. Необходимо передать ID маркетплейса Amazon (американский, европейский или дальневосточный), для которого создается аккаунт, токен доступа и ID продавца в системе Amazon.'
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CreateAmazonUserAccount'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/CreateAmazonUserAccount'
+            type: object
+            properties:
+              marketplace:
+                type: string
+                description: 'ID маркетплейса Amazon (North America, Europe или Far East)'
+              access_token:
+                type: string
+                description: Токен доступа
+              seller_id:
+                type: string
+                description: ID аккаунта продавца Amazon (SellerID)
+            required:
+              - marketplace
+              - access_token
+              - seller_id
       tags:
-        - work_in_process
+        - amazon_account
+      summary: Локальное создание аккаунта Amazon
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters: []
   '/v1/amazon/account/{id}/':
     get:
       operationId: v1_amazon_account_read
-      description: ''
+      description: Получение аккаунта Amazon
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseAmazonUserAccount'
+          examples:
+            example-1:
+              id: aed608f0-ba9c-44ac-84e3-fe52f3e74907
+              marketplace_user_account:
+                id: ad565d64-f13f-438c-a6c9-3deea5459333
+                marketplace_name: Amazon North America
+                username: zonesmart
+                user: 1
+                marketplace: 3
+              created: '2020-07-02T19:37:03.961398+03:00'
+              modified: '2020-07-02T19:37:03.961409+03:00'
+              access_token_expiry: '2021-05-28T20:42:33.922000+03:00'
+              seller_id: A2RW18F8J3TTX6
       tags:
-        - work_in_process
+        - amazon_account
+      summary: Получение аккаунта Amazon
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID аккаунта Amazon
+    delete:
+      summary: Локальное удаление аккаунта Amazon
+      operationId: delete-v1-amazon-account-id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - amazon_account
+      description: Локальное удаление аккаунта Amazon.
   /v1/ebay/account/:
     get:
       operationId: v1_ebay_account_list
@@ -8769,6 +8827,69 @@ paths:
       tags:
         - etsy_shipping_policy
       description: Удаление политики доставки из Etsy
+  /v1/amazon/account/get_auth_data/:
+    get:
+      summary: Получение данных для подключения аккаунта Amazon
+      tags:
+        - amazon_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              auth_url:
+                type: string
+                description: 'Ссылка, по которой пользователь должен перейти для авторизации приложения Zonesmart'
+              developer_name:
+                type: string
+                description: Название приложения Zonesmart на Amazon
+              developer_id:
+                type: string
+                description: ID разработчика (приложения Zonesmart на Amazon)
+          examples:
+            example-1:
+              auth_url: 'https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1'
+              developer_name: Zonesmart
+              developer_id: '914218968872'
+      operationId: get-v1-amazon-account-get_auth_data
+      description: 'Получение данных, которые нужны пользователю для авторизации приложения Zonesmart в своём аккаунте на сайте Amazon.'
+  /v1/amazon/account/available_domains/:
+    get:
+      summary: Получение списка доступных доменов
+      tags:
+        - amazon_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Сообщение
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Domain'
+          examples:
+            example-1:
+              results:
+                - id: 2
+                  name: Amazon Mexico
+                  code: A1AM78C64UM0Y8
+                  description: null
+                  url: 'https://www.amazon.com.mx'
+                  marketplace: 3
+              message: 'Получение списка доступных для пользователя маркетплейсов Amazon: успешно выполнено.'
+      operationId: get-v1-amazon-account-available_domains
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+      description: 'Получение списка доступных для создания канала продаж доменов маркетплейса Amazon. В рамках одного аккаунта Amazon для каждого домена (например, для канадского домена американского маркетплейса или для французского домена европейского маркетплейса) можно создать только один канал продаж.'
 definitions:
   TokenObtainPair:
     type: object
@@ -9030,22 +9151,33 @@ definitions:
         minLength: 1
   BaseAmazonUserAccount:
     type: object
+    title: AmazonAccount
+    description: Аккаунт Amazon
     properties:
       id:
         title: Id
         type: string
         format: uuid
         readOnly: true
+        description: ID аккаунта в БД
+      created:
+        type: string
+        description: Дата создания
+        format: date-time
+      modified:
+        type: string
+        description: Дата последнего обновления
+        format: date-time
+      access_token_expiry:
+        type: string
+        description: Дата истечения срока действия токена доступа
+      seller_id:
+        type: string
+        description: ID аккаунта в системе Amazon
       marketplace_user_account:
-        title: Marketplace user account
-        type: string
-        format: uuid
-        readOnly: true
-      access_token:
-        title: Токен доступа
-        type: string
-        readOnly: true
-        minLength: 1
+        $ref: '#/definitions/MarketplaceUserAccount'
+    x-tags:
+      - amazon_account
   CreateAmazonUserAccount:
     required:
       - access_token
