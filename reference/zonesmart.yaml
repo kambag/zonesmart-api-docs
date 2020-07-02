@@ -2418,7 +2418,7 @@ paths:
           type: integer
         - type: string
           in: query
-          name: marketplace_user_account
+          name: marketplace_user_account_id
           description: ID аккаунта маркетплейса
       responses:
         '200':
@@ -2915,6 +2915,10 @@ paths:
           in: query
           name: search
           description: Поиск по названию и описанию
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
       responses:
         '200':
           description: ''
@@ -3581,6 +3585,22 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: markeplace_user_account_id
+        - type: string
+          in: query
+          name: category_type
+          description: Тип категории политики
+        - type: string
+          in: query
+          name: status
+          description: Фильтрация по статусу
+        - type: string
+          in: query
+          description: Поиск по названию и описанию
+          name: search
       responses:
         '200':
           description: ''
@@ -3972,6 +3992,26 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID канала продаж
+          name: channel
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
+        - type: string
+          in: query
+          name: category_type
+          description: Тип категории политики
+        - type: string
+          in: query
+          name: status
+          description: Фильтрация по статусу
+        - type: string
+          in: query
+          description: Поиск по названию и описанию
+          name: search
       responses:
         '200':
           description: ''
@@ -5265,6 +5305,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -5381,6 +5425,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
       responses:
         '200':
           description: ''
