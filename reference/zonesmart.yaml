@@ -6593,7 +6593,7 @@ paths:
         format: uuid
   /v1/zonesmart/listing/:
     get:
-      summary: Получить все базовые листинги
+      summary: Получение списка базовых листингов
       tags:
         - listing
       responses:
@@ -6604,7 +6604,32 @@ paths:
           examples:
             example-1: {}
       operationId: get-v1-zonesmart-listing
-      description: ''
+      description: Получение списка базовых листингов
+      parameters:
+        - type: string
+          in: query
+          name: channel
+          description: 'ID канала продаж. Фильтрация тех базовых листингов, к которым привязан хотя бы один листинг маркетплейса с данного канала продаж.'
+        - type: string
+          in: query
+          name: price_min
+          description: 'Минимальная цена. Фильтрация базовых листингов, цена хотя бы одного продукта которых выше указанной.'
+        - type: string
+          in: query
+          name: price_max
+          description: 'Максимальная цена. Фильтрация базовых листингов, цена хотя бы одного продукта которых ниже указанной.'
+        - type: string
+          in: query
+          name: products_num_min
+          description: 'Минимальное количество единиц. Фильтрация базовых листингов, суммарное количество продуктов которых больше указанного.'
+        - type: string
+          in: query
+          name: products_num_max
+          description: 'Максимальное количество единиц. Фильтрация базовых листингов, суммарное количество продуктов которых меньше указанного.'
+        - type: string
+          in: query
+          name: condition
+          description: Состояние
     post:
       summary: Создать базовый листинг
       tags:
@@ -16835,44 +16860,47 @@ definitions:
         type: string
         x-nullable: true
   Listing:
-    required:
-      - title
-      - description
-      - user
     type: object
+    description: Базовый листинг
+    title: BaseListing
+    x-tags:
+      - base_listing
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: ID листинга
       created:
         title: Создан
         type: string
         format: date-time
         readOnly: true
+        description: Дата создания
       modified:
         title: Изменён
         type: string
         format: date-time
         readOnly: true
-      is_removed:
-        title: Is removed
-        type: boolean
+        description: Дата последнего обновления
       title:
         title: Title
         type: string
         maxLength: 255
         minLength: 1
+        description: Название
       description:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
+        description: Описание
       category_name:
         title: Название категории
         type: string
         maxLength: 255
         x-nullable: true
+        description: Категория
       currency:
         title: Валюта
         type: string
@@ -17032,15 +17060,122 @@ definitions:
           - ZAR
           - ZMW
           - ZWL
+        description: Код валюты
       brand:
         title: Бренд
         type: string
         maxLength: 255
         x-nullable: true
+        description: Бренд
+      price_min:
+        type: string
+        description: Минимальная цена (цена наименее дорогого продукта)
+      price_max:
+        type: string
+        description: Максимальная цена (цена наиболее дорогого продукта)
+      total_quantity:
+        type: string
+        description: Суммарное количество единиц продуктов
+      has_variations:
+        type: string
+        description: Имеются ли вариации (количество продуктов больше одного)
       user:
-        title: Пользователь
-        type: integer
-    description: ''
+        type: string
+        description: 'ID пользователю, которому принадлежит листинг'
+      linked_listings:
+        type: array
+        description: 'Список листингов маркетплейсов, привязанных к данному базовому листингу'
+        items:
+          type: object
+          properties:
+            marketplace:
+              type: string
+              description: Название маркетплейса листинга
+            marketplace_user_account:
+              type: string
+              description: Название аккаунта маркетплейса листинга
+            channel:
+              type: string
+              description: Название канала продаж листинга
+            is_published:
+              type: string
+              description: Опубликован ли листинг
+            listing:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID листинга
+                title:
+                  type: string
+                  description: Название листинга
+      products:
+        type: array
+        description: Список продуктов базового листинга
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID продукта
+            product_code_type:
+              type: string
+              description: Тип штрих-кода
+              enum:
+                - EAN
+                - ISBN
+                - UPC
+                - ASIN
+                - GCID
+                - JAN
+                - GTIN
+            product_code:
+              type: string
+              description: Штрих-код
+            created:
+              type: string
+              description: Дата создания
+            modified:
+              type: string
+              description: Дата последнего обновления
+            sku:
+              type: string
+              description: SKU
+            quantity:
+              type: string
+              description: Количество единиц
+            price:
+              type: string
+              description: Цена
+            condition:
+              type: string
+              description: Состояние продукта
+            condition_note:
+              type: string
+              description: Описание состояния продукта
+            main_image:
+              type: string
+              description: URL главного изображения продукта
+            extra_images:
+              type: array
+              description: Список URL дополнительных изображений продукта
+              items:
+                type: string
+            attributes:
+              type: array
+              description: Список атрибутов продукта
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID атрибута
+                  name:
+                    type: string
+                    description: Название атрибута
+                  value:
+                    type: string
+                    description: Значение атрибута
   Feedback:
     required:
       - feedback_id
