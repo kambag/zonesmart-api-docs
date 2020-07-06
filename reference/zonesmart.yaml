@@ -6594,15 +6594,249 @@ paths:
   /v1/zonesmart/listing/:
     get:
       summary: Получение списка базовых листингов
-      tags:
-        - listing
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/Listing'
+            type: array
+            items:
+              $ref: '#/definitions/Listing'
           examples:
-            example-1: {}
+            example-1:
+              count: 3
+              next: null
+              previous: null
+              results:
+                - products:
+                    - id: fc9db091-4c04-42cb-880a-946ef9c091e4
+                      attributes:
+                        - id: 20e1db2c-697c-414b-a49a-878c2e3d5a61
+                          name: hlPTdpvlwdxBlBYiryVf
+                          value: SJqtZqpbynaaHetArGpk
+                          _order: 0
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                        - id: 458fea05-09fa-4ee4-980d-879a1591ed39
+                          name: XadYpuQGUVGxMRFgaPZw
+                          value: iGeRPncdtsqvzVEKgMde
+                          _order: 1
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                        - id: d91d29aa-f509-47fb-a045-10c1cd4f0bd0
+                          name: sTLKiKaTxuYFqTogffDA
+                          value: FUuHIDfqvNXAEhYxuWDh
+                          _order: 2
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                      product_code_type: EAN
+                      created: '2020-07-05T15:14:05.705000+03:00'
+                      modified: '2020-07-05T23:53:18.688000+03:00'
+                      is_removed: false
+                      sku: BUaMAfkcUFHsMQAPkLvY
+                      quantity: 34
+                      price: 4.2
+                      product_code: 978-0-12-209639-6
+                      condition: NEW
+                      condition_note: Against structure civil product wife state evidence industry. Pay statement marriage keep. List campaign order analysis tough care strong. Perform eight beat environment go sound well.
+                      listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                      main_image: 'https://picsum.photos/id/17/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/13/500/500'
+                        - 'https://picsum.photos/id/10/500/500'
+                        - 'https://picsum.photos/id/18/500/500'
+                    - id: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                      attributes:
+                        - id: b4ca910d-1696-4253-a385-7f0eae6abfdd
+                          name: NtWGOLUgxzeWjDkBiluN
+                          value: dhODOrdGZWcZpDLzaMNc
+                          _order: 0
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                        - id: e5137655-6e4c-4db0-a375-bb26d504982d
+                          name: PXvvXpYIweHPfggKKLcy
+                          value: bVWOwFDzXkhdfbmirfKH
+                          _order: 1
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                        - id: e96a5382-5b0f-4bf5-a03c-553ee07c7331
+                          name: VyLMxXvMquUxrhwEyDwp
+                          value: babWGeMxYAqbsRnqGeVQ
+                          _order: 2
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                      product_code_type: UPC
+                      created: '2020-07-05T15:14:05.668000+03:00'
+                      modified: '2020-07-05T23:53:18.703000+03:00'
+                      is_removed: false
+                      sku: HWqVbCMfCgDOdsnOBzqP
+                      quantity: 43
+                      price: 4
+                      product_code: 978-1-69728-541-3
+                      condition: REFURBISHED
+                      condition_note: Usually once age moment collection test. Bar economic lawyer study base wife black.
+                      listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                      main_image: 'https://picsum.photos/id/7/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/10/500/500'
+                        - 'https://picsum.photos/id/4/500/500'
+                        - 'https://picsum.photos/id/10/500/500'
+                  linked_listings:
+                    - marketplace: eBay
+                      marketplace_user_account: lite-store
+                      channel: Тестовый канал
+                      listing:
+                        id: 071da228-dd6f-4f90-b29a-94c3cb9bb9fa
+                        title: Politics hit catch season big add single.
+                      is_published: false
+                    - marketplace: Etsy
+                      marketplace_user_account: eppxtc0m
+                      channel: "Канал продаж Etsy аккаунта 'eppxtc0m'"
+                      listing:
+                        id: 245da10f-4e11-46b4-94ea-8e881616f667
+                        title: Politics hit catch season big add single.
+                      is_published: false
+                  id: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  user: 1
+                  title: Politics hit catch season big add single.
+                  description: Lose at official Mrs year head population audience. Sure reach majority smile. Give girl note dinner goal oil American one. Speak person city network.
+                  listing_sku: null
+                  created: '2020-07-05T15:14:05.651000+03:00'
+                  modified: '2020-07-05T15:14:05.734000+03:00'
+                  category_name: store
+                  brand: must
+                  currency: HUF
+                  is_removed: false
+                  price_min: 4
+                  price_max: 4.2
+                  total_quantity: 77
+                  has_variations: true
+                - products:
+                    - id: bbfa2154-1198-4191-ab68-33bc0f12a948
+                      attributes:
+                        - id: a9735ee9-a4ad-4505-a991-1a4a2bf4f69e
+                          name: BUGhJgiPELGAdaiYciLq
+                          value: lIKHPuADdLBYBrFBXSfF
+                          _order: 0
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                        - id: d88aeee7-c457-4128-9ac7-20cb127fea25
+                          name: RjrDFbYtuZnSrRtEuINV
+                          value: onNlWqnWcRVMpjxXFGGZ
+                          _order: 1
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                        - id: de941090-194b-48a5-81b0-74df09a66d7b
+                          name: qcOJvXakXrWaPVJGefxB
+                          value: egJSwqJGgKPzsUDLduLm
+                          _order: 2
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                      product_code_type: UPC
+                      created: '2020-07-05T15:18:20.509000+03:00'
+                      modified: '2020-07-05T23:53:18.712000+03:00'
+                      is_removed: false
+                      sku: pOIQDZQArJhnYwdUrbyy
+                      quantity: 2
+                      price: 8.1
+                      product_code: 978-0-7678-0020-4
+                      condition: REFURBISHED
+                      condition_note: Cause expect easy teach group. Similar before include home hour.
+                      listing: a98c9743-3e5d-4147-b0da-150f78030a5a
+                      main_image: 'https://picsum.photos/id/5/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/9/500/500'
+                        - 'https://picsum.photos/id/4/500/500'
+                        - 'https://picsum.photos/id/5/500/500'
+                    - id: 14272211-913e-453f-88e7-2b763830b1e8
+                      attributes:
+                        - id: 453baa3e-66d6-417d-b436-6a5978d57618
+                          name: sfdQBCTVHJzlvVuhbqvT
+                          value: bJVdrgPfGTVkxTXDqMoY
+                          _order: 0
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                        - id: 96b8e153-b85c-409d-919b-03563b90d5a9
+                          name: AQcCsrJbsRvhfdIQDOKF
+                          value: hYKcMiwpCNSwHnUCybjB
+                          _order: 1
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                        - id: 97830d11-fca6-4aa5-8d4c-e72a018588f3
+                          name: HoumEISAVarwOTHFmMpi
+                          value: YlzYueFEZNfofcunOCms
+                          _order: 2
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                      product_code_type: EAN
+                      created: '2020-07-05T15:18:20.551000+03:00'
+                      modified: '2020-07-05T23:53:18.709000+03:00'
+                      is_removed: false
+                      sku: xjKrqkUKWnhahpcifqdu
+                      quantity: 2
+                      price: 6.3
+                      product_code: 978-0-907791-08-9
+                      condition: REFURBISHED
+                      condition_note: Body figure have budget whether war. Condition might director explain carry. Picture believe occur sea.
+                      listing: a98c9743-3e5d-4147-b0da-150f78030a5a
+                      main_image: 'https://picsum.photos/id/10/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/16/500/500'
+                        - 'https://picsum.photos/id/9/500/500'
+                        - 'https://picsum.photos/id/11/500/500'
+                  linked_listings: []
+                  id: a98c9743-3e5d-4147-b0da-150f78030a5a
+                  user: 1
+                  title: Process responsibility third chair include.
+                  description: Develop knowledge product stand.
+                  listing_sku: null
+                  created: '2020-07-05T15:18:20.496000+03:00'
+                  modified: '2020-07-05T15:18:20.584000+03:00'
+                  category_name: 'no'
+                  brand: ever
+                  currency: JOD
+                  is_removed: false
+                  price_min: 6.3
+                  price_max: 8.1
+                  total_quantity: 4
+                  has_variations: true
+                - products:
+                    - id: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                      attributes:
+                        - id: 1ad95547-4856-45a5-a9ff-24cfe6adf26d
+                          name: WySPFtAIHkIFNjZqfhyD
+                          value: HxqSUykkXKeGUjVxuBRM
+                          _order: 0
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                        - id: 432cdf9d-5389-47e8-b356-84a7811486bb
+                          name: UKPwaCkxpnuLUIFhHALC
+                          value: ezdYhCdIfAHHXjhbXmVD
+                          _order: 1
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                        - id: e0322f9d-350d-452b-af61-40139266b8a7
+                          name: OOztvksxQmPghzxWVbgY
+                          value: kfedSIdwuaxoMtndZmMt
+                          _order: 2
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                      product_code_type: UPC
+                      created: '2020-07-05T15:18:47.959000+03:00'
+                      modified: '2020-07-05T23:53:18.714000+03:00'
+                      is_removed: false
+                      sku: pyLPhNzLeLRVWpiXCOcf
+                      quantity: 4
+                      price: 6.7
+                      product_code: 978-0-338-69003-6
+                      condition: NEW
+                      condition_note: Something budget cup so his article. Nation court know account must different.
+                      listing: ba82ba2f-593b-4607-aabd-99162fd900f1
+                      main_image: 'https://picsum.photos/id/18/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/2/500/500'
+                        - 'https://picsum.photos/id/14/500/500'
+                        - 'https://picsum.photos/id/12/500/500'
+                  linked_listings: []
+                  id: ba82ba2f-593b-4607-aabd-99162fd900f1
+                  user: 1
+                  title: Seek statement sister store yard evening.
+                  description: Spring character such relate. War side pass feeling huge music. Society person fund security. Worry type street.
+                  listing_sku: null
+                  created: '2020-07-05T15:18:47.938000+03:00'
+                  modified: '2020-07-05T15:18:47.988000+03:00'
+                  category_name: it
+                  brand: trade
+                  currency: AOA
+                  is_removed: false
+                  price_min: 6.7
+                  price_max: 6.7
+                  total_quantity: 4
+                  has_variations: false
       operationId: get-v1-zonesmart-listing
       description: Получение списка базовых листингов
       parameters:
@@ -6630,118 +6864,252 @@ paths:
           in: query
           name: condition
           description: Состояние
-    post:
-      summary: Создать базовый листинг
       tags:
-        - listing
+        - base_listing
+    post:
+      summary: Создание базового листинга
       responses:
         '200':
           description: OK
           schema:
             $ref: '#/definitions/Listing'
       operationId: post-v1-zonesmart-listing
-      description: ''
+      description: Создание базового листинга
       parameters:
         - in: body
           name: body
-          schema:
-            $ref: '#/definitions/Listing'
-    parameters: []
-    put:
-      summary: Обновить базовый листинг
-      tags:
-        - listing
-      responses:
-        '200':
-          description: OK
           schema:
             type: object
-            properties: {}
-      operationId: put-v1-zonesmart-listing
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/Listing'
-    patch:
-      summary: ''
-      operationId: patch-v1-zonesmart-listing
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/Listing'
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/Listing'
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency:
+                type: string
+                description: Код валюты
+            required:
+              - title
+              - description
+      tags:
+        - base_listing
+    parameters: []
   '/v1/zonesmart/listing/{id}/':
     get:
       operationId: v1_zonesmart_listing_read
-      description: ''
+      description: Получение базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+          examples:
+            example-1:
+              products:
+                - id: fc9db091-4c04-42cb-880a-946ef9c091e4
+                  attributes:
+                    - id: 20e1db2c-697c-414b-a49a-878c2e3d5a61
+                      name: hlPTdpvlwdxBlBYiryVf
+                      value: SJqtZqpbynaaHetArGpk
+                      _order: 0
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                    - id: 458fea05-09fa-4ee4-980d-879a1591ed39
+                      name: XadYpuQGUVGxMRFgaPZw
+                      value: iGeRPncdtsqvzVEKgMde
+                      _order: 1
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                    - id: d91d29aa-f509-47fb-a045-10c1cd4f0bd0
+                      name: sTLKiKaTxuYFqTogffDA
+                      value: FUuHIDfqvNXAEhYxuWDh
+                      _order: 2
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                  product_code_type: EAN
+                  created: '2020-07-05T15:14:05.705000+03:00'
+                  modified: '2020-07-05T23:53:18.688000+03:00'
+                  is_removed: false
+                  sku: BUaMAfkcUFHsMQAPkLvY
+                  quantity: 34
+                  price: 4.2
+                  product_code: 978-0-12-209639-6
+                  condition: NEW
+                  condition_note: Against structure civil product wife state evidence industry. Pay statement marriage keep. List campaign order analysis tough care strong. Perform eight beat environment go sound well.
+                  listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  main_image: 'https://picsum.photos/id/17/500/500'
+                  extra_images:
+                    - 'https://picsum.photos/id/13/500/500'
+                    - 'https://picsum.photos/id/10/500/500'
+                    - 'https://picsum.photos/id/18/500/500'
+                - id: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                  attributes:
+                    - id: b4ca910d-1696-4253-a385-7f0eae6abfdd
+                      name: NtWGOLUgxzeWjDkBiluN
+                      value: dhODOrdGZWcZpDLzaMNc
+                      _order: 0
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                    - id: e5137655-6e4c-4db0-a375-bb26d504982d
+                      name: PXvvXpYIweHPfggKKLcy
+                      value: bVWOwFDzXkhdfbmirfKH
+                      _order: 1
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                    - id: e96a5382-5b0f-4bf5-a03c-553ee07c7331
+                      name: VyLMxXvMquUxrhwEyDwp
+                      value: babWGeMxYAqbsRnqGeVQ
+                      _order: 2
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                  product_code_type: UPC
+                  created: '2020-07-05T15:14:05.668000+03:00'
+                  modified: '2020-07-05T23:53:18.703000+03:00'
+                  is_removed: false
+                  sku: HWqVbCMfCgDOdsnOBzqP
+                  quantity: 43
+                  price: 4
+                  product_code: 978-1-69728-541-3
+                  condition: REFURBISHED
+                  condition_note: Usually once age moment collection test. Bar economic lawyer study base wife black.
+                  listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  main_image: 'https://picsum.photos/id/7/500/500'
+                  extra_images:
+                    - 'https://picsum.photos/id/10/500/500'
+                    - 'https://picsum.photos/id/4/500/500'
+                    - 'https://picsum.photos/id/10/500/500'
+              linked_listings:
+                - marketplace: eBay
+                  marketplace_user_account: lite-store
+                  channel: Тестовый канал
+                  listing:
+                    id: 071da228-dd6f-4f90-b29a-94c3cb9bb9fa
+                    title: Politics hit catch season big add single.
+                  is_published: false
+                - marketplace: Etsy
+                  marketplace_user_account: eppxtc0m
+                  channel: "Канал продаж Etsy аккаунта 'eppxtc0m'"
+                  listing:
+                    id: 245da10f-4e11-46b4-94ea-8e881616f667
+                    title: Politics hit catch season big add single.
+                  is_published: false
+                - marketplace: Amazon North America
+                  marketplace_user_account: zonesmart
+                  channel: Американский Amazon (zonesmart)
+                  listing:
+                    id: 6baf5b2c-ae45-4cf4-86be-cd95a52d3eb9
+                    title: Politics hit catch season big add single.
+                  is_published: false
+              id: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+              user: 1
+              title: Politics hit catch season big add single.
+              description: Lose at official Mrs year head population audience. Sure reach majority smile. Give girl note dinner goal oil American one. Speak person city network.
+              listing_sku: null
+              created: '2020-07-05T15:14:05.651000+03:00'
+              modified: '2020-07-05T15:14:05.734000+03:00'
+              category_name: store
+              brand: must
+              currency: HUF
+              is_removed: false
+              price_min: 4
+              price_max: 4.2
+              total_quantity: 77
+              has_variations: true
+      summary: Получение базового листинга
       tags:
-        - listing
-      summary: Получить базовый листинг
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_update
-      description: ''
+      description: Обновление базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Listing'
+            type: object
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency:
+                type: string
+                description: Код валюты
+            required:
+              - title
+              - description
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+      summary: Обновление базового листинга
       tags:
-        - work_in_process
-      summary: Обновить базовый листинг
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_partial_update
-      description: ''
+      description: Частичное обновление базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Listing'
+            type: object
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency_code:
+                type: string
+                description: Код валюты
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+      summary: Частичное обновление базового листинга
       tags:
-        - work_in_process
-      summary: Частично обновить базовый листинг
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_delete
-      description: ''
+      description: Удаление базового листинга
       parameters: []
       responses:
         '204':
           description: ''
+      summary: Удаление базового листинга
       tags:
-        - listing
-      summary: Удалить базовый листинг
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/feedback/':
     get:
       operationId: v1_zonesmart_listing_feedback_list
-      description: ''
+      description: Получение списка отзывов о базовом листинге
       parameters:
         - name: limit
           in: query
@@ -6777,16 +7145,18 @@ paths:
                 items:
                   $ref: '#/definitions/Feedback'
       tags:
-        - work_in_process
+        - base_listing
+      summary: Получение списка отзывов о базовом листинге
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/feedback/{id}/':
     get:
       operationId: v1_zonesmart_listing_feedback_read
-      description: ''
+      description: Получение отзыва о базовом листинге
       parameters: []
       responses:
         '200':
@@ -6794,20 +7164,23 @@ paths:
           schema:
             $ref: '#/definitions/Feedback'
       tags:
-        - work_in_process
+        - base_listing
+      summary: Получение отзыва о базовом листинге
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID отзыва
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/product/':
     get:
       operationId: v1_zonesmart_listing_product_list
-      description: ''
+      description: Получение списка продуктов базового листинга
       parameters:
         - name: limit
           in: query
@@ -6842,17 +7215,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Product'
+      summary: Получение списка продуктов базового листинга
       tags:
-        - listing
-        - product
-      summary: Получение всех продуктов для выбранного листинга
+        - base_listing
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
     post:
-      summary: Создание продукта для выбранного листинга
+      summary: Создание продукта базового листинга
       operationId: post-v1-zonesmart-listing-listing_id-product
       responses:
         '201':
@@ -6863,84 +7236,83 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
       tags:
-        - listing
-        - product
+        - base_listing
+      description: Создание продукта базового листинга
   '/v1/zonesmart/listing/{listing_id}/product/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_read
-      description: ''
+      description: Получение продукта базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Получение конкретного продукта для выбранного листинга
+      summary: Получение продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_product_update
-      description: ''
+      description: Обновление продукта базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Обновление продукта для выбранного листинга
+      summary: Обновление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_product_partial_update
-      description: ''
+      description: Частичное обновление продукта базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
+          description: ''
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Частичное обновление продукта для выбранного листинга
+      summary: Частичное обновление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_product_delete
-      description: ''
+      description: Удаление продукта базового листинга
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление продукта для выбранного листинга
+      summary: Удаление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID продукта
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_list
-      description: ''
+      description: Получение списка атрибутов продукта базового листинга
       parameters:
         - name: limit
           in: query
@@ -6975,13 +7347,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseAttribute'
-      summary: Получить все атрибуты для выбранного продукта
+      summary: Получение списка атрибутов продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     post:
       operationId: v1_zonesmart_listing_product_attribute_create
-      description: ''
+      description: Создание атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -6993,36 +7364,36 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Создать атрибут для выбранного продукта
+      summary: Создание атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_read
-      description: ''
+      description: Получение атрибута продукта базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Получить атрибут для выбранного продукта
+      summary: Получение атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_product_attribute_update
-      description: ''
+      description: Обновление атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -7034,13 +7405,12 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Обновить атрибут для выбранного продукта
+      summary: Обновление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_product_attribute_partial_update
-      description: ''
+      description: Частичное обновление атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -7052,34 +7422,35 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Частично обновить атрибут для выбранного продукта
+      summary: Частичное обновление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_product_attribute_delete
-      description: ''
+      description: Удаление атрибута продукта базового листинга
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удалить атрибут для выбранного продукта
+      summary: Удаление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID атрибута
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта
   /v1/zonesmart/marketplace/:
     get:
       operationId: v1_zonesmart_marketplace_list
@@ -8452,11 +8823,9 @@ paths:
         name: id
         in: path
         required: true
+        description: ID базового листинга
     post:
-      summary: Конвертация базового листинга в листинг для конкретной интеграции
-      tags:
-        - listing
-        - converter
+      summary: Конвертация базового листинга в листинг маркетплейса
       responses:
         '200':
           description: OK
@@ -8513,6 +8882,8 @@ paths:
             properties:
               channel_id:
                 type: string
+      tags:
+        - base_listing
   /v1/zonesmart/order/sync/:
     get:
       summary: Скачивание заказов с подключенных маркетплейсов
@@ -8963,6 +9334,71 @@ paths:
           required: true
           description: ID аккаунта маркетплейса
       description: 'Получение списка доступных для создания канала продаж доменов маркетплейса Amazon. В рамках одного аккаунта Amazon для каждого домена (например, для канадского домена американского маркетплейса или для французского домена европейского маркетплейса) можно создать только один канал продаж.'
+  '/v1/zonesmart/listing/{id}/bulk_update_quantity/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID базового листинга
+    post:
+      summary: Обновление цен продуктов базового листинга
+      operationId: post-v1-zonesmart-listing-id-bulk_update_quantity
+      responses:
+        '200':
+          description: OK
+      tags:
+        - base_listing
+      description: 'Обновление цен продуктов базового листинга. Цены автоматически обновляются и у соответствующих продуктов листингов маркетплейсов, привязанных к данному базовому листингу.'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ID продукта базового листинга
+                quantity:
+                  type: integer
+                  description: Новое количество единиц продукта базового листинга
+              required:
+                - product_id
+                - quantity
+  '/v1/zonesmart/listing/{listing_id}/product/{product_id}/update_quantity/':
+    parameters:
+      - type: string
+        name: listing_id
+        in: path
+        required: true
+        description: ID базового листинга
+      - type: string
+        name: product_id
+        in: path
+        required: true
+        description: ID продукта
+    post:
+      summary: Обновление цены продукта базового листинга
+      operationId: post-v1-zonesmart-listing-listing_id-product-product_id-update_quantity
+      responses:
+        '200':
+          description: OK
+      tags:
+        - base_listing
+      description: 'Обновление цены продукта базового листинга. Цена автоматически обновляется и у соответствующих продуктов листингов маркетплейсов, привязанных к данному базовому листингу.'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: string
+                description: Новое количество единиц продукта базового листинга
+            required:
+              - quantity
 definitions:
   TokenObtainPair:
     type: object
@@ -17300,34 +17736,24 @@ definitions:
           format: uuid
         uniqueItems: true
   BaseAttribute:
-    required:
-      - name
-      - value
-      - product
     type: object
     properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
       name:
         title: Название
         type: string
         maxLength: 255
         minLength: 1
+        description: Название атрибута
       value:
         title: Значение
         type: string
         maxLength: 255
         minLength: 1
-      _order:
-        title: order
-        type: integer
-        readOnly: true
-      product:
-        title: Аттрибут
-        type: string
-        format: uuid
+        description: Значение атрибута
+    required:
+      - name
+      - value
+    title: CreateOrUpdateBaseProductAttribute
   Marketplace:
     type: object
     properties:
@@ -18632,3 +19058,43 @@ definitions:
               description: Стоимость отправки дополнительной единицы товара
     x-tags:
       - etsy_shipping_policy
+  CreateOrUpdateBaseListingProduct:
+    title: CreateOrUpdateBaseListingProduct
+    type: object
+    description: Тело запроса для создания или обновления продукта базового листинга
+    x-tags:
+      - base_listing
+    properties:
+      sku:
+        type: string
+        description: SKU
+      quantity:
+        type: integer
+        description: Количество единиц
+      price:
+        type: number
+        description: Цена
+      main_image:
+        type: string
+        description: ID главного изображения продукта
+      extra_images:
+        type: array
+        description: Список ID дополнительных изображений продукта
+        items:
+          type: string
+      product_code:
+        type: string
+        description: Штрих-код
+      product_code_type:
+        type: string
+        description: Тип штрих-кода
+      condition:
+        type: string
+        description: Состояние продукта
+      condition_note:
+        type: string
+        description: Описание состояния продукта
+    required:
+      - sku
+      - quantity
+      - price

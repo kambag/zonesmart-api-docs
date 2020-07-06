@@ -106,7 +106,7 @@ tags: [general]
 4) [Удаление канала продаж](https://stoplight.io/p/docs/gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1channel~1%7Bid%7D~1/delete?srn=gh/kambag/zonesmart-api-docs/reference/zonesmart.yaml/paths/~1v1~1zonesmart~1channel~1{id}~1/delete&group=ebay_listing)
 
 
-#### BaseListing
+#### Base Listing
 Локальные CRUD-вызовы для базовых листингов и их базовых продуктов. 
 
 Базовый листинг - сущность, которая служит для хранения информации о товаре и используется для создания листингов. На основе базового листинга можно создать неограниченное число листингов для любого маркетплейса без повторного ввода повторяющейся информации, вроде названия и описания товара.
