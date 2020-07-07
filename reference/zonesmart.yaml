@@ -612,66 +612,70 @@ paths:
   /v1/aliexpress/listing/:
     get:
       operationId: v1_aliexpress_listing_list
-      description: List of AliexpressListing instances
+      description: Данный endpoint используется для получения списка листингов Aliexpress.
       parameters:
         - name: title
           in: query
-          description: ''
+          description: Фильтрация по названию листинга.
           required: false
           type: string
         - name: status
           in: query
-          description: ''
+          description: Фильтрация по статусу листинга.
           required: false
           type: string
         - name: channel
           in: query
-          description: ''
-          required: false
+          description: Фильтрация по ID канала продаж.
           type: string
         - name: marketplace_user_account
           in: query
-          description: ''
+          description: Фильтрация по ID аккаунта маркетплейса.
           required: false
           type: string
         - name: limit
           in: query
-          description: Number of results to return per page.
+          description: Количество результатов для возврата на страницу.
           required: false
           type: integer
         - name: offset
           in: query
-          description: The initial index from which to return the results.
+          description: Начальный индекс для возврата результатов.
           required: false
           type: integer
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
                 type: integer
+                description: Кол-во вернувшихся объектов.
               next:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение следующей группы объектов.
               previous:
                 type: string
                 format: uri
                 x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
+                description: Список аккаунтов eBay.
                 items:
                   $ref: '#/definitions/BaseAliexpressListing'
+            required:
+              - count
+              - results
+      summary: Получение списка листингов Aliexpress
       tags:
-        - work_in_process
+        - aliexpress_listing
     post:
       operationId: v1_aliexpress_listing_create
-      description: Create AliexpressListing instance
+      description: Данный endpoint используется для локального создания листинга Aliexpress.
       parameters:
         - name: data
           in: body
@@ -684,23 +688,25 @@ paths:
           schema:
             $ref: '#/definitions/CreateAliexpressListing'
       tags:
-        - work_in_process
+        - aliexpress_listing
+      summary: Локальное создания листинга Aliexpress
     parameters: []
   '/v1/aliexpress/listing/{id}/':
     get:
       operationId: v1_aliexpress_listing_read
-      description: Retrieve AliexpressListing instance
+      description: Данный endpoint используется для получения листинга Aliexpress по id.
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseAliexpressListing'
+      summary: Получение листинга Aliexpress
       tags:
-        - work_in_process
+        - aliexpress_listing
     put:
       operationId: v1_aliexpress_listing_update
-      description: Update AliexpressListing instance
+      description: Данный Endpoint используется для локального обновления литсинга Aliexpress по id.
       parameters:
         - name: data
           in: body
@@ -712,38 +718,25 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/UpdateAliexpressListing'
+      summary: Локальное обновление листинга Aliexpress
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_aliexpress_listing_partial_update
-      description: Patch AliexpressListing instance
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateAliexpressListing'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateAliexpressListing'
-      tags:
-        - work_in_process
+        - aliexpress_listing
     delete:
       operationId: v1_aliexpress_listing_delete
-      description: Delete AliexpressListing instance
+      description: Данный endpoint используется для локального удаления листинга Aliexpress по id.
       parameters: []
       responses:
         '204':
           description: ''
+      summary: Локальное удаление листинга Aliexpress
       tags:
-        - work_in_process
+        - aliexpress_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: Идентификатор листинга Aliexpress.
   /v1/amazon/account/:
     get:
       operationId: v1_amazon_account_list
@@ -8886,49 +8879,56 @@ definitions:
         type: boolean
         description: Является тестовым аккаунтов.
   AliexpressProductAttribute:
-    required:
-      - product
     type: object
+    title: AliexpressProductAttribute
+    description: Используется для отображения атрибутов вариаций листингов Aliexpress.
     properties:
       value:
         title: Значение атрибута
         type: string
         maxLength: 30
         x-nullable: true
+        description: Значение.
       name:
         title: Название атрибута
         type: string
         maxLength: 50
         x-nullable: true
+        description: Название.
       value_id:
         title: ID значение атрибута
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Идентификатор значения.
       name_id:
         title: ID название атрибута
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Идентификатор названия.
       product:
         title: Product
         type: string
         format: uuid
-  BaseAliexpressProduct:
+        description: Идентификатор вариации листинга Aliexpress.
     required:
-      - attributes
-      - sku
-      - price
+      - product
+  BaseAliexpressProduct:
     type: object
+    title: BaseAliexpressProduct
+    description: Используется для отображения вариаций листинга Aliexpress.
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор.
       attributes:
         type: array
+        description: Атрибуты вариации.
         items:
           $ref: '#/definitions/AliexpressProductAttribute'
       sku:
@@ -8936,55 +8936,197 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
+        description: SKU код.
       price:
         title: Цена
         type: number
+        description: Цена.
       quantity:
         title: Количество
         type: integer
         maximum: 2147483647
         minimum: 0
+        description: Кол-во.
       _order:
         title: order
         type: integer
         readOnly: true
+        description: Кол-во ордеров.
       main_image:
         title: Изображение вариации
         type: string
         format: uuid
         x-nullable: true
-  AliexpressListingAttribute:
+        description: Картинка вариации.
     required:
-      - listing
+      - attributes
+      - sku
+      - price
+  AliexpressListingAttribute:
     type: object
+    title: AliexpressListingAttribute
+    description: Используется для отображения атрибутов листинга Aliexpress.
     properties:
       value:
         title: Значение атрибута
         type: string
         maxLength: 30
         x-nullable: true
+        description: Значение.
       name:
         title: Название атрибута
         type: string
         maxLength: 50
         x-nullable: true
+        description: Название.
       value_id:
         title: ID значение атрибута
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Идентификатор значения.
       name_id:
         title: ID название атрибута
         type: integer
         maximum: 2147483647
         minimum: 0
         x-nullable: true
+        description: Идентификатор названия.
       listing:
         title: Listing
         type: string
         format: uuid
+        description: Идентификатор листинга.
+    required:
+      - listing
   BaseAliexpressListing:
+    type: object
+    title: BaseAliexpressListing
+    description: Используется для отображение листингов Aliexpress.
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор.
+      products:
+        type: array
+        description: Вариации листинга.
+        items:
+          $ref: '#/definitions/BaseAliexpressProduct'
+      attributes:
+        type: array
+        description: Атрибуты листинга.
+        items:
+          $ref: '#/definitions/AliexpressListingAttribute'
+      created:
+        title: Created
+        type: string
+        format: date-time
+        readOnly: true
+        description: Дата и время создания.
+      modified:
+        title: Modified
+        type: string
+        format: date-time
+        readOnly: true
+        description: Дата и время обновления.
+      status:
+        title: Статус
+        type: string
+        enum:
+          - draft
+          - ready_to_be_published
+          - published
+          - update_required
+        description: Статус листинга.
+      published_at:
+        title: Время публикации
+        type: string
+        format: date-time
+        description: Дата и время публикации.
+      title:
+        title: Наименование
+        type: string
+        maxLength: 128
+        minLength: 1
+        description: Название.
+      description_web:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+        description: Описание для web.
+      description_mobile:
+        title: Описание
+        type: string
+        maxLength: 500000
+        minLength: 1
+        description: Описание для моб. телефонов.
+      listing_id:
+        title: ID листинга
+        type: string
+        maxLength: 32
+        x-nullable: true
+        description: Идентификатор в системе Aliexpress.
+      language:
+        title: Код языка локализации
+        type: string
+        enum:
+          - ru_RU
+          - es_ES
+        description: Язык.
+      inventory_deduction_strategy:
+        title: Стратегия вычета продукта
+        type: string
+        enum:
+          - place_order_withhold
+          - payment_success_deduct
+        description: Способ вычитания продуктов (quantity).
+      service_policy_id:
+        title: Service policy id
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        description: Идентификатор политик сервиса доставки.
+      shipping_lead_time:
+        title: Shipping lead time
+        type: integer
+        maximum: 2147483647
+        minimum: -2147483648
+        description: Кол-во дней на доставку.
+      channel:
+        title: Пользовательский канал продаж
+        type: string
+        format: uuid
+        description: Идентификатор канала продаж.
+      base_listing:
+        title: Базовый листинг
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор базового листинга.
+      category:
+        title: Категория листинга Aliexpress
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор категории.
+      shipping_template:
+        title: Политика доставки
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор политики доставки.
+      extra_images:
+        type: array
+        uniqueItems: true
+        description: Картинки листинга.
+        items:
+          title: Дополнительные изображения
+          type: string
+          format: uuid
     required:
       - products
       - title
@@ -8993,18 +9135,48 @@ definitions:
       - service_policy_id
       - shipping_lead_time
       - channel
+  CreateAliexpressProduct:
     type: object
+    title: CreateAliexpressProduct
+    description: Используется для создания вариации листинга Aliexpress.
+    properties:
+      sku:
+        title: SKU
+        type: string
+        maxLength: 50
+        minLength: 1
+        description: SKU код.
+      price:
+        title: Цена
+        type: number
+        description: Цена.
+      quantity:
+        title: Количество
+        type: integer
+        maximum: 2147483647
+        minimum: 0
+        description: Кол-во.
+    required:
+      - sku
+      - price
+  CreateAliexpressListing:
+    type: object
+    title: CreateAliexpressListing
+    description: Используется для создания листинга Aliexpress.
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор.
       products:
         type: array
+        description: Вариации листинга.
         items:
-          $ref: '#/definitions/BaseAliexpressProduct'
+          $ref: '#/definitions/CreateAliexpressProduct'
       attributes:
         type: array
+        description: Атрибуты листинга.
         items:
           $ref: '#/definitions/AliexpressListingAttribute'
       created:
@@ -9012,11 +9184,13 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время создания.
       modified:
         title: Modified
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -9025,98 +9199,79 @@ definitions:
           - ready_to_be_published
           - published
           - update_required
+        description: Статус листинга.
       published_at:
         title: Время публикации
         type: string
         format: date-time
+        description: Дата и время публикации.
       title:
         title: Наименование
         type: string
         maxLength: 128
         minLength: 1
+        description: Название.
       description_web:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
+        description: Описание для web.
       description_mobile:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
-      listing_id:
-        title: ID листинга
-        type: string
-        maxLength: 32
-        x-nullable: true
+        description: Описание для моб. телефонов.
       language:
         title: Код языка локализации
         type: string
         enum:
           - ru_RU
           - es_ES
+        description: Язык.
       inventory_deduction_strategy:
         title: Стратегия вычета продукта
         type: string
         enum:
           - place_order_withhold
           - payment_success_deduct
+        description: Способ вычитания product (quantity).
       service_policy_id:
         title: Service policy id
         type: integer
         maximum: 2147483647
         minimum: -2147483648
+        description: Идентификатор политики сервиса доставки.
       shipping_lead_time:
         title: Shipping lead time
         type: integer
         maximum: 2147483647
         minimum: -2147483648
+        description: Кол-во дней на доставку.
       channel:
         title: Пользовательский канал продаж
         type: string
         format: uuid
+        description: Идентификатор канал продаж.
       base_listing:
         title: Базовый листинг
         type: string
         format: uuid
         x-nullable: true
+        description: ИДентификатор базового листинга.
       category:
         title: Категория листинга Aliexpress
         type: string
         format: uuid
         x-nullable: true
+        description: Идентифкатор категории.
       shipping_template:
         title: Политика доставки
         type: string
         format: uuid
         x-nullable: true
-      extra_images:
-        type: array
-        items:
-          title: Дополнительные изображения
-          type: string
-          format: uuid
-        uniqueItems: true
-  CreateAliexpressProduct:
-    required:
-      - sku
-      - price
-    type: object
-    properties:
-      sku:
-        title: SKU
-        type: string
-        maxLength: 50
-        minLength: 1
-      price:
-        title: Цена
-        type: number
-      quantity:
-        title: Количество
-        type: integer
-        maximum: 2147483647
-        minimum: 0
-  CreateAliexpressListing:
+        description: Идентификатор политики доставки.
     required:
       - title
       - description_web
@@ -9124,112 +9279,19 @@ definitions:
       - service_policy_id
       - shipping_lead_time
       - channel
-    type: object
-    properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-      products:
-        type: array
-        items:
-          $ref: '#/definitions/CreateAliexpressProduct'
-      attributes:
-        type: array
-        items:
-          $ref: '#/definitions/AliexpressListingAttribute'
-      created:
-        title: Created
-        type: string
-        format: date-time
-        readOnly: true
-      modified:
-        title: Modified
-        type: string
-        format: date-time
-        readOnly: true
-      status:
-        title: Статус
-        type: string
-        enum:
-          - draft
-          - ready_to_be_published
-          - published
-          - update_required
-      published_at:
-        title: Время публикации
-        type: string
-        format: date-time
-      title:
-        title: Наименование
-        type: string
-        maxLength: 128
-        minLength: 1
-      description_web:
-        title: Описание
-        type: string
-        maxLength: 500000
-        minLength: 1
-      description_mobile:
-        title: Описание
-        type: string
-        maxLength: 500000
-        minLength: 1
-      language:
-        title: Код языка локализации
-        type: string
-        enum:
-          - ru_RU
-          - es_ES
-      inventory_deduction_strategy:
-        title: Стратегия вычета продукта
-        type: string
-        enum:
-          - place_order_withhold
-          - payment_success_deduct
-      service_policy_id:
-        title: Service policy id
-        type: integer
-        maximum: 2147483647
-        minimum: -2147483648
-      shipping_lead_time:
-        title: Shipping lead time
-        type: integer
-        maximum: 2147483647
-        minimum: -2147483648
-      channel:
-        title: Пользовательский канал продаж
-        type: string
-        format: uuid
-      base_listing:
-        title: Базовый листинг
-        type: string
-        format: uuid
-        x-nullable: true
-      category:
-        title: Категория листинга Aliexpress
-        type: string
-        format: uuid
-        x-nullable: true
-      shipping_template:
-        title: Политика доставки
-        type: string
-        format: uuid
-        x-nullable: true
   UpdateAliexpressProduct:
-    required:
-      - attributes
-      - sku
-      - price
-      - listing
     type: object
+    title: UpdateAliexpressProduct
+    description: Используется для обновления вариаций листинга Aliexpress.
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор.
       attributes:
         type: array
+        description: Атрибуты вариации листинга.
         items:
           $ref: '#/definitions/AliexpressProductAttribute'
       sku:
@@ -9237,44 +9299,56 @@ definitions:
         type: string
         maxLength: 50
         minLength: 1
+        description: SKU код.
       price:
         title: Цена
         type: number
+        description: Цена.
       quantity:
         title: Количество
         type: integer
         maximum: 2147483647
         minimum: 0
+        description: Кол-во.
       _order:
         title: order
         type: integer
         readOnly: true
+        description: Кол-во заказов.
       listing:
         title: Listing
         type: string
         format: uuid
+        description: Идентификатор листинга.
       main_image:
         title: Изображение вариации
         type: string
         format: uuid
         x-nullable: true
-  UpdateAliexpressListing:
+        description: Картинка вариации.
     required:
-      - title
-      - service_policy_id
-      - shipping_lead_time
+      - attributes
+      - sku
+      - price
+      - listing
+  UpdateAliexpressListing:
     type: object
+    title: UpdateAliexpressListing
+    description: Используется для обновления листинга Aliexpress.
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: Идентификатор.
       products:
         type: array
+        description: Вариации листинга.
         items:
           $ref: '#/definitions/UpdateAliexpressProduct'
       attributes:
         type: array
+        description: Атрибуты листинга.
         items:
           $ref: '#/definitions/AliexpressListingAttribute'
       created:
@@ -9282,11 +9356,13 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время создания.
       modified:
         title: Modified
         type: string
         format: date-time
         readOnly: true
+        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -9295,66 +9371,83 @@ definitions:
           - ready_to_be_published
           - published
           - update_required
+        description: Статус листинга.
       published_at:
         title: Время публикации
         type: string
         format: date-time
+        description: Дата и время публикации.
       title:
         title: Наименование
         type: string
         maxLength: 128
         minLength: 1
+        description: Название.
       description_web:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
+        description: Описание для web.
       description_mobile:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
+        description: Описание для моб. телефонов.
       language:
         title: Код языка локализации
         type: string
         enum:
           - ru_RU
           - es_ES
+        description: Язык.
       inventory_deduction_strategy:
         title: Стратегия вычета продукта
         type: string
         enum:
           - place_order_withhold
           - payment_success_deduct
+        description: Способ вычитания product (quantity).
       service_policy_id:
         title: Service policy id
         type: integer
         maximum: 2147483647
         minimum: -2147483648
+        description: Идентификатор политики сервиса доставки.
       shipping_lead_time:
         title: Shipping lead time
         type: integer
         maximum: 2147483647
         minimum: -2147483648
+        description: Кол-во дней доставки.
       channel:
         title: Пользовательский канал продаж
         type: string
         format: uuid
+        description: Идентификатор канала продаж.
       base_listing:
         title: Базовый листинг
         type: string
         format: uuid
         x-nullable: true
+        description: Идентификатор базового листинга.
       category:
         title: Категория листинга Aliexpress
         type: string
         format: uuid
         x-nullable: true
+        description: Идентификатор категории.
       shipping_template:
         title: Политика доставки
         type: string
         format: uuid
         x-nullable: true
+        description: Идентификатор политики доставки.
+    required:
+      - title
+      - service_policy_id
+      - shipping_lead_time
   BusinessAddress:
     title: BusinessAddress
     type: object
