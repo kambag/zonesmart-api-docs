@@ -8384,6 +8384,21 @@ paths:
             properties:
               channel_id:
                 type: string
+  /v1/aliexpress/account/get_auth_url/:
+    get:
+      summary: Получение ссылки для подключения аккаунта Aliexpress
+      tags:
+        - aliexpress_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+            format: uri
+          examples:
+            Example: 'https://aliexpress.com'
+      operationId: get-v1-aliexpress-account-get_auth_url
+      description: Получение ссылки на страницу авторизации аккаунта Aliexpress.
 definitions:
   TokenObtainPair:
     type: object
