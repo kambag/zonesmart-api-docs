@@ -664,7 +664,7 @@ paths:
                 description: Страница для получение предыдущей группы объектов.
               results:
                 type: array
-                description: Список аккаунтов eBay.
+                description: Список листингов Aliexpress.
                 items:
                   $ref: '#/definitions/BaseAliexpressListing'
             required:
@@ -740,8 +740,13 @@ paths:
   /v1/amazon/account/:
     get:
       operationId: v1_amazon_account_list
-      description: ''
+      description: View аккаунтов Amazon
       parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
         - name: limit
           in: query
           description: Number of results to return per page.
@@ -774,36 +779,378 @@ paths:
               results:
                 type: array
                 items:
-                  $ref: '#/definitions/BaseAmazonUserAccount'
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
       tags:
         - work_in_process
     post:
       operationId: v1_amazon_account_create
-      description: ''
+      description: View аккаунтов Amazon
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CreateAmazonUserAccount'
+            $ref: '#/definitions/CreateAmazonAccount'
       responses:
         '201':
           description: ''
           schema:
-            $ref: '#/definitions/CreateAmazonUserAccount'
+            $ref: '#/definitions/CreateAmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+      summary: ''
+    parameters: []
+  /v1/amazon/account/available_domains/:
+    get:
+      operationId: v1_amazon_account_available_domains
+      description: 'Получение доменов маркетплейса Amazon, доступных для создания канала продаж.'
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/bulk_delete/:
+    delete:
+      operationId: v1_amazon_account_bulk_delete
+      description: View аккаунтов Amazon
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/get_auth_data/:
+    get:
+      operationId: v1_amazon_account_get_auth_data
+      description: 'Получение информации, нужной пользователю для авторизации приложения на Amazon.'
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/remote_download/:
+    get:
+      operationId: v1_amazon_account_remote_download
+      description: View аккаунтов Amazon
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/remote_download_list/:
+    get:
+      operationId: v1_amazon_account_remote_download_list
+      description: View аккаунтов Amazon
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/remote_get/:
+    get:
+      operationId: v1_amazon_account_remote_get
+      description: View аккаунтов Amazon
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    parameters: []
+  /v1/amazon/account/remote_get_list/:
+    get:
+      operationId: v1_amazon_account_remote_get_list
+      description: View аккаунтов Amazon
+      parameters:
+        - name: marketplace_user_account
+          in: query
+          description: ''
+          required: false
+          type: string
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/AmazonAccount'
+      consumes: []
       tags:
         - work_in_process
     parameters: []
   '/v1/amazon/account/{id}/':
     get:
       operationId: v1_amazon_account_read
-      description: ''
+      description: View аккаунтов Amazon
       parameters: []
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/BaseAmazonUserAccount'
+            $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    put:
+      operationId: v1_amazon_account_update
+      description: View аккаунтов Amazon
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonAccount'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    patch:
+      operationId: v1_amazon_account_partial_update
+      description: View аккаунтов Amazon
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonAccount'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonAccount'
+      consumes: []
+      tags:
+        - work_in_process
+    delete:
+      operationId: v1_amazon_account_delete
+      description: View аккаунтов Amazon
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
       tags:
         - work_in_process
     parameters:
@@ -811,6 +1158,1059 @@ paths:
         in: path
         required: true
         type: string
+  /v1/amazon/listings/:
+    get:
+      operationId: v1_amazon_listings_list
+      description: Данный endpoint используется для получения списка листингов Amazon.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Кол-во вернувшихся объектов.
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение следующей группы объектов.
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
+              results:
+                type: array
+                description: Список листингов Amazon.
+                items:
+                  $ref: '#/definitions/AmazonListing'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 1
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  products:
+                    - id: string
+                      attributes:
+                        - id: string
+                          name: string
+                          value: string
+                      is_removed: true
+                      product_id: string
+                      sku: string
+                      asin: string
+                      price: 0
+                      quantity: 0
+                      main_image: string
+                      extra_images:
+                        - string
+                  attributes:
+                    - id: string
+                      name: string
+                      value: string
+                  created: '2020-07-09T07:09:47Z'
+                  modified: '2020-07-09T07:09:47Z'
+                  status: draft
+                  published_at: '2020-07-09T07:09:47Z'
+                  listing_id: string
+                  title: string
+                  description: string
+                  listing_type: string
+                  condition_type: 11
+                  condition_note: string
+                  product_tax_code: A_GEN_NOTAX
+                  merchant_shipping_group_name: string
+                  fulfillment_center_id: AMAZON_NA
+                  handling_time: 0
+                  expedited_ship_internationally: string
+                  will_ship_internationally: '1'
+                  channel: string
+                  base_listing: string
+                  category: string
+      consumes: []
+      summary: Получение списка листингов Amazon
+      tags:
+        - amazon_listing
+    post:
+      operationId: v1_amazon_listings_create
+      description: Данный endpoint используется для локального создания листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListing'
+          x-examples:
+            Example:
+              id: string
+              products:
+                - id: string
+                  attributes:
+                    - id: string
+                      name: string
+                      value: string
+                  is_removed: true
+                  product_id: string
+                  sku: string
+                  asin: string
+                  price: 0
+                  quantity: 0
+                  main_image: string
+                  extra_images:
+                    - string
+              attributes:
+                - id: string
+                  name: string
+                  value: string
+              created: '2020-07-09T07:09:47Z'
+              modified: '2020-07-09T07:09:47Z'
+              status: draft
+              published_at: '2020-07-09T07:09:47Z'
+              listing_id: string
+              title: string
+              description: string
+              listing_type: string
+              condition_type: 11
+              condition_note: string
+              product_tax_code: A_GEN_NOTAX
+              merchant_shipping_group_name: string
+              fulfillment_center_id: AMAZON_NA
+              handling_time: 0
+              expedited_ship_internationally: string
+              will_ship_internationally: '1'
+              channel: string
+              base_listing: string
+              category: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListing'
+          x-examples:
+            example-1: {}
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListing'
+          examples:
+            Example:
+              id: string
+              products:
+                - id: string
+                  attributes:
+                    - id: string
+                      name: string
+                      value: string
+                  is_removed: true
+                  product_id: string
+                  sku: string
+                  asin: string
+                  price: 0
+                  quantity: 0
+                  main_image: string
+                  extra_images:
+                    - string
+              attributes:
+                - id: string
+                  name: string
+                  value: string
+              created: '2020-07-09T07:09:47Z'
+              modified: '2020-07-09T07:09:47Z'
+              status: draft
+              published_at: '2020-07-09T07:09:47Z'
+              listing_id: string
+              title: string
+              description: string
+              listing_type: string
+              condition_type: 11
+              condition_note: string
+              product_tax_code: A_GEN_NOTAX
+              merchant_shipping_group_name: string
+              fulfillment_center_id: AMAZON_NA
+              handling_time: 0
+              expedited_ship_internationally: string
+              will_ship_internationally: '1'
+              channel: string
+              base_listing: string
+              category: string
+      consumes: []
+      summary: Локальное создание листинга Amazon
+      tags:
+        - amazon_listing
+    parameters: []
+  /v1/amazon/listings/bulk_delete/:
+    delete:
+      operationId: v1_amazon_listings_bulk_delete
+      description: Данный endpoint используется для локального удаления листингов Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление нескольких листингов Amazon
+      tags:
+        - amazon_listing
+    parameters: []
+  /v1/amazon/listings/file_download/:
+    get:
+      operationId: v1_amazon_listings_file_download
+      description: Данный endpoint используется для скачивание листингов в csv формате.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      consumes: []
+      responses:
+        '200':
+          description: Отдаёт csv файл с листингами.
+          schema: {}
+      summary: Скачивание csv с листингами Amazon
+      tags:
+        - amazon_listing
+    parameters: []
+  /v1/amazon/listings/file_upload/:
+    post:
+      operationId: v1_amazon_listings_file_upload
+      description: 'Данный endpoint используется для локального создания листингов Amazon, через загрузку csv файла.'
+      parameters:
+        - in: formData
+          type: file
+          name: file
+          description: Csv файл.
+          required: true
+        - in: formData
+          type: string
+          name: channel_id
+          description: Идентификатор канала продаж.
+        - in: formData
+          type: string
+          name: marketplace_user_account_id
+          description: Идентификатор маркетплейс аккаунта пользователя.
+      consumes: []
+      summary: Загрузка csv файла с листингами Amazon
+      tags:
+        - amazon_listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              total_created:
+                type: number
+                description: Кол-во загруженных листингов.
+              ids:
+                type: string
+                description: Идентификаторы загруженных листингов через запятую.
+          examples:
+            Example:
+              total_created: 3
+              ids: '142,199,230'
+    parameters: []
+  '/v1/amazon/listings/{id}/':
+    get:
+      operationId: v1_amazon_listings_read
+      description: Данный endpoint используется для получения листинга Amazon по id.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListing'
+          examples:
+            Example:
+              id: string
+              products:
+                - id: string
+                  attributes:
+                    - id: string
+                      name: string
+                      value: string
+                  is_removed: true
+                  product_id: string
+                  sku: string
+                  asin: string
+                  price: 0
+                  quantity: 0
+                  main_image: string
+                  extra_images:
+                    - string
+              attributes:
+                - id: string
+                  name: string
+                  value: string
+              created: '2020-07-09T07:09:47Z'
+              modified: '2020-07-09T07:09:47Z'
+              status: draft
+              published_at: '2020-07-09T07:09:47Z'
+              listing_id: string
+              title: string
+              description: string
+              listing_type: string
+              condition_type: 11
+              condition_note: string
+              product_tax_code: A_GEN_NOTAX
+              merchant_shipping_group_name: string
+              fulfillment_center_id: AMAZON_NA
+              handling_time: 0
+              expedited_ship_internationally: string
+              will_ship_internationally: '1'
+              channel: string
+              base_listing: string
+              category: string
+      consumes: []
+      summary: Получение листинга Amazon
+      tags:
+        - amazon_listing
+    put:
+      operationId: v1_amazon_listings_update
+      description: Данный endpoint используется для локального обновления листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListing'
+          description: ''
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListing'
+      consumes: []
+      summary: Локальное обновление листинга Amazon
+      tags:
+        - amazon_listing
+    delete:
+      operationId: v1_amazon_listings_delete
+      description: Данный endpoint используется для локального удаления листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{id}/link/':
+    post:
+      operationId: v1_amazon_listings_link
+      description: 'Данный endpoint используется для создания связи с базовым листингом, если раньше её не было.'
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: string
+          examples:
+            Example: Ok
+      consumes: []
+      summary: Создание связи с базовым листингом
+      tags:
+        - amazon_listing
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{id}/unlink/':
+    post:
+      operationId: v1_amazon_listings_unlink
+      description: Данный endpoint используется для открепления листинга от базового.
+      parameters: []
+      responses:
+        '200':
+          schema:
+            type: object
+            properties:
+              detail:
+                type: string
+                description: Сообщение с результатом.
+          examples:
+            Example:
+              detail: Листинг успешно откреплен от базового листинга.
+      consumes: []
+      summary: Удаление связи с базовым листингов
+      tags:
+        - amazon_listing
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/attributes/':
+    get:
+      operationId: v1_amazon_listings_attributes_list
+      description: Данный endpoint используется для получения списка атрибутов листинга Amazon.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Кол-во вернувшихся объектов.
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение следующей группы объектов.
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
+              results:
+                type: array
+                description: Список атрибутов листинга Amazon.
+                items:
+                  $ref: '#/definitions/AmazonListingAttribute'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 0
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  name: string
+                  value: string
+      consumes: []
+      summary: Получение списка атрибутов листинга Amazon
+      tags:
+        - amazon_listing
+    post:
+      operationId: v1_amazon_listings_attributes_create
+      description: Данный endpoint испльзуется для локального создания атрибутов лситинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          x-examples:
+            Example:
+              id: string
+              name: string
+              value: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          x-examples:
+            example-1: {}
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      summary: Локальное создание атрибутов листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/attributes/bulk_delete/':
+    delete:
+      operationId: v1_amazon_listings_attributes_bulk_delete
+      description: Данный endpoint используется для локального удаления нескольких атрибутов листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление нескольких атрибутов листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/attributes/{id}/':
+    get:
+      operationId: v1_amazon_listings_attributes_read
+      description: Данный endpoint используется для получение атрибута листинга Amazon по id.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      summary: Получение атрибута листинга Amazon
+      tags:
+        - amazon_listing
+    put:
+      operationId: v1_amazon_listings_attributes_update
+      description: Данный endpoint используется для локального обновления атрибута листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          x-examples:
+            Example:
+              id: string
+              name: string
+              value: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          x-examples:
+            example-1: {}
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonListingAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      summary: Локальное обновление атрибута листинга Amazon
+      tags:
+        - amazon_listing
+    delete:
+      operationId: v1_amazon_listings_attributes_delete
+      description: Данный endpoint используется для локального удаления атрибута листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление атрибута листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор атрибута листинга.
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/':
+    get:
+      operationId: v1_amazon_listings_products_list
+      description: Данный endpoint используется для получения списка товаров листинга Amazon.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Кол-во вернувшихся объектов.
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение следующей группы объектов.
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
+              results:
+                type: array
+                description: Список товаров листинга Amazon.
+                items:
+                  $ref: '#/definitions/AmazonProduct'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 0
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  attributes:
+                    - id: string
+                      name: string
+                      value: string
+                  is_removed: true
+                  product_id: string
+                  sku: string
+                  asin: string
+                  price: 0
+                  quantity: 0
+                  main_image: string
+                  extra_images:
+                    - string
+      consumes: []
+      summary: Получение списка товаров листинга Amazom
+      tags:
+        - amazon_listing
+    post:
+      operationId: v1_amazon_listings_products_create
+      description: Данный endpoint используется для локльного создания товара листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          x-examples:
+            Example:
+              id: string
+              is_removed: true
+              product_id: string
+              sku: string
+              asin: string
+              price: 0
+              quantity: 0
+              main_image: string
+              extra_images:
+                - string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          x-examples:
+            example-1: {}
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          examples:
+            Example:
+              id: string
+              is_removed: true
+              product_id: string
+              sku: string
+              asin: string
+              price: 0
+              quantity: 0
+              main_image: string
+              extra_images:
+                - string
+      consumes: []
+      summary: Локальное создание товара листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/bulk_delete/':
+    delete:
+      operationId: v1_amazon_listings_products_bulk_delete
+      description: Данный endpoint используется для локального удаления нескольких товаров листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление нескольких товаров листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/{id}/':
+    get:
+      operationId: v1_amazon_listings_products_read
+      description: Данный endpoint используется для получения товара листинга Amazon по id.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          examples:
+            Example:
+              id: string
+              attributes:
+                - id: string
+                  name: string
+                  value: string
+              is_removed: true
+              product_id: string
+              sku: string
+              asin: string
+              price: 0
+              quantity: 0
+              main_image: string
+              extra_images:
+                - string
+      consumes: []
+      summary: Получение товара листинга Amazon
+      tags:
+        - amazon_listing
+    put:
+      operationId: v1_amazon_listings_products_update
+      description: Данный endpoint используется для локального обновления товара листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          x-examples:
+            Example:
+              id: string
+              is_removed: true
+              product_id: string
+              sku: string
+              asin: string
+              price: 0
+              quantity: 0
+              main_image: string
+              extra_images:
+                - string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          x-examples:
+            example-1: {}
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProduct'
+          examples:
+            Example:
+              id: string
+              attributes:
+                - id: string
+                  name: string
+                  value: string
+              is_removed: true
+              product_id: string
+              sku: string
+              asin: string
+              price: 0
+              quantity: 0
+              main_image: string
+              extra_images:
+                - string
+      consumes: []
+      tags:
+        - amazon_listing
+      summary: Локальное обновление товара листинга Amazon
+    delete:
+      operationId: v1_amazon_listings_products_delete
+      description: Данный endpoint используется для локального удаления товара листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      tags:
+        - amazon_listing
+      summary: Локальное удаление товара листинга Amazon
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификато товара листинга Amazon.
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/{product_id}/attributes/':
+    get:
+      operationId: v1_amazon_listings_products_attributes_list
+      description: Данный endpoint используется для получения списка атрибутов товара листинга Amazon.
+      parameters:
+        - name: limit
+          in: query
+          description: Количество результатов для возврата на страницу.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: Начальный индекс для возврата результатов.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                description: Кол-во вернувшихся объектов.
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение следующей группы объектов.
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+                description: Страница для получение предыдущей группы объектов.
+              results:
+                type: array
+                description: Список атрибутов товара листинга Amazon.
+                items:
+                  $ref: '#/definitions/AmazonProductAttribute'
+            required:
+              - count
+              - results
+          examples:
+            Example:
+              count: 0
+              next: 'http://example.com'
+              previous: 'http://example.com'
+              results:
+                - id: string
+                  name: string
+                  value: string
+      consumes: []
+      summary: Получение списка атрибутов товара листинга Amazon
+      tags:
+        - amazon_listing
+    post:
+      operationId: v1_amazon_listings_products_attributes_create
+      description: Данный endpoint используется для локального создания атрибута товара листинга Amazon.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          x-examples:
+            Example:
+              id: string
+              name: string
+              value: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          x-examples:
+            example-1: {}
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      tags:
+        - amazon_listing
+      summary: Локальное создание атрибута товара листинга Amazon
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+      - name: product_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор товара листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/{product_id}/attributes/bulk_delete/':
+    delete:
+      operationId: v1_amazon_listings_products_attributes_bulk_delete
+      description: Данный endpoint используется для локального удаления нескольких атрибутов товара листинга Amazon.
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление нескольких атрибутов товара листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+      - name: product_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор товара листинга Amazon.
+  '/v1/amazon/listings/{listing_id}/products/{product_id}/attributes/{id}/':
+    get:
+      operationId: v1_amazon_listings_products_attributes_read
+      description: Данный endpoint используется для получения атрибута товара листинга Amazon по id.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      tags:
+        - amazon_listing
+      summary: Получение атрибута товара листинга Amazon
+    put:
+      operationId: v1_amazon_listings_products_attributes_update
+      description: Данный endpoint используется для локального обновления атрибута товара листинга Amazon по id.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          x-examples:
+            Example:
+              id: string
+              name: string
+              value: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          x-examples:
+            example-1: {}
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/AmazonProductAttribute'
+          examples:
+            Example:
+              id: string
+              name: string
+              value: string
+      consumes: []
+      summary: Локальное обновление атрибута товара листинга Amazon
+      tags:
+        - amazon_listing
+    delete:
+      operationId: v1_amazon_listings_products_attributes_delete
+      description: Данный endpoint используется для локального удаления атрибута товара листинга Amazon .
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      consumes: []
+      summary: Локальное удаление атрибута товара листинга Amazon
+      tags:
+        - amazon_listing
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор атрибута товара листинга Amazon.
+      - name: listing_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор листинга Amazon.
+      - name: product_id
+        in: path
+        required: true
+        type: string
+        description: Идентификатор товара листинга Amazon.
   /v1/ebay/account/:
     get:
       operationId: v1_ebay_account_list
@@ -8651,48 +10051,398 @@ definitions:
         title: Current password
         type: string
         minLength: 1
-  BaseAmazonUserAccount:
-    type: object
-    properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
-        readOnly: true
-      marketplace_user_account:
-        title: Marketplace user account
-        type: string
-        format: uuid
-        readOnly: true
-      access_token:
-        title: Токен доступа
-        type: string
-        readOnly: true
-        minLength: 1
-  CreateAmazonUserAccount:
+  AmazonAccount:
     required:
-      - access_token
-      - marketplace
+      - seller_id
     type: object
     properties:
       id:
         title: Id
         type: string
         format: uuid
-        readOnly: true
       marketplace_user_account:
-        title: Marketplace user account
+        $ref: '#/definitions/MarketplaceUserAccount'
+      created:
+        title: Создан
         type: string
-        format: uuid
+        format: date-time
         readOnly: true
+      modified:
+        title: Изменён
+        type: string
+        format: date-time
+        readOnly: true
+      access_token_expiry:
+        title: Дата и время окончания действия токена доступа
+        type: string
+        format: date-time
+      seller_id:
+        title: ID продавца
+        type: string
+        maxLength: 30
+        minLength: 1
+  CreateAmazonAccount:
+    required:
+      - marketplace
+      - access_token
+      - seller_id
+    type: object
+    properties:
+      user:
+        title: User
+        type: integer
+      marketplace:
+        title: Marketplace
+        type: integer
       access_token:
         title: Токен доступа
         type: string
         maxLength: 2500
         minLength: 1
-      marketplace:
-        title: Marketplace
+      seller_id:
+        title: ID продавца
+        type: string
+        maxLength: 30
+        minLength: 1
+  AmazonProductAttribute:
+    type: object
+    title: AmazonProductAttribute
+    description: Используется для отображения и создания атрибутов товара Amazon.
+    x-examples:
+      Example:
+        id: string
+        name: string
+        value: string
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор.
+      name:
+        title: Название
+        type: string
+        maxLength: 40
+        minLength: 1
+        description: Название.
+      value:
+        title: Значение
+        type: string
+        maxLength: 50
+        minLength: 1
+        description: Значение.
+    required:
+      - name
+      - value
+  AmazonProduct:
+    type: object
+    title: AmazonProduct
+    description: Используется для отображения и создания товара Amazon.
+    x-examples:
+      Example:
+        id: string
+        attributes:
+          - id: string
+            name: string
+            value: string
+        is_removed: true
+        product_id: string
+        sku: string
+        asin: string
+        price: 0
+        quantity: 0
+        main_image: string
+        extra_images:
+          - string
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор товара.
+      attributes:
+        type: array
+        readOnly: true
+        description: Атрибуты товара.
+        items:
+          $ref: '#/definitions/AmazonProductAttribute'
+      is_removed:
+        title: Is removed
+        type: boolean
+        description: Товар удалён.
+      product_id:
+        title: ID продукта
+        type: string
+        maxLength: 30
+        x-nullable: true
+        description: Идентификатор товара в системе Amazon.
+      sku:
+        title: Seller SKU
+        type: string
+        maxLength: 50
+        minLength: 1
+        description: SKU товара.
+      asin:
+        title: ASIN
+        type: string
+        maxLength: 50
+        x-nullable: true
+        description: ASIN товара.
+      price:
+        title: Цена
+        type: number
+        description: Цена.
+      quantity:
+        title: Количество
         type: integer
+        maximum: 2147483647
+        minimum: 0
+        description: Кол-во.
+      main_image:
+        title: Главное изображение
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор главной картинки.
+      extra_images:
+        type: array
+        uniqueItems: true
+        description: Список идентификаторов доп. картинок.
+        items:
+          title: Дополнительные изображения
+          type: string
+          format: uuid
+    required:
+      - sku
+      - price
+  AmazonListingAttribute:
+    type: object
+    title: AmazonListingAttribute
+    description: Используется для отображения и создания атрибутов листинга Amazon.
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор.
+      name:
+        title: Название
+        type: string
+        maxLength: 40
+        minLength: 1
+        description: Название.
+      value:
+        title: Значение
+        type: string
+        maxLength: 50
+        minLength: 1
+        description: Значение.
+    required:
+      - name
+      - value
+    x-examples:
+      Example:
+        id: string
+        name: string
+        value: string
+  AmazonListing:
+    type: object
+    title: AmazonListing
+    description: Используется для отображения листингов Amazon.
+    properties:
+      id:
+        title: Id
+        type: string
+        format: uuid
+        description: Идентификатор.
+      products:
+        type: array
+        readOnly: true
+        description: Товар листинга.
+        items:
+          $ref: '#/definitions/AmazonProduct'
+      attributes:
+        type: array
+        readOnly: true
+        description: Атрибуты листинга.
+        items:
+          $ref: '#/definitions/AmazonListingAttribute'
+      created:
+        title: Created
+        type: string
+        format: date-time
+        readOnly: true
+        description: Дата и время создания.
+      modified:
+        title: Modified
+        type: string
+        format: date-time
+        readOnly: true
+        description: Дата и время обновления.
+      status:
+        title: Статус
+        type: string
+        enum:
+          - draft
+          - ready_to_be_published
+          - published
+          - update_required
+        description: Статус листинга.
+      published_at:
+        title: Время публикации
+        type: string
+        format: date-time
+        description: Дата и время публикации.
+      listing_id:
+        title: ID листинга в системе amazon
+        type: string
+        maxLength: 64
+        x-nullable: true
+        description: Идентификатор листинга в системе Amazon.
+      title:
+        title: Наименование листинга
+        type: string
+        maxLength: 255
+        minLength: 1
+        description: Название.
+      description:
+        title: Описание для листинга
+        type: string
+        maxLength: 500000
+        minLength: 1
+        description: Оптсание.
+      listing_type:
+        title: Тип литсинга (товара)
+        type: string
+        maxLength: 64
+        x-nullable: true
+        description: Тип листинга.
+      condition_type:
+        title: Состояние товара
+        type: string
+        enum:
+          - 11
+          - 9
+          - 1
+          - 2
+          - 3
+          - 4
+          - 10
+          - 5
+          - 6
+          - 7
+          - 8
+        description: Тип состояния товара.
+      condition_note:
+        title: Описание состояния товара
+        type: string
+        maxLength: 1000
+        x-nullable: true
+        description: Описание состояния товара.
+      product_tax_code:
+        title: Налоговый код Amazon
+        type: string
+        enum:
+          - A_GEN_NOTAX
+        x-nullable: true
+        description: Tax код товара.
+      merchant_shipping_group_name:
+        title: Название шаблона доставки
+        type: string
+        maxLength: 100
+        x-nullable: true
+        description: Название шаблона доставки.
+      fulfillment_center_id:
+        title: Fulfillment center id
+        type: string
+        enum:
+          - AMAZON_NA
+          - DEFAULT
+        description: Идентификатор центра доставки.
+      handling_time:
+        title: 'Количество дней, нужное для отправки товара'
+        type: integer
+        maximum: 32767
+        minimum: 0
+        x-nullable: true
+        description: 'Количество дней, нужное для отправки товара.'
+      expedited_ship_internationally:
+        title: Ускоренная доставка
+        type: string
+        maxLength: 50
+        x-nullable: true
+        description: Ускоренная доставка.
+      will_ship_internationally:
+        title: Международная доставка
+        type: string
+        enum:
+          - '1'
+          - '2'
+        x-nullable: true
+        description: Международная доставка.
+      channel:
+        title: Пользовательский канал продаж
+        type: string
+        format: uuid
+        description: Идентификатор канала продаж.
+      base_listing:
+        title: Базовый листинг
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор базовго листинга.
+      category:
+        title: Категория листинга Amazon
+        type: string
+        format: uuid
+        x-nullable: true
+        description: Идентификатор категории.
+    required:
+      - title
+      - description
+      - fulfillment_center_id
+      - channel
+    x-examples:
+      Example:
+        id: string
+        products:
+          - id: string
+            attributes:
+              - id: string
+                name: string
+                value: string
+            is_removed: true
+            product_id: string
+            sku: string
+            asin: string
+            price: 0
+            quantity: 0
+            main_image: string
+            extra_images:
+              - string
+        attributes:
+          - id: string
+            name: string
+            value: string
+        created: '2020-07-09T07:09:47Z'
+        modified: '2020-07-09T07:09:47Z'
+        status: draft
+        published_at: '2020-07-09T07:09:47Z'
+        listing_id: string
+        title: string
+        description: string
+        listing_type: string
+        condition_type: 11
+        condition_note: string
+        product_tax_code: A_GEN_NOTAX
+        merchant_shipping_group_name: string
+        fulfillment_center_id: AMAZON_NA
+        handling_time: 0
+        expedited_ship_internationally: string
+        will_ship_internationally: '1'
+        channel: string
+        base_listing: string
+        category: string
   MarketplaceUserAccount:
     title: MarketplaceUserAccount
     type: object
