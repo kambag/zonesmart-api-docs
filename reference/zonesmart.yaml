@@ -8871,6 +8871,420 @@ paths:
         description: Идентификатор маркетплейса.
         required: true
         type: integer
+  /v1/zonesmart/order/sync/:
+    get:
+      summary: Скачивание заказов с подключенных маркетплейсов
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-zonesmart-order-sync
+      tags:
+        - order
+      description: 'Скачивание заказов с интегрированных пользователем маркетплейсов. На данный момент поддерживается скачивание заказов со всех аккаунтов eBay, со всех аккаунтов Etsy и со всех каналов продаж всех аккаунтов Amazon, подключенных пользователем. Если требуется ограничить число маркетплейсов для скачивания, можно определить get-параметр запроса "marketplaces", передав список ID интересующих маркетплейсов, например, "?marketplaces=1,5" или "?marketplaces=1".'
+      parameters:
+        - type: array
+          in: query
+          name: marketplaces
+          description: 'Список ID маркетплейсов, с аккаунтов которых нужно скачать заказы.'
+  '/v1/ebay/category/{id}/aspect/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID категории eBay
+    get:
+      summary: Получение аспектов категории eBay
+      tags:
+        - ebay_category
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-ebay-category-id-aspect
+      description: Получение аспектов категории eBay
+  '/v1/ebay/listing/{id}/unlink/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID листинга eBay
+    get:
+      summary: Отвязывание листинга eBay от базового листинга
+      tags:
+        - ebay_listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-ebay-listing-id-unlink
+      description: 'Отвязывание листинга eBay от базового листинга, к которому он привязан. Если листинг eBay не привязан к какому-либо базовому листингу, произойдет ошибка.'
+  '/v1/zonesmart/order/{order_id}/shipment/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+        description: ID заказа
+    get:
+      summary: Получение списка отправлений заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Shipment'
+      operationId: get-v1-zonesmart-order-order_id-shipment
+      description: Получение списка отправлений заказа
+    post:
+      summary: Локальное создание отправления заказа
+      operationId: post-v1-zonesmart-order-order_id-shipment
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      tags:
+        - order
+      description: 'Локальное создание отправления заказа. Если в теле запроса не определить элементы отправления (ключ "items"), то они будут сгенерированы автоматически из всех элементов заказа, которые еще не были добавлены в какое-либо из отправлений. '
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              carrier_name:
+                type: string
+                description: Курьерская служба
+              tracking_code:
+                type: string
+                description: Трек-код
+              shipped_date:
+                type: string
+                description: Дата отправления
+              items:
+                type: array
+                description: Элементы отправления
+                items:
+                  $ref: '#/definitions/ShipmentItem'
+  '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+        description: ID заказа
+      - type: string
+        name: shipment_id
+        in: path
+        required: true
+        description: ID отправления заказа
+    get:
+      summary: Получение отправления заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      operationId: get-v1-zonesmart-order-order_id-shipment-shipment_id
+      description: Получение отправления заказа
+    put:
+      summary: Локальное обновление отправления заказа
+      operationId: put-v1-zonesmart-order-order_id-shipment-shipment_id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Shipment'
+      tags:
+        - order
+      description: Локальное обновление отправления заказа.
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              carrier_name:
+                type: string
+                description: Курьерская служба
+              tracking_code:
+                type: string
+                description: Трек-код
+              shipped_date:
+                type: string
+                description: Дата отправления
+              items:
+                type: array
+                description: Элементы отправления
+                items:
+                  $ref: '#/definitions/ShipmentItem'
+            required:
+              - items
+    delete:
+      summary: Локальное удаление отправления заказа
+      operationId: delete-v1-zonesmart-order-order_id-shipment-shipment_id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - order
+      description: Локальное удаление отправления заказа.
+  '/v1/zonesmart/order/{order_id}/shipment/items_to_ship/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+    get:
+      summary: Получение неотправленных элементов заказа
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                order_item:
+                  type: string
+                  description: ID элемента заказа
+                quantity:
+                  type: string
+                  description: 'Количество единиц элемента заказа, не добавленных в какое-либо отправление'
+      operationId: get-v1-zonesmart-order-order_id-shipment-items_to_ship
+      description: 'Получение списка элементов заказа, которые были отправлены не в полном объеме, и количества единиц элементов заказа, которые нужно добавить в отправление для полной обработки заказа.'
+  '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/mark_as_shipped/':
+    parameters:
+      - type: string
+        name: order_id
+        in: path
+        required: true
+      - type: string
+        name: shipment_id
+        in: path
+        required: true
+    post:
+      summary: Удаленное создание отправления заказа
+      operationId: post-v1-zonesmart-order-order_id-shipment-shipment_id-mark_as_shipped
+      responses:
+        '200':
+          description: OK
+      tags:
+        - order
+      description: 'Данный вызов используется для того, чтобы отметить локально созданное отправление заказа как отправленное, измененив его статус с "Заготовка" ("draft") на "Отправлено" ("shipped"). Как результат, отправление создается в маркетплейсе (покупатель на маркетплейсе видит, что часть заказа или весь заказ отправлен) и становится недоступным для локального обновления.'
+  / v1/etsy/billing/:
+    get:
+      summary: Получение денежный списаний аккаунта Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              created:
+                type: string
+                description: Дата и время создания
+                format: date-time
+              last_modified:
+                type: string
+                description: Дата и время последнего обновления
+                format: date-time
+              bill_type:
+                type: string
+                description: Тип списания
+              bill_type_id:
+                type: string
+                description: ID объекта связанного со списанием
+              amount:
+                type: number
+                description: Сумма списания
+              currency_code:
+                type: string
+                description: Код валюты
+              bill_charge_id:
+                type: string
+                description: ID списания в системе Etsy
+      operationId: get-v1-etsy-billing-remote_download_billing
+      description: Получение денежный списаний аккаунта Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+    parameters: []
+  /v1/etsy/billing/remote_download_billing/:
+    get:
+      summary: Скачивание биллинговой информации пользователя Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-etsy-billing
+      description: Скачивание биллинговой информации пользователя Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+    parameters: []
+  /v1/etsy/billing/summary/:
+    get:
+      summary: Получение сводки по балансу аккаунта Etsy
+      tags:
+        - etsy_billing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              is_overdue:
+                type: string
+                description: Просрочена ли задолженность
+              currency_code:
+                type: string
+                description: Код валюты
+              overdue_balance:
+                type: string
+                description: Пророченный баланс
+              balance_due:
+                type: string
+                description: Текущий баланс
+              total_balance:
+                type: string
+              date_due:
+                type: string
+                description: 'Дата, к которой задолженность должна быть погашена'
+        '':
+          schema:
+            type: object
+            properties:
+              is_overdue:
+                type: boolean
+                description: Просрочена ли задолженность
+              currency_code:
+                type: string
+                description: Код валюты
+              overdue_balance:
+                type: number
+                description: Просроченный баланс
+              balance_due:
+                type: number
+                description: Текущий баланс
+              total_balance:
+                type: number
+              date_due:
+                type: string
+                format: date-time
+                description: Дедлайн задолженности
+      operationId: get-v1-etsy-billing-summary
+      description: Получение сводки по балансу аккаунта Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
+  /v1/etsy/policy/payment/remote_download_list/:
+    get:
+      summary: Скачивание политики оплаты Etsy
+      tags:
+        - etsy_payment_policy
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: get-v1-etsy-policy-payment-remote_download_list
+      description: Скачивание политики оплаты Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+  '/v1/etsy/policy/shipping/{id}/remote_create_or_update/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID политики доставки Etsy
+    post:
+      summary: Создание или обновление политики доставки в Etsy
+      operationId: post-v1-etsy-policy-shipping-id-remote_create_or_update
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Создание или обновление политики доставки в Etsy
+  '/v1/etsy/policy/shipping/{id}/remote_delete/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID политики доставки Etsy
+    delete:
+      summary: Удаление политики доставки из Etsy
+      operationId: delete-v1-etsy-policy-shipping-id-remote_delete
+      responses:
+        '200':
+          description: OK
+      tags:
+        - etsy_shipping_policy
+      description: Удаление политики доставки из Etsy
+  /v1/amazon/account/get_auth_data/:
+    get:
+      summary: Получение данных для подключения аккаунта Amazon
+      tags:
+        - amazon_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              auth_url:
+                type: string
+                description: 'Ссылка, по которой пользователь должен перейти для авторизации приложения Zonesmart'
+              developer_name:
+                type: string
+                description: Название приложения Zonesmart на Amazon
+              developer_id:
+                type: string
+                description: ID разработчика (приложения Zonesmart на Amazon)
+          examples:
+            example-1:
+              auth_url: 'https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1'
+              developer_name: Zonesmart
+              developer_id: '914218968872'
+      operationId: get-v1-amazon-account-get_auth_data
+      description: 'Получение данных, которые нужны пользователю для авторизации приложения Zonesmart в своём аккаунте на сайте Amazon.'
   '/v1/zonesmart/marketplace/{marketplace_id}/domain/':
     get:
       operationId: v1_zonesmart_marketplace_domain_list
