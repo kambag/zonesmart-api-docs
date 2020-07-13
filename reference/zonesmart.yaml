@@ -9258,33 +9258,6 @@ paths:
       tags:
         - etsy_shipping_policy
       description: Удаление политики доставки из Etsy
-  /v1/amazon/account/get_auth_data/:
-    get:
-      summary: Получение данных для подключения аккаунта Amazon
-      tags:
-        - amazon_account
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: object
-            properties:
-              auth_url:
-                type: string
-                description: 'Ссылка, по которой пользователь должен перейти для авторизации приложения Zonesmart'
-              developer_name:
-                type: string
-                description: Название приложения Zonesmart на Amazon
-              developer_id:
-                type: string
-                description: ID разработчика (приложения Zonesmart на Amazon)
-          examples:
-            example-1:
-              auth_url: 'https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1'
-              developer_name: Zonesmart
-              developer_id: '914218968872'
-      operationId: get-v1-amazon-account-get_auth_data
-      description: 'Получение данных, которые нужны пользователю для авторизации приложения Zonesmart в своём аккаунте на сайте Amazon.'
   '/v1/zonesmart/marketplace/{marketplace_id}/domain/':
     get:
       operationId: v1_zonesmart_marketplace_domain_list
