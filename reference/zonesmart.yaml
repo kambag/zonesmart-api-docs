@@ -9258,6 +9258,266 @@ paths:
       tags:
         - etsy_shipping_policy
       description: Удаление политики доставки из Etsy
+  /v1/amazon/account/:
+    get:
+      operationId: v1_amazon_account_list
+      description: Получение списка аккаунтов Amazon.
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return per page.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: The initial index from which to return the results.
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+              - count
+              - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/BaseAmazonUserAccount'
+          examples:
+            example-1:
+              count: 1
+              next: null
+              previous: null
+              results:
+                - id: aed608f0-ba9c-44ac-84e3-fe52f3e74907
+                  marketplace_user_account:
+                    id: ad565d64-f13f-438c-a6c9-3deea5459333
+                    marketplace_name: Amazon North America
+                    username: zonesmart
+                    user: 1
+                    marketplace: 3
+                  created: '2020-07-02T19:37:03.961398+03:00'
+                  modified: '2020-07-02T19:37:03.961409+03:00'
+                  access_token_expiry: '2021-05-28T20:42:33.922000+03:00'
+                  seller_id: A2RW18F8J3TTX6
+      tags:
+        - amazon_account
+      summary: Получение списка аккаунтов Amazon
+    post:
+      operationId: v1_amazon_account_create
+      description: 'Локальное создание аккаунта Amazon. Необходимо передать ID маркетплейса Amazon (американский, европейский или дальневосточный), для которого создается аккаунт, токен доступа и ID продавца в системе Amazon.'
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              marketplace:
+                type: string
+                description: 'ID маркетплейса Amazon (North America, Europe или Far East)'
+              access_token:
+                type: string
+                description: Токен доступа
+              seller_id:
+                type: string
+                description: ID аккаунта продавца Amazon (SellerID)
+            required:
+              - marketplace
+              - access_token
+              - seller_id
+      tags:
+        - amazon_account
+      summary: Локальное создание аккаунта Amazon
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+    parameters: []
+  '/v1/amazon/account/{id}/':
+    get:
+      operationId: v1_amazon_account_read
+      description: Получение аккаунта Amazon
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/BaseAmazonUserAccount'
+          examples:
+            example-1:
+              id: aed608f0-ba9c-44ac-84e3-fe52f3e74907
+              marketplace_user_account:
+                id: ad565d64-f13f-438c-a6c9-3deea5459333
+                marketplace_name: Amazon North America
+                username: zonesmart
+                user: 1
+                marketplace: 3
+              created: '2020-07-02T19:37:03.961398+03:00'
+              modified: '2020-07-02T19:37:03.961409+03:00'
+              access_token_expiry: '2021-05-28T20:42:33.922000+03:00'
+              seller_id: A2RW18F8J3TTX6
+      tags:
+        - amazon_account
+      summary: Получение аккаунта Amazon
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: ID аккаунта Amazon
+    delete:
+      summary: Локальное удаление аккаунта Amazon
+      operationId: delete-v1-amazon-account-id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - amazon_account
+      description: Локальное удаление аккаунта Amazon.
+  /v1/amazon/account/available_domains/:
+    get:
+      summary: Получение списка доступных доменов
+      tags:
+        - amazon_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Сообщение
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Domain'
+          examples:
+            example-1:
+              results:
+                - id: 2
+                  name: Amazon Mexico
+                  code: A1AM78C64UM0Y8
+                  description: null
+                  url: 'https://www.amazon.com.mx'
+                  marketplace: 3
+              message: 'Получение списка доступных для пользователя маркетплейсов Amazon: успешно выполнено.'
+      operationId: get-v1-amazon-account-available_domains
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+      description: 'Получение списка доступных для создания канала продаж доменов маркетплейса Amazon. В рамках одного аккаунта Amazon для каждого домена (например, для канадского домена американского маркетплейса или для французского домена европейского маркетплейса) можно создать только один канал продаж.'
+  '/v1/zonesmart/listing/{id}/bulk_update_quantity/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID базового листинга
+    post:
+      summary: Обновление цен продуктов базового листинга
+      operationId: post-v1-zonesmart-listing-id-bulk_update_quantity
+      responses:
+        '200':
+          description: OK
+      tags:
+        - base_listing
+      description: 'Обновление цен продуктов базового листинга. Цены автоматически обновляются и у соответствующих продуктов листингов маркетплейсов, привязанных к данному базовому листингу.'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                product_id:
+                  type: string
+                  description: ID продукта базового листинга
+                quantity:
+                  type: integer
+                  description: Новое количество единиц продукта базового листинга
+              required:
+                - product_id
+                - quantity
+  '/v1/zonesmart/listing/{listing_id}/product/{product_id}/update_quantity/':
+    parameters:
+      - type: string
+        name: listing_id
+        in: path
+        required: true
+        description: ID базового листинга
+      - type: string
+        name: product_id
+        in: path
+        required: true
+        description: ID продукта
+    post:
+      summary: Обновление цены продукта базового листинга
+      operationId: post-v1-zonesmart-listing-listing_id-product-product_id-update_quantity
+      responses:
+        '200':
+          description: OK
+      tags:
+        - base_listing
+      description: 'Обновление цены продукта базового листинга. Цена автоматически обновляется и у соответствующих продуктов листингов маркетплейсов, привязанных к данному базовому листингу.'
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: string
+                description: Новое количество единиц продукта базового листинга
+            required:
+              - quantity
+  /v1/amazon/account/get_auth_data/:
+    get:
+      summary: Получение данных для подключения аккаунта Amazon
+      tags:
+        - amazon_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              auth_url:
+                type: string
+                description: 'Ссылка, по которой пользователь должен перейти для авторизации приложения Zonesmart'
+              developer_name:
+                type: string
+                description: Название приложения Zonesmart на Amazon
+              developer_id:
+                type: string
+                description: ID разработчика (приложения Zonesmart на Amazon)
+          examples:
+            example-1:
+              auth_url: 'https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1'
+              developer_name: Zonesmart
+              developer_id: '914218968872'
+      operationId: get-v1-amazon-account-get_auth_data
+      description: 'Получение данных, которые нужны пользователю для авторизации приложения Zonesmart в своём аккаунте на сайте Amazon.'
   '/v1/zonesmart/marketplace/{marketplace_id}/domain/':
     get:
       operationId: v1_zonesmart_marketplace_domain_list
