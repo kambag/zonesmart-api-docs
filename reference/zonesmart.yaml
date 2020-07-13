@@ -25,17 +25,28 @@ paths:
   /auth/jwt/create/:
     post:
       operationId: auth_jwt_create_create
-      description: Данный Endpoint используется для создания jwt токена.
+      description: 'Обменивание логина и пароля пользователя Zonesmart на токены доступа и обновления. Токен доступа используется для авторизованных вызовов к API Zonesmart, а токен обновления используется для обновления токена доступа при его устаревании.'
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/TokenObtainPair'
+            type: object
+            properties:
+              email:
+                type: string
+                description: Email пользователя
+              password:
+                type: string
+                description: Пароль пользователя
+            required:
+              - email
+              - password
           x-examples:
             Example:
               email: 123@gmail.com
               password: '123123'
+          description: ''
         - name: data
           in: body
           required: true
@@ -43,31 +54,38 @@ paths:
             $ref: '#/definitions/TokenObtainPair'
           x-examples:
             example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenObtainPair'
-          examples:
-            Example:
-              email: 123@gmail.com
-              password: '123123'
       tags:
         - auth
-      summary: Создание токена доступа
+      summary: Получение JWT-токенов
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+                description: Токен обновления
+              access:
+                type: string
+                description: Токен доступа
     parameters: []
   /auth/jwt/refresh/:
     post:
       operationId: auth_jwt_refresh_create
-      description: |-
-        Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
+      description: Обменивание токена обновления на токен доступа.
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/TokenRefresh'
+            type: object
+            properties:
+              refresh:
+                type: string
+                description: Токен обновления
+            required:
+              - refresh
           x-examples:
             Example:
               refresh: 123-333-123
@@ -78,22 +96,23 @@ paths:
             $ref: '#/definitions/TokenRefresh'
           x-examples:
             example-1: {}
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenRefresh'
-          examples:
-            Example:
-              refresh: 123-333-123
       tags:
         - auth
       summary: Обновление токена доступа
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              access:
+                type: string
+                description: Токен доступа
     parameters: []
   /users/:
     get:
       operationId: users_list
-      description: ''
+      description: Получение списка пользователей Zonesmart
       parameters:
         - name: limit
           in: query
@@ -129,7 +148,8 @@ paths:
                 items:
                   $ref: '#/definitions/ZonesmartUser'
       tags:
-        - work_in_process
+        - user
+      summary: Получение списка пользователей
     post:
       operationId: users_create
       description: ''
@@ -168,25 +188,12 @@ paths:
   /users/me/:
     get:
       operationId: users_me_read
-      description: ''
-      parameters:
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: 'Получение информации о своем пользователе, то есть пользователе, которому принаджежит используемый токен доступа.'
+      parameters: []
       responses:
         '200':
           description: ''
           schema:
-            required:
-              - count
-              - results
             type: object
             properties:
               count:
@@ -200,11 +207,13 @@ paths:
                 format: uri
                 x-nullable: true
               results:
-                type: array
-                items:
-                  $ref: '#/definitions/User'
+                $ref: '#/definitions/User'
+            required:
+              - count
+              - results
       tags:
-        - work_in_process
+        - user
+      summary: Получение собственного пользователя
     put:
       operationId: users_me_update
       description: ''
@@ -1649,8 +1658,8 @@ paths:
           x-examples:
             example-1: {}
       responses:
-        '201':
-          description: ''
+        '200':
+          description: OK
           schema:
             $ref: '#/definitions/AmazonListingAttribute'
           examples:
@@ -2451,41 +2460,41 @@ paths:
   /v1/ebay/category/:
     get:
       operationId: v1_ebay_category_list
-      description: ''
+      description: Получение списка категорий eBay
       parameters:
         - name: parent_id
           in: query
-          description: ''
+          description: ID родительской категории
           required: false
           type: string
         - name: level
           in: query
-          description: ''
+          description: Уровень вложенности категории
           required: false
           type: number
         - name: domain_id
           in: query
-          description: ''
+          description: 'ID домена маркетплейса, к которому относится категория'
           required: false
           type: number
         - name: is_leaf
           in: query
-          description: ''
+          description: Является ли категория листовой
           required: false
           type: string
         - name: category_id
           in: query
-          description: ''
+          description: ID категории в eBay
           required: false
           type: string
         - name: variations_supported
           in: query
-          description: ''
+          description: Поддерживаются ли вариации
           required: false
           type: string
         - name: transport_supported
           in: query
-          description: ''
+          description: Поддерживается ли транспорт
           required: false
           type: string
         - name: limit
@@ -2522,12 +2531,13 @@ paths:
                 items:
                   $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: Получение списка категорий eBay
     parameters: []
   '/v1/ebay/category/{id}/':
     get:
       operationId: v1_ebay_category_read
-      description: ''
+      description: Получение категории eBay по ID.
       parameters: []
       responses:
         '200':
@@ -2535,7 +2545,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: Получение категории eBay
     parameters:
       - name: id
         in: path
@@ -2552,7 +2563,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
+      summary: ''
     parameters:
       - name: id
         in: path
@@ -2569,7 +2581,7 @@ paths:
           schema:
             $ref: '#/definitions/EbayCategory'
       tags:
-        - work_in_process
+        - ebay_category
     parameters:
       - name: id
         in: path
@@ -2582,26 +2594,21 @@ paths:
   /v1/ebay/listing/:
     get:
       operationId: v1_ebay_listing_list
-      description: ''
+      description: Получение списка листингов eBay
       parameters:
-        - name: title
-          in: query
-          description: ''
-          required: false
-          type: string
         - name: status
           in: query
-          description: ''
+          description: Статус листинга eBay
           required: false
           type: string
         - name: channel
           in: query
-          description: ''
+          description: ID канала продаж
           required: false
           type: string
         - name: marketplace_user_account
           in: query
-          description: ''
+          description: ID аккаунта маркетплейса
           required: false
           type: string
         - name: limit
@@ -2638,10 +2645,11 @@ paths:
                 items:
                   $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение списка листингов eBay
     post:
       operationId: v1_ebay_listing_create
-      description: ''
+      description: Локальное создание листинга eBay
       parameters:
         - name: data
           in: body
@@ -2654,7 +2662,8 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание листинга eBay
     parameters: []
   /v1/ebay/listing/file_download/:
     get:
@@ -2949,72 +2958,27 @@ paths:
   '/v1/ebay/listing/remote_download_list/{channel_id}/':
     get:
       operationId: v1_ebay_listing_remote_download_list
-      description: ''
-      parameters:
-        - name: title
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: status
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: channel
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: marketplace_user_account
-          in: query
-          description: ''
-          required: false
-          type: string
-        - name: limit
-          in: query
-          description: Number of results to return per page.
-          required: false
-          type: integer
-        - name: offset
-          in: query
-          description: The initial index from which to return the results.
-          required: false
-          type: integer
+      description: Скачивание листингов eBay с канала продаж
+      parameters: []
+      tags:
+        - ebay_listing
+      summary: Скачивание листингов с eBay
       responses:
         '200':
-          description: ''
+          description: OK
           schema:
-            required:
-              - count
-              - results
             type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/EbayListing'
-      tags:
-        - work_in_process
+            properties: {}
     parameters:
       - name: channel_id
         in: path
         required: true
         type: string
+        description: ID канала продаж
   '/v1/ebay/listing/{id}/':
     get:
       operationId: v1_ebay_listing_read
-      description: ''
+      description: Получение листинга eBay по ID
       parameters: []
       responses:
         '200':
@@ -3022,10 +2986,11 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение листинга eBay
     put:
       operationId: v1_ebay_listing_update
-      description: ''
+      description: Локальное обновление листинга eBay
       parameters:
         - name: data
           in: body
@@ -3038,96 +3003,89 @@ paths:
           schema:
             $ref: '#/definitions/EbayListing'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление листинга eBay
     delete:
       operationId: v1_ebay_listing_delete
-      description: ''
+      description: Локальное удаление листинга eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление листинга eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/link/':
     post:
       operationId: v1_ebay_listing_link
-      description: Creates base listing depends on listing data if no base listing specified before.
+      description: 'Если в теле запроса задано значение "base_listing_id", то листинг eBay привязывается к базовому листингу с таким ID. В противном случае на основе листинга eBay создается новый базовый листинг, к которому привязывается данный листинг eBay.'
       parameters:
-        - name: data
-          in: body
-          required: true
+        - in: body
+          name: body
           schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
+            type: object
+            properties:
+              base_listing_id:
+                type: string
+                description: ID базового листинга
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Привязывание листинга eBay к базовому листингу
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/remote_delete/':
     delete:
       operationId: v1_ebay_listing_remote_delete
-      description: ''
+      description: Удаление листинга с eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Удаление листинга с eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/remote_sync/':
     post:
       operationId: v1_ebay_listing_remote_sync
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayListing'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayListing'
+      description: Создание листинга на eBay
+      parameters: []
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Создание листинга на eBay
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
   '/v1/ebay/listing/{id}/send_offer_to_buyers/':
     post:
       operationId: v1_ebay_listing_send_offer_to_buyers
@@ -3515,22 +3473,6 @@ paths:
             $ref: '#/definitions/UpdateCompatibility'
       tags:
         - work_in_process
-    patch:
-      operationId: v1_ebay_listing_compatibility_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateCompatibility'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateCompatibility'
-      tags:
-        - work_in_process
     delete:
       operationId: v1_ebay_listing_compatibility_delete
       description: ''
@@ -3552,7 +3494,7 @@ paths:
   '/v1/ebay/listing/{listing_id}/product/':
     get:
       operationId: v1_ebay_listing_product_list
-      description: ''
+      description: Получение списка продуктов eBay
       parameters:
         - name: limit
           in: query
@@ -3587,13 +3529,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/EbayProduct'
+      summary: Получение списка продуктов eBay
       tags:
-        - work_in_process
+        - ebay_listing
     post:
       operationId: v1_ebay_listing_product_create
-      description: |-
-        Переопределение метода создания,
-        т.к. необходимо передать listing_id из url в сериализатор.
+      description: Создание продукта eBay
       parameters:
         - name: data
           in: body
@@ -3606,16 +3547,18 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание продукта eBay
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
-  '/v1/ebay/listing/{listing_id}/product/{id}/':
+        description: ID листинга eBay
+  '/v1/ebay/listing/{listing_id}/product/{product_id}/':
     get:
       operationId: v1_ebay_listing_product_read
-      description: ''
+      description: Получение продукта eBay
       parameters: []
       responses:
         '200':
@@ -3623,10 +3566,11 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Получение продукта eBay
     put:
       operationId: v1_ebay_listing_product_update
-      description: ''
+      description: Обновление продукта eBay
       parameters:
         - name: data
           in: body
@@ -3639,45 +3583,33 @@ paths:
           schema:
             $ref: '#/definitions/EbayProduct'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_product_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/EbayProduct'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/EbayProduct'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление продукта eBay
     delete:
       operationId: v1_ebay_listing_product_delete
-      description: ''
+      description: Удаление продукта eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление продукта eBay
     parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
+      - type: string
+        name: product_id
+        in: path
+        required: true
+        description: ID продукта eBay
   '/v1/ebay/listing/{listing_id}/product/{product_id}/specification/':
     get:
       operationId: v1_ebay_listing_product_specification_list
-      description: ''
+      description: Получение спецификаций продукта eBay
       parameters:
         - name: limit
           in: query
@@ -3712,11 +3644,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Specification'
+      summary: Получение спецификаций продукта eBay
       tags:
-        - work_in_process
+        - ebay_listing
     post:
       operationId: v1_ebay_listing_product_specification_create
-      description: ''
+      description: Создание спецификации продукта eBay
       parameters:
         - name: data
           in: body
@@ -3729,31 +3662,35 @@ paths:
           schema:
             $ref: '#/definitions/CreateSpecification'
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное создание спецификации продукта eBay
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта eBay
   '/v1/ebay/listing/{listing_id}/product/{product_id}/specification/{id}/':
     get:
       operationId: v1_ebay_listing_product_specification_read
-      description: ''
+      description: Получение спецификации продукта eBay
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Specification'
+      summary: Получение спецификации продукта eBay
       tags:
-        - work_in_process
+        - ebay_listing
     put:
       operationId: v1_ebay_listing_product_specification_update
-      description: ''
+      description: Обновление спецификации продукта eBay
       parameters:
         - name: data
           in: body
@@ -3766,45 +3703,34 @@ paths:
           schema:
             $ref: '#/definitions/UpdateSpecification'
       tags:
-        - work_in_process
-    patch:
-      operationId: v1_ebay_listing_product_specification_partial_update
-      description: ''
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateSpecification'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/UpdateSpecification'
-      tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное обновление спецификации продукта eBay
     delete:
       operationId: v1_ebay_listing_product_specification_delete
-      description: ''
+      description: Удаление спецификации продукта eBay
       parameters: []
       responses:
         '204':
           description: ''
       tags:
-        - work_in_process
+        - ebay_listing
+      summary: Локальное удаление спецификации продукта eBay
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID спецификации
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга eBay
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта eBay
   /v1/ebay/location/:
     get:
       operationId: v1_ebay_location_list
@@ -3827,7 +3753,7 @@ paths:
           type: integer
         - type: string
           in: query
-          name: marketplace_user_account
+          name: marketplace_user_account_id
           description: ID аккаунта маркетплейса
       responses:
         '200':
@@ -4324,6 +4250,10 @@ paths:
           in: query
           name: search
           description: Поиск по названию и описанию
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
       responses:
         '200':
           description: ''
@@ -4990,6 +4920,22 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: markeplace_user_account_id
+        - type: string
+          in: query
+          name: category_type
+          description: Тип категории политики
+        - type: string
+          in: query
+          name: status
+          description: Фильтрация по статусу
+        - type: string
+          in: query
+          description: Поиск по названию и описанию
+          name: search
       responses:
         '200':
           description: ''
@@ -5381,6 +5327,26 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID канала продаж
+          name: channel
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
+        - type: string
+          in: query
+          name: category_type
+          description: Тип категории политики
+        - type: string
+          in: query
+          name: status
+          description: Фильтрация по статусу
+        - type: string
+          in: query
+          description: Поиск по названию и описанию
+          name: search
       responses:
         '200':
           description: ''
@@ -5763,20 +5729,18 @@ paths:
   /v1/etsy/account/complete/:
     get:
       operationId: v1_etsy_account_complete
-      description: |-
-        Данных Endpoint используется для создание / обновление Etsy аккаунта пользователя.
-        Необходимо передавать oauth_token и oauth_verifier в query параметрах запроса.
+      description: Подключение нового или обновление существующего аккаунта Etsy пользователя.
       parameters:
         - type: string
           in: query
           name: oauth_token
           required: true
-          description: oauth токен.
+          description: ''
         - type: string
           in: query
           name: oauth_verifier
           required: true
-          description: oauth токен верификации.
+          description: ''
       responses:
         '201':
           description: ''
@@ -5798,7 +5762,7 @@ paths:
             description: Сообщение о результате.
           examples:
             Example: Аккаунт успешно создан
-      summary: Создание / обновление аккаунта etsy
+      summary: Создание или обновление аккаунта Etsy
       tags:
         - etsy_account
     parameters: []
@@ -5976,7 +5940,7 @@ paths:
   /v1/etsy/country/:
     get:
       operationId: v1_etsy_country_list
-      description: ''
+      description: Получение списка стран в формате Etsy
       parameters:
         - name: limit
           in: query
@@ -6012,12 +5976,13 @@ paths:
                 items:
                   $ref: '#/definitions/BaseEtsyCountry'
       tags:
-        - work_in_process
+        - etsy_shipping_policy
+      summary: Получение списка стран в формате Etsy
     parameters: []
   '/v1/etsy/country/{country_id}/':
     get:
       operationId: v1_etsy_country_read
-      description: ''
+      description: Получение страны в формате Etsy
       parameters: []
       responses:
         '200':
@@ -6025,11 +5990,12 @@ paths:
           schema:
             $ref: '#/definitions/BaseEtsyCountry'
       tags:
-        - work_in_process
+        - etsy_shipping_policy
+      summary: Получение страны в формате Etsy
     parameters:
       - name: country_id
         in: path
-        description: A unique value identifying this Страна.
+        description: ID страны
         required: true
         type: integer
   /v1/etsy/listing/:
@@ -6662,7 +6628,7 @@ paths:
   /v1/etsy/policy/payment/:
     get:
       operationId: v1_etsy_policy_payment_list
-      description: Данный Endpoint используется для получения списка политик оплаты.
+      description: Получение списка политик оплаты Etsy
       parameters:
         - name: limit
           in: query
@@ -6674,6 +6640,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: Фильтрация по ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -6728,14 +6698,14 @@ paths:
                   zip: string
                   channel: string
                   country: 0
-      summary: Получение списка политик оплаты
+      summary: Получение списка политик оплаты Etsy
       tags:
         - etsy_payment_policy
     parameters: []
   '/v1/etsy/policy/payment/{id}/':
     get:
       operationId: v1_etsy_policy_payment_read
-      description: Данный Endpoint используется для получения политики оплаты по id.
+      description: Получение политики оплаты Etsy по ID.
       parameters: []
       responses:
         '200':
@@ -6765,7 +6735,7 @@ paths:
               zip: string
               channel: string
               country: 0
-      summary: Получение политики оплаты
+      summary: Получение политики оплаты Etsy
       tags:
         - etsy_payment_policy
     parameters:
@@ -6778,7 +6748,7 @@ paths:
   /v1/etsy/policy/shipping/:
     get:
       operationId: v1_etsy_policy_shipping_list
-      description: Данный Endpoint используется для получения списка политик доставки.
+      description: Получение списка политик доставки Etsy
       parameters:
         - name: limit
           in: query
@@ -6790,6 +6760,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          description: Фильтрация по ID аккаунта маркетплейса
+          name: marketplace_user_account_id
       responses:
         '200':
           description: ''
@@ -6819,81 +6793,121 @@ paths:
               - results
           examples:
             Example:
-              count: 1
-              next: 'http://example.com'
-              previous: 'http://example.com'
+              count: 3
+              next: null
+              previous: null
               results:
-                - id: string
-                  created: '2020-05-18T07:33:42Z'
-                  modified: '2020-05-18T07:33:42Z'
-                  status: draft
-                  published_at: '2020-05-18T07:33:42Z'
-                  shipping_template_id: string
-                  title: string
-                  max_processing_days: 0
-                  min_processing_days: 0
-                  processing_days_display_label: string
-                  marketplace_user_account: string
-                  origin_country: 0
-      summary: Получение списка политик доставки
+                - id: bc49daa5-6600-488e-85ba-78e5add894b4
+                  status: published
+                  shipping_template_id: '84628853766'
+                  title: test_976
+                  max_processing_days: 3
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 55
+                - id: 0c734bb8-78bd-44d7-84b0-eb50defe7f12
+                  status: published
+                  shipping_template_id: '97614462814'
+                  title: Sanya noo eto pizdetz
+                  max_processing_days: 3
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 55
+                - id: 5a128396-cfba-474d-b706-e6133335e7c5
+                  status: published
+                  shipping_template_id: '97610860268'
+                  title: asdasdas
+                  max_processing_days: 1
+                  min_processing_days: 1
+                  marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+                  origin_country: 181
+      summary: Получение списка политик доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters: []
-  '/v1/etsy/policy/shipping/remote_download_list/{marketplace_user_account_id}/':
+    post:
+      summary: Локальное создание политики доставки Etsy
+      operationId: post-v1-etsy-policy-shipping
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
+      tags:
+        - etsy_shipping_policy
+      description: Локальное создание политики доставки Etsy
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
+  /v1/etsy/policy/shipping/remote_download_list/:
     get:
       operationId: v1_etsy_policy_shipping_remote_download_list
-      description: Данный Endpoint используется для удалённого скачивания списка политик доставки с Etsy.
-      parameters: []
-      summary: Скачивание списка политик доставки
+      description: Скачивание списка политик доставки Etsy
+      parameters:
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          required: true
+          description: ID аккаунта маркетплейса
+      summary: Скачивание списка политик доставки Etsy
       tags:
         - etsy_shipping_policy
       responses:
-        '201':
+        '200':
           description: ''
           schema:
             type: string
             description: Сообщение о результате.
           examples:
             Example: Скачивание прошло успешно
-        '400':
-          description: ''
-          schema:
-            type: string
-            description: Сообщение о результате.
-          examples:
-            Example: Скачивание провалилось
-    parameters:
-      - name: marketplace_user_account_id
-        in: path
-        required: true
-        type: string
-        description: Идентификатор маркетплейс аккаунта пользователя.
-        format: uuid
+    parameters: []
   '/v1/etsy/policy/shipping/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_read
-      description: Данный Endpoint используется для получения политики оплаты по id.
+      description: Получение политики доставки Etsy
       parameters: []
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/ShippingTemplate'
+            type: object
+            properties:
+              template:
+                $ref: '#/definitions/ShippingTemplate'
+              entries:
+                type: array
+                items:
+                  $ref: '#/definitions/ShippingTemplateEntry'
           examples:
             Example:
-              id: string
-              created: '2020-05-18T07:33:42Z'
-              modified: '2020-05-18T07:33:42Z'
-              status: draft
-              published_at: '2020-05-18T07:33:42Z'
-              shipping_template_id: string
-              title: string
-              max_processing_days: 0
-              min_processing_days: 0
-              processing_days_display_label: string
-              marketplace_user_account: string
-              origin_country: 0
-      summary: Получение политики доставки
+              id: bc49daa5-6600-488e-85ba-78e5add894b4
+              status: published
+              marketplace_user_account: ff373023-fd25-4772-860e-b06b429c468a
+              shipping_template_id: '84628853766'
+              title: test_976
+              origin_country_id: 55
+              min_processing_days: 1
+              max_processing_days: 3
+              entries:
+                - id: 390eb8c4-85ba-4fdb-8786-9f4e5b907ebc
+                  destination_country_id: 56
+                  destination_region_id: null
+                  is_removed: false
+                  shipping_template_entry_id: '19689842684'
+                  currency_code: USD
+                  primary_cost: 3
+                  secondary_cost: 4
+                - id: b71e4a6c-fbb8-463a-b7e9-b1906b3579c5
+                  destination_country_id: 71
+                  destination_region_id: null
+                  is_removed: false
+                  shipping_template_entry_id: '19689842546'
+                  currency_code: USD
+                  primary_cost: 1
+                  secondary_cost: 2
+      summary: Получение политики доставки Etsy
       tags:
         - etsy_shipping_policy
     parameters:
@@ -6901,12 +6915,36 @@ paths:
         in: path
         required: true
         type: string
+        description: ID политики доставки Etsy
+    put:
+      summary: Локальное обновление политики доставки Etsy
+      operationId: put-v1-etsy-policy-shipping-id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
+      tags:
+        - etsy_shipping_policy
+      description: Локальное обновление политики доставки Etsy
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/CreateOrUpdateEtsyShippingTemplate'
+    delete:
+      summary: Локальное удаление политики доставки Etsy
+      operationId: delete-v1-etsy-policy-shipping-id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - etsy_shipping_policy
+      description: Локальное удаление политики доставки Etsy
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/':
     get:
       operationId: v1_etsy_policy_shipping_entry_list
-      description: |-
-        Данный Endpoint используется для получения списка записей политик доставки.
-        Примечание: записи политик доставки не могут быть обновлены.
+      description: Получение списка записей политик доставки Etsy
       parameters:
         - name: limit
           in: query
@@ -6960,22 +6998,29 @@ paths:
                   shipping_template: string
                   destination_country: 0
                   destination_region: 0
-      summary: Получение списка записей политик доставки
+      summary: Получение списка записей политик доставки Etsy
       tags:
-        - etsy_shipping_policy
+        - etsy_shipping_policy_entry
     parameters:
       - name: shipping_template_id
         in: path
         required: true
         type: string
         format: uuid
-        description: Идентификатор политики доставки.
+        description: ID политики доставки Etsy
+    post:
+      summary: Локальное создание или обновление записи политики доставки Etsy
+      operationId: post-v1-etsy-policy-shipping-shipping_template_id-entry
+      responses:
+        '200':
+          description: OK
+      description: Локальное создание или обновление политики доставки Etsy
+      tags:
+        - etsy_shipping_policy_entry
   '/v1/etsy/policy/shipping/{shipping_template_id}/entry/{id}/':
     get:
       operationId: v1_etsy_policy_shipping_entry_read
-      description: |-
-        Данный Endpoint используется для получения записи политики доставки по id.
-        Примечание: записи политик доставки не могут быть обновлены.
+      description: Получение записи политики доставки Etsy
       parameters: []
       responses:
         '200':
@@ -6993,22 +7038,31 @@ paths:
               shipping_template: string
               destination_country: 0
               destination_region: 0
-      summary: Получение записи политики доставки
+      summary: Получение записи политики доставки Etsy
       tags:
-        - etsy_shipping_policy
+        - etsy_shipping_policy_entry
     parameters:
       - name: id
         in: path
         required: true
         type: string
         format: uuid
-        description: Идентификатор записи.
+        description: ID политики доставки Etsy
       - name: shipping_template_id
         in: path
         required: true
         type: string
         format: uuid
-        description: Идентификатор политики доставки.
+        description: ID записи политики доставки Etsy
+    delete:
+      summary: Локальное удаление записи политики доставки Etsy
+      operationId: delete-v1-etsy-policy-shipping-shipping_template_id-entry-id
+      responses:
+        '200':
+          description: OK
+      description: Локальное удаление записи политики доставки Etsy
+      tags:
+        - etsy_shipping_policy_entry
   /v1/etsy/region/:
     get:
       operationId: v1_etsy_region_list
@@ -7874,130 +7928,523 @@ paths:
         format: uuid
   /v1/zonesmart/listing/:
     get:
-      summary: Получить все базовые листинги
-      tags:
-        - listing
+      summary: Получение списка базовых листингов
       responses:
         '200':
           description: OK
           schema:
-            $ref: '#/definitions/Listing'
+            type: array
+            items:
+              $ref: '#/definitions/Listing'
           examples:
-            example-1: {}
+            example-1:
+              count: 3
+              next: null
+              previous: null
+              results:
+                - products:
+                    - id: fc9db091-4c04-42cb-880a-946ef9c091e4
+                      attributes:
+                        - id: 20e1db2c-697c-414b-a49a-878c2e3d5a61
+                          name: hlPTdpvlwdxBlBYiryVf
+                          value: SJqtZqpbynaaHetArGpk
+                          _order: 0
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                        - id: 458fea05-09fa-4ee4-980d-879a1591ed39
+                          name: XadYpuQGUVGxMRFgaPZw
+                          value: iGeRPncdtsqvzVEKgMde
+                          _order: 1
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                        - id: d91d29aa-f509-47fb-a045-10c1cd4f0bd0
+                          name: sTLKiKaTxuYFqTogffDA
+                          value: FUuHIDfqvNXAEhYxuWDh
+                          _order: 2
+                          product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                      product_code_type: EAN
+                      created: '2020-07-05T15:14:05.705000+03:00'
+                      modified: '2020-07-05T23:53:18.688000+03:00'
+                      is_removed: false
+                      sku: BUaMAfkcUFHsMQAPkLvY
+                      quantity: 34
+                      price: 4.2
+                      product_code: 978-0-12-209639-6
+                      condition: NEW
+                      condition_note: Against structure civil product wife state evidence industry. Pay statement marriage keep. List campaign order analysis tough care strong. Perform eight beat environment go sound well.
+                      listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                      main_image: 'https://picsum.photos/id/17/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/13/500/500'
+                        - 'https://picsum.photos/id/10/500/500'
+                        - 'https://picsum.photos/id/18/500/500'
+                    - id: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                      attributes:
+                        - id: b4ca910d-1696-4253-a385-7f0eae6abfdd
+                          name: NtWGOLUgxzeWjDkBiluN
+                          value: dhODOrdGZWcZpDLzaMNc
+                          _order: 0
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                        - id: e5137655-6e4c-4db0-a375-bb26d504982d
+                          name: PXvvXpYIweHPfggKKLcy
+                          value: bVWOwFDzXkhdfbmirfKH
+                          _order: 1
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                        - id: e96a5382-5b0f-4bf5-a03c-553ee07c7331
+                          name: VyLMxXvMquUxrhwEyDwp
+                          value: babWGeMxYAqbsRnqGeVQ
+                          _order: 2
+                          product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                      product_code_type: UPC
+                      created: '2020-07-05T15:14:05.668000+03:00'
+                      modified: '2020-07-05T23:53:18.703000+03:00'
+                      is_removed: false
+                      sku: HWqVbCMfCgDOdsnOBzqP
+                      quantity: 43
+                      price: 4
+                      product_code: 978-1-69728-541-3
+                      condition: REFURBISHED
+                      condition_note: Usually once age moment collection test. Bar economic lawyer study base wife black.
+                      listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                      main_image: 'https://picsum.photos/id/7/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/10/500/500'
+                        - 'https://picsum.photos/id/4/500/500'
+                        - 'https://picsum.photos/id/10/500/500'
+                  linked_listings:
+                    - marketplace: eBay
+                      marketplace_user_account: lite-store
+                      channel: Тестовый канал
+                      listing:
+                        id: 071da228-dd6f-4f90-b29a-94c3cb9bb9fa
+                        title: Politics hit catch season big add single.
+                      is_published: false
+                    - marketplace: Etsy
+                      marketplace_user_account: eppxtc0m
+                      channel: "Канал продаж Etsy аккаунта 'eppxtc0m'"
+                      listing:
+                        id: 245da10f-4e11-46b4-94ea-8e881616f667
+                        title: Politics hit catch season big add single.
+                      is_published: false
+                  id: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  user: 1
+                  title: Politics hit catch season big add single.
+                  description: Lose at official Mrs year head population audience. Sure reach majority smile. Give girl note dinner goal oil American one. Speak person city network.
+                  listing_sku: null
+                  created: '2020-07-05T15:14:05.651000+03:00'
+                  modified: '2020-07-05T15:14:05.734000+03:00'
+                  category_name: store
+                  brand: must
+                  currency: HUF
+                  is_removed: false
+                  price_min: 4
+                  price_max: 4.2
+                  total_quantity: 77
+                  has_variations: true
+                - products:
+                    - id: bbfa2154-1198-4191-ab68-33bc0f12a948
+                      attributes:
+                        - id: a9735ee9-a4ad-4505-a991-1a4a2bf4f69e
+                          name: BUGhJgiPELGAdaiYciLq
+                          value: lIKHPuADdLBYBrFBXSfF
+                          _order: 0
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                        - id: d88aeee7-c457-4128-9ac7-20cb127fea25
+                          name: RjrDFbYtuZnSrRtEuINV
+                          value: onNlWqnWcRVMpjxXFGGZ
+                          _order: 1
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                        - id: de941090-194b-48a5-81b0-74df09a66d7b
+                          name: qcOJvXakXrWaPVJGefxB
+                          value: egJSwqJGgKPzsUDLduLm
+                          _order: 2
+                          product: bbfa2154-1198-4191-ab68-33bc0f12a948
+                      product_code_type: UPC
+                      created: '2020-07-05T15:18:20.509000+03:00'
+                      modified: '2020-07-05T23:53:18.712000+03:00'
+                      is_removed: false
+                      sku: pOIQDZQArJhnYwdUrbyy
+                      quantity: 2
+                      price: 8.1
+                      product_code: 978-0-7678-0020-4
+                      condition: REFURBISHED
+                      condition_note: Cause expect easy teach group. Similar before include home hour.
+                      listing: a98c9743-3e5d-4147-b0da-150f78030a5a
+                      main_image: 'https://picsum.photos/id/5/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/9/500/500'
+                        - 'https://picsum.photos/id/4/500/500'
+                        - 'https://picsum.photos/id/5/500/500'
+                    - id: 14272211-913e-453f-88e7-2b763830b1e8
+                      attributes:
+                        - id: 453baa3e-66d6-417d-b436-6a5978d57618
+                          name: sfdQBCTVHJzlvVuhbqvT
+                          value: bJVdrgPfGTVkxTXDqMoY
+                          _order: 0
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                        - id: 96b8e153-b85c-409d-919b-03563b90d5a9
+                          name: AQcCsrJbsRvhfdIQDOKF
+                          value: hYKcMiwpCNSwHnUCybjB
+                          _order: 1
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                        - id: 97830d11-fca6-4aa5-8d4c-e72a018588f3
+                          name: HoumEISAVarwOTHFmMpi
+                          value: YlzYueFEZNfofcunOCms
+                          _order: 2
+                          product: 14272211-913e-453f-88e7-2b763830b1e8
+                      product_code_type: EAN
+                      created: '2020-07-05T15:18:20.551000+03:00'
+                      modified: '2020-07-05T23:53:18.709000+03:00'
+                      is_removed: false
+                      sku: xjKrqkUKWnhahpcifqdu
+                      quantity: 2
+                      price: 6.3
+                      product_code: 978-0-907791-08-9
+                      condition: REFURBISHED
+                      condition_note: Body figure have budget whether war. Condition might director explain carry. Picture believe occur sea.
+                      listing: a98c9743-3e5d-4147-b0da-150f78030a5a
+                      main_image: 'https://picsum.photos/id/10/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/16/500/500'
+                        - 'https://picsum.photos/id/9/500/500'
+                        - 'https://picsum.photos/id/11/500/500'
+                  linked_listings: []
+                  id: a98c9743-3e5d-4147-b0da-150f78030a5a
+                  user: 1
+                  title: Process responsibility third chair include.
+                  description: Develop knowledge product stand.
+                  listing_sku: null
+                  created: '2020-07-05T15:18:20.496000+03:00'
+                  modified: '2020-07-05T15:18:20.584000+03:00'
+                  category_name: 'no'
+                  brand: ever
+                  currency: JOD
+                  is_removed: false
+                  price_min: 6.3
+                  price_max: 8.1
+                  total_quantity: 4
+                  has_variations: true
+                - products:
+                    - id: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                      attributes:
+                        - id: 1ad95547-4856-45a5-a9ff-24cfe6adf26d
+                          name: WySPFtAIHkIFNjZqfhyD
+                          value: HxqSUykkXKeGUjVxuBRM
+                          _order: 0
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                        - id: 432cdf9d-5389-47e8-b356-84a7811486bb
+                          name: UKPwaCkxpnuLUIFhHALC
+                          value: ezdYhCdIfAHHXjhbXmVD
+                          _order: 1
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                        - id: e0322f9d-350d-452b-af61-40139266b8a7
+                          name: OOztvksxQmPghzxWVbgY
+                          value: kfedSIdwuaxoMtndZmMt
+                          _order: 2
+                          product: fa723d25-0072-4108-8b7c-8a6ccf0b8804
+                      product_code_type: UPC
+                      created: '2020-07-05T15:18:47.959000+03:00'
+                      modified: '2020-07-05T23:53:18.714000+03:00'
+                      is_removed: false
+                      sku: pyLPhNzLeLRVWpiXCOcf
+                      quantity: 4
+                      price: 6.7
+                      product_code: 978-0-338-69003-6
+                      condition: NEW
+                      condition_note: Something budget cup so his article. Nation court know account must different.
+                      listing: ba82ba2f-593b-4607-aabd-99162fd900f1
+                      main_image: 'https://picsum.photos/id/18/500/500'
+                      extra_images:
+                        - 'https://picsum.photos/id/2/500/500'
+                        - 'https://picsum.photos/id/14/500/500'
+                        - 'https://picsum.photos/id/12/500/500'
+                  linked_listings: []
+                  id: ba82ba2f-593b-4607-aabd-99162fd900f1
+                  user: 1
+                  title: Seek statement sister store yard evening.
+                  description: Spring character such relate. War side pass feeling huge music. Society person fund security. Worry type street.
+                  listing_sku: null
+                  created: '2020-07-05T15:18:47.938000+03:00'
+                  modified: '2020-07-05T15:18:47.988000+03:00'
+                  category_name: it
+                  brand: trade
+                  currency: AOA
+                  is_removed: false
+                  price_min: 6.7
+                  price_max: 6.7
+                  total_quantity: 4
+                  has_variations: false
       operationId: get-v1-zonesmart-listing
-      description: ''
-    post:
-      summary: Создать базовый листинг
+      description: Получение списка базовых листингов
+      parameters:
+        - type: string
+          in: query
+          name: channel
+          description: 'ID канала продаж. Фильтрация тех базовых листингов, к которым привязан хотя бы один листинг маркетплейса с данного канала продаж.'
+        - type: string
+          in: query
+          name: price_min
+          description: 'Минимальная цена. Фильтрация базовых листингов, цена хотя бы одного продукта которых выше указанной.'
+        - type: string
+          in: query
+          name: price_max
+          description: 'Максимальная цена. Фильтрация базовых листингов, цена хотя бы одного продукта которых ниже указанной.'
+        - type: string
+          in: query
+          name: products_num_min
+          description: 'Минимальное количество единиц. Фильтрация базовых листингов, суммарное количество продуктов которых больше указанного.'
+        - type: string
+          in: query
+          name: products_num_max
+          description: 'Максимальное количество единиц. Фильтрация базовых листингов, суммарное количество продуктов которых меньше указанного.'
+        - type: string
+          in: query
+          name: condition
+          description: Состояние
       tags:
-        - listing
+        - base_listing
+    post:
+      summary: Создание базового листинга
       responses:
         '200':
           description: OK
           schema:
             $ref: '#/definitions/Listing'
       operationId: post-v1-zonesmart-listing
-      description: ''
+      description: Создание базового листинга
       parameters:
         - in: body
           name: body
-          schema:
-            $ref: '#/definitions/Listing'
-    parameters: []
-    put:
-      summary: Обновить базовый листинг
-      tags:
-        - listing
-      responses:
-        '200':
-          description: OK
           schema:
             type: object
-            properties: {}
-      operationId: put-v1-zonesmart-listing
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/Listing'
-    patch:
-      summary: ''
-      operationId: patch-v1-zonesmart-listing
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/Listing'
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/Listing'
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency:
+                type: string
+                description: Код валюты
+            required:
+              - title
+              - description
+      tags:
+        - base_listing
+    parameters: []
   '/v1/zonesmart/listing/{id}/':
     get:
       operationId: v1_zonesmart_listing_read
-      description: ''
+      description: Получение базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+          examples:
+            example-1:
+              products:
+                - id: fc9db091-4c04-42cb-880a-946ef9c091e4
+                  attributes:
+                    - id: 20e1db2c-697c-414b-a49a-878c2e3d5a61
+                      name: hlPTdpvlwdxBlBYiryVf
+                      value: SJqtZqpbynaaHetArGpk
+                      _order: 0
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                    - id: 458fea05-09fa-4ee4-980d-879a1591ed39
+                      name: XadYpuQGUVGxMRFgaPZw
+                      value: iGeRPncdtsqvzVEKgMde
+                      _order: 1
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                    - id: d91d29aa-f509-47fb-a045-10c1cd4f0bd0
+                      name: sTLKiKaTxuYFqTogffDA
+                      value: FUuHIDfqvNXAEhYxuWDh
+                      _order: 2
+                      product: fc9db091-4c04-42cb-880a-946ef9c091e4
+                  product_code_type: EAN
+                  created: '2020-07-05T15:14:05.705000+03:00'
+                  modified: '2020-07-05T23:53:18.688000+03:00'
+                  is_removed: false
+                  sku: BUaMAfkcUFHsMQAPkLvY
+                  quantity: 34
+                  price: 4.2
+                  product_code: 978-0-12-209639-6
+                  condition: NEW
+                  condition_note: Against structure civil product wife state evidence industry. Pay statement marriage keep. List campaign order analysis tough care strong. Perform eight beat environment go sound well.
+                  listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  main_image: 'https://picsum.photos/id/17/500/500'
+                  extra_images:
+                    - 'https://picsum.photos/id/13/500/500'
+                    - 'https://picsum.photos/id/10/500/500'
+                    - 'https://picsum.photos/id/18/500/500'
+                - id: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                  attributes:
+                    - id: b4ca910d-1696-4253-a385-7f0eae6abfdd
+                      name: NtWGOLUgxzeWjDkBiluN
+                      value: dhODOrdGZWcZpDLzaMNc
+                      _order: 0
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                    - id: e5137655-6e4c-4db0-a375-bb26d504982d
+                      name: PXvvXpYIweHPfggKKLcy
+                      value: bVWOwFDzXkhdfbmirfKH
+                      _order: 1
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                    - id: e96a5382-5b0f-4bf5-a03c-553ee07c7331
+                      name: VyLMxXvMquUxrhwEyDwp
+                      value: babWGeMxYAqbsRnqGeVQ
+                      _order: 2
+                      product: 8af8b9dd-09d1-4745-9d85-7df9e496a694
+                  product_code_type: UPC
+                  created: '2020-07-05T15:14:05.668000+03:00'
+                  modified: '2020-07-05T23:53:18.703000+03:00'
+                  is_removed: false
+                  sku: HWqVbCMfCgDOdsnOBzqP
+                  quantity: 43
+                  price: 4
+                  product_code: 978-1-69728-541-3
+                  condition: REFURBISHED
+                  condition_note: Usually once age moment collection test. Bar economic lawyer study base wife black.
+                  listing: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+                  main_image: 'https://picsum.photos/id/7/500/500'
+                  extra_images:
+                    - 'https://picsum.photos/id/10/500/500'
+                    - 'https://picsum.photos/id/4/500/500'
+                    - 'https://picsum.photos/id/10/500/500'
+              linked_listings:
+                - marketplace: eBay
+                  marketplace_user_account: lite-store
+                  channel: Тестовый канал
+                  listing:
+                    id: 071da228-dd6f-4f90-b29a-94c3cb9bb9fa
+                    title: Politics hit catch season big add single.
+                  is_published: false
+                - marketplace: Etsy
+                  marketplace_user_account: eppxtc0m
+                  channel: "Канал продаж Etsy аккаунта 'eppxtc0m'"
+                  listing:
+                    id: 245da10f-4e11-46b4-94ea-8e881616f667
+                    title: Politics hit catch season big add single.
+                  is_published: false
+                - marketplace: Amazon North America
+                  marketplace_user_account: zonesmart
+                  channel: Американский Amazon (zonesmart)
+                  listing:
+                    id: 6baf5b2c-ae45-4cf4-86be-cd95a52d3eb9
+                    title: Politics hit catch season big add single.
+                  is_published: false
+              id: 77a2951a-3a68-4308-bcc5-1c005fdb4c07
+              user: 1
+              title: Politics hit catch season big add single.
+              description: Lose at official Mrs year head population audience. Sure reach majority smile. Give girl note dinner goal oil American one. Speak person city network.
+              listing_sku: null
+              created: '2020-07-05T15:14:05.651000+03:00'
+              modified: '2020-07-05T15:14:05.734000+03:00'
+              category_name: store
+              brand: must
+              currency: HUF
+              is_removed: false
+              price_min: 4
+              price_max: 4.2
+              total_quantity: 77
+              has_variations: true
+      summary: Получение базового листинга
       tags:
-        - listing
-      summary: Получить базовый листинг
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_update
-      description: ''
+      description: Обновление базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Listing'
+            type: object
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency:
+                type: string
+                description: Код валюты
+            required:
+              - title
+              - description
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+      summary: Обновление базового листинга
       tags:
-        - work_in_process
-      summary: Обновить базовый листинг
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_partial_update
-      description: ''
+      description: Частичное обновление базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Listing'
+            type: object
+            properties:
+              title:
+                type: string
+                description: Название
+              description:
+                type: string
+                description: Описание
+              brand:
+                type: string
+                description: Бренд
+              category_name:
+                type: string
+                description: Категория
+              currency_code:
+                type: string
+                description: Код валюты
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Listing'
+      summary: Частичное обновление базового листинга
       tags:
-        - work_in_process
-      summary: Частично обновить базовый листинг
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_delete
-      description: ''
+      description: Удаление базового листинга
       parameters: []
       responses:
         '204':
           description: ''
+      summary: Удаление базового листинга
       tags:
-        - listing
-      summary: Удалить базовый листинг
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/feedback/':
     get:
       operationId: v1_zonesmart_listing_feedback_list
-      description: ''
+      description: Получение списка отзывов о базовом листинге
       parameters:
         - name: limit
           in: query
@@ -8033,16 +8480,18 @@ paths:
                 items:
                   $ref: '#/definitions/Feedback'
       tags:
-        - work_in_process
+        - base_listing
+      summary: Получение списка отзывов о базовом листинге
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/feedback/{id}/':
     get:
       operationId: v1_zonesmart_listing_feedback_read
-      description: ''
+      description: Получение отзыва о базовом листинге
       parameters: []
       responses:
         '200':
@@ -8050,20 +8499,23 @@ paths:
           schema:
             $ref: '#/definitions/Feedback'
       tags:
-        - work_in_process
+        - base_listing
+      summary: Получение отзыва о базовом листинге
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID отзыва
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
   '/v1/zonesmart/listing/{listing_id}/product/':
     get:
       operationId: v1_zonesmart_listing_product_list
-      description: ''
+      description: Получение списка продуктов базового листинга
       parameters:
         - name: limit
           in: query
@@ -8098,17 +8550,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Product'
+      summary: Получение списка продуктов базового листинга
       tags:
-        - listing
-        - product
-      summary: Получение всех продуктов для выбранного листинга
+        - base_listing
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID базового листинга
     post:
-      summary: Создание продукта для выбранного листинга
+      summary: Создание продукта базового листинга
       operationId: post-v1-zonesmart-listing-listing_id-product
       responses:
         '201':
@@ -8119,84 +8571,83 @@ paths:
         - in: body
           name: body
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
       tags:
-        - listing
-        - product
+        - base_listing
+      description: Создание продукта базового листинга
   '/v1/zonesmart/listing/{listing_id}/product/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_read
-      description: ''
+      description: Получение продукта базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Получение конкретного продукта для выбранного листинга
+      summary: Получение продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_product_update
-      description: ''
+      description: Обновление продукта базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Обновление продукта для выбранного листинга
+      summary: Обновление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_product_partial_update
-      description: ''
+      description: Частичное обновление продукта базового листинга
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/Product'
+            $ref: '#/definitions/CreateOrUpdateBaseListingProduct'
+          description: ''
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/Product'
-      summary: Частичное обновление продукта для выбранного листинга
+      summary: Частичное обновление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_product_delete
-      description: ''
+      description: Удаление продукта базового листинга
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удаление продукта для выбранного листинга
+      summary: Удаление продукта базового листинга
       tags:
-        - listing
-        - product
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID продукта
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_list
-      description: ''
+      description: Получение списка атрибутов продукта базового листинга
       parameters:
         - name: limit
           in: query
@@ -8231,13 +8682,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/BaseAttribute'
-      summary: Получить все атрибуты для выбранного продукта
+      summary: Получение списка атрибутов продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     post:
       operationId: v1_zonesmart_listing_product_attribute_create
-      description: ''
+      description: Создание атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -8249,36 +8699,36 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Создать атрибут для выбранного продукта
+      summary: Создание атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     parameters:
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта
   '/v1/zonesmart/listing/{listing_id}/product/{product_id}/attribute/{id}/':
     get:
       operationId: v1_zonesmart_listing_product_attribute_read
-      description: ''
+      description: Получение атрибута продукта базового листинга
       parameters: []
       responses:
         '200':
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Получить атрибут для выбранного продукта
+      summary: Получение атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     put:
       operationId: v1_zonesmart_listing_product_attribute_update
-      description: ''
+      description: Обновление атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -8290,13 +8740,12 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Обновить атрибут для выбранного продукта
+      summary: Обновление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     patch:
       operationId: v1_zonesmart_listing_product_attribute_partial_update
-      description: ''
+      description: Частичное обновление атрибута продукта базового листинга
       parameters:
         - name: data
           in: body
@@ -8308,34 +8757,35 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/BaseAttribute'
-      summary: Частично обновить атрибут для выбранного продукта
+      summary: Частичное обновление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     delete:
       operationId: v1_zonesmart_listing_product_attribute_delete
-      description: ''
+      description: Удаление атрибута продукта базового листинга
       parameters: []
       responses:
         '204':
           description: ''
-      summary: Удалить атрибут для выбранного продукта
+      summary: Удаление атрибута продукта базового листинга
       tags:
-        - listing
-        - attribute
+        - base_listing
     parameters:
       - name: id
         in: path
         required: true
         type: string
+        description: ID атрибута
       - name: listing_id
         in: path
         required: true
         type: string
+        description: ID листинга
       - name: product_id
         in: path
         required: true
         type: string
+        description: ID продукта
   /v1/zonesmart/marketplace/:
     get:
       operationId: v1_zonesmart_marketplace_list
@@ -8351,6 +8801,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace
+          description: ID маркетплейса (фильтрация)
       responses:
         '200':
           description: ''
@@ -8420,7 +8874,7 @@ paths:
   '/v1/zonesmart/marketplace/{marketplace_id}/domain/':
     get:
       operationId: v1_zonesmart_marketplace_domain_list
-      description: Данный Endpoint используется для получения списка доменов.
+      description: "Получение списка доменов маркетплейса. \nЕсли передать ID аккаунта маркетплейса пользователя \"marketplace_user_account_id\" в качестве параметра, то будут возвращены только те домены маркетплейса, для которых пользователь не создал канал продаж данного аккаунта маркетплейса."
       parameters:
         - name: limit
           in: query
@@ -8432,6 +8886,10 @@ paths:
           description: Начальный индекс для возврата результатов.
           required: false
           type: integer
+        - type: string
+          in: query
+          name: marketplace_user_account_id
+          description: ID аккаунта маркетплейса
       responses:
         '200':
           description: ''
@@ -8674,6 +9132,14 @@ paths:
           in: query
           name: update_date
           description: Нижняя граница даты последнего обновления
+        - type: string
+          in: query
+          name: marketplace
+          description: ID маркетплейса
+        - type: string
+          in: query
+          name: domain
+          description: ID домена маркетплейса
       responses:
         '200':
           description: ''
@@ -8734,30 +9200,6 @@ paths:
       summary: Получение заказа
       tags:
         - order
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-        description: ID заказа
-  '/v1/zonesmart/order/{id}/ship/':
-    post:
-      operationId: v1_zonesmart_order_ship
-      description: Экшн на отправку посылки.
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Order'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Order'
-      tags:
-        - work_in_process
-      summary: ''
     parameters:
       - name: id
         in: path
@@ -9716,11 +10158,9 @@ paths:
         name: id
         in: path
         required: true
+        description: ID базового листинга
     post:
-      summary: Конвертация базового листинга в листинг для конкретной интеграции
-      tags:
-        - listing
-        - converter
+      summary: Конвертация базового листинга в листинг маркетплейса
       responses:
         '200':
           description: OK
@@ -10055,6 +10495,8 @@ definitions:
     required:
       - seller_id
     type: object
+    title: AmazonAccount
+    description: Аккаунт Amazon
     properties:
       id:
         title: Id
@@ -13370,13 +13812,6 @@ definitions:
       - profile
       - sandbox
   EbayCategory:
-    required:
-      - domain_id
-      - category_id
-      - parent_id
-      - level
-      - name
-      - is_leaf
     type: object
     properties:
       id:
@@ -13386,39 +13821,56 @@ definitions:
       domain_id:
         title: Domain id
         type: integer
+        description: 'ID домена маркетплейса, к которому относится категория'
       category_id:
         title: ID категории
         type: string
         maxLength: 15
         minLength: 1
+        description: ID категории в eBay
       parent_id:
         title: ID родительской категории или 0
         type: string
         maxLength: 15
         minLength: 1
+        description: ID родительской категории
       level:
         title: Уровень вложенности категории
         type: integer
         maximum: 32767
         minimum: 0
+        description: Уровень вложенности категории
       name:
         title: Название категории
         type: string
         maxLength: 100
         minLength: 1
+        description: Название категории
       name_path:
         title: Путь к категории
         type: string
         maxLength: 500
+        description: Путь категории
       is_leaf:
         title: Является листом дерева категорий
         type: boolean
+        description: Является ли категория листовой
       variationsSupported:
         title: Доступно для групп товаров
         type: boolean
+        description: Поддерживаются ли вариации
       transportSupported:
         title: Транспортная категория
         type: boolean
+        description: Поддерживается ли транспорт
+    required:
+      - domain_id
+      - category_id
+      - parent_id
+      - level
+      - name
+      - is_leaf
+    title: EbayCategory
   EbayListing:
     required:
       - listing_sku
@@ -13857,6 +14309,7 @@ definitions:
           type: string
           format: uuid
         uniqueItems: true
+    title: EbayProduct
   Specification:
     required:
       - name
@@ -17422,8 +17875,8 @@ definitions:
       - channel
   ShippingTemplate:
     type: object
-    title: ShippingTemplate
-    description: Используется для отображения политики доставки.
+    title: EtsyShippingTemplate
+    description: Используется для отображения политики доставки Etsy.
     x-examples:
       Example:
         id: string
@@ -17444,18 +17897,6 @@ definitions:
         type: string
         format: uuid
         description: Идентификатор политики доставки.
-      created:
-        title: Created
-        type: string
-        format: date-time
-        readOnly: true
-        description: Дата и время создания.
-      modified:
-        title: Modified
-        type: string
-        format: date-time
-        readOnly: true
-        description: Дата и время обновления.
       status:
         title: Статус
         type: string
@@ -17465,11 +17906,6 @@ definitions:
           - published
           - update_required
         description: Статус.
-      published_at:
-        title: Время публикации
-        type: string
-        format: date-time
-        description: Время публикации.
       shipping_template_id:
         title: ID политики доставки
         type: string
@@ -17496,18 +17932,12 @@ definitions:
         minimum: 0
         x-nullable: true
         description: Минимальное число дней на обработку заказа.
-      processing_days_display_label:
-        title: Отображаемое число дней на обработку заказа
-        type: string
-        maxLength: 100
-        x-nullable: true
-        description: Отображаемое число дней на обработку заказа.
       marketplace_user_account:
         title: Marketplace user account
         type: string
         format: uuid
         description: Идентификатор маркетплейс аккаунта пользователя.
-      origin_country:
+      origin_country_id:
         title: 'Страна, из которой отравляется заказ'
         type: integer
         x-nullable: true
@@ -17515,10 +17945,12 @@ definitions:
     required:
       - title
       - marketplace_user_account
+    x-tags:
+      - etsy_shipping_policy
   ShippingTemplateEntry:
     type: object
-    title: ShippingTemplateEntry
-    description: Используется для отображения записей политик доставки.
+    title: EtsyShippingTemplateEntry
+    description: Используется для отображения записей политик доставки Etsy.
     x-examples:
       Example:
         id: string
@@ -17562,22 +17994,17 @@ definitions:
       primary_cost:
         title: Плата за одиночную доставку
         type: number
-        description: Плата за одиночную доставку.
+        description: Плата за доставку одной единицы товара.
       secondary_cost:
         title: Плата за совместную доставку
         type: number
-        description: Плата за совместную доставку.
-      shipping_template:
-        title: Политика доставки
-        type: string
-        format: uuid
-        description: Идентификатор политики доставки.
-      destination_country:
+        description: Плата за доставку дополнительной единицы товара.
+      destination_country_id:
         title: 'Страна, в которую отравляется заказ'
         type: integer
         x-nullable: true
         description: 'Идентификатор страны, в которую отравляется заказ.'
-      destination_region:
+      destination_region_id:
         title: 'Регион, в который отравляется заказ'
         type: integer
         x-nullable: true
@@ -17585,7 +18012,8 @@ definitions:
     required:
       - primary_cost
       - secondary_cost
-      - shipping_template
+    x-tags:
+      - etsy_shipping_policy
   BaseEtsyRegion:
     required:
       - region_id
@@ -18142,44 +18570,47 @@ definitions:
         type: string
         x-nullable: true
   Listing:
-    required:
-      - title
-      - description
-      - user
     type: object
+    description: Базовый листинг
+    title: BaseListing
+    x-tags:
+      - base_listing
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: ID листинга
       created:
         title: Создан
         type: string
         format: date-time
         readOnly: true
+        description: Дата создания
       modified:
         title: Изменён
         type: string
         format: date-time
         readOnly: true
-      is_removed:
-        title: Is removed
-        type: boolean
+        description: Дата последнего обновления
       title:
         title: Title
         type: string
         maxLength: 255
         minLength: 1
+        description: Название
       description:
         title: Описание
         type: string
         maxLength: 500000
         minLength: 1
+        description: Описание
       category_name:
         title: Название категории
         type: string
         maxLength: 255
         x-nullable: true
+        description: Категория
       currency:
         title: Валюта
         type: string
@@ -18339,15 +18770,122 @@ definitions:
           - ZAR
           - ZMW
           - ZWL
+        description: Код валюты
       brand:
         title: Бренд
         type: string
         maxLength: 255
         x-nullable: true
+        description: Бренд
+      price_min:
+        type: string
+        description: Минимальная цена (цена наименее дорогого продукта)
+      price_max:
+        type: string
+        description: Максимальная цена (цена наиболее дорогого продукта)
+      total_quantity:
+        type: string
+        description: Суммарное количество единиц продуктов
+      has_variations:
+        type: string
+        description: Имеются ли вариации (количество продуктов больше одного)
       user:
-        title: Пользователь
-        type: integer
-    description: ''
+        type: string
+        description: 'ID пользователю, которому принадлежит листинг'
+      linked_listings:
+        type: array
+        description: 'Список листингов маркетплейсов, привязанных к данному базовому листингу'
+        items:
+          type: object
+          properties:
+            marketplace:
+              type: string
+              description: Название маркетплейса листинга
+            marketplace_user_account:
+              type: string
+              description: Название аккаунта маркетплейса листинга
+            channel:
+              type: string
+              description: Название канала продаж листинга
+            is_published:
+              type: string
+              description: Опубликован ли листинг
+            listing:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID листинга
+                title:
+                  type: string
+                  description: Название листинга
+      products:
+        type: array
+        description: Список продуктов базового листинга
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID продукта
+            product_code_type:
+              type: string
+              description: Тип штрих-кода
+              enum:
+                - EAN
+                - ISBN
+                - UPC
+                - ASIN
+                - GCID
+                - JAN
+                - GTIN
+            product_code:
+              type: string
+              description: Штрих-код
+            created:
+              type: string
+              description: Дата создания
+            modified:
+              type: string
+              description: Дата последнего обновления
+            sku:
+              type: string
+              description: SKU
+            quantity:
+              type: string
+              description: Количество единиц
+            price:
+              type: string
+              description: Цена
+            condition:
+              type: string
+              description: Состояние продукта
+            condition_note:
+              type: string
+              description: Описание состояния продукта
+            main_image:
+              type: string
+              description: URL главного изображения продукта
+            extra_images:
+              type: array
+              description: Список URL дополнительных изображений продукта
+              items:
+                type: string
+            attributes:
+              type: array
+              description: Список атрибутов продукта
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID атрибута
+                  name:
+                    type: string
+                    description: Название атрибута
+                  value:
+                    type: string
+                    description: Значение атрибута
   Feedback:
     required:
       - feedback_id
@@ -18472,34 +19010,24 @@ definitions:
           format: uuid
         uniqueItems: true
   BaseAttribute:
-    required:
-      - name
-      - value
-      - product
     type: object
     properties:
-      id:
-        title: Id
-        type: string
-        format: uuid
       name:
         title: Название
         type: string
         maxLength: 255
         minLength: 1
+        description: Название атрибута
       value:
         title: Значение
         type: string
         maxLength: 255
         minLength: 1
-      _order:
-        title: order
-        type: integer
-        readOnly: true
-      product:
-        title: Аттрибут
-        type: string
-        format: uuid
+        description: Значение атрибута
+    required:
+      - name
+      - value
+    title: CreateOrUpdateBaseProductAttribute
   Marketplace:
     type: object
     properties:
@@ -18899,7 +19427,7 @@ definitions:
   Order:
     type: object
     title: BaseOrder
-    description: Базовый заказ
+    description: 'Заказ, его элементы и отправления'
     x-examples:
       example-1:
         id: 5a7c6750-c0b5-483a-b971-cdad6ec9aa24
@@ -19158,16 +19686,16 @@ definitions:
         description: ID аккаунта маркетплейса
       items:
         type: array
-        description: Заказанные товары
+        description: Элементы заказа
         items:
           type: object
           properties:
-            sku:
+            id:
               type: string
-              description: SKU товара
-            title:
+              description: ID элемента заказа
+            remote_id:
               type: string
-              description: Название товара
+              description: ID элемента заказа в маркетплейсе
             quantity:
               type: string
               description: Заказанное количество единиц товара
@@ -19177,6 +19705,14 @@ definitions:
             currency:
               type: string
               description: Валюта
+            sku:
+              type: string
+              description: SKU товара
+            title:
+              type: string
+              description: Название товара
+            base_product:
+              type: string
       shipping_address:
         type: object
         description: Адрес покупателя
@@ -19199,6 +19735,49 @@ definitions:
           zip_code:
             type: string
             description: Почтовый индекс
+      shipments:
+        type: array
+        description: Отправление
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: ID отправления
+            shipment_id:
+              type: string
+              description: ID отправления в маркетплейсе
+            tracking_code:
+              type: string
+              description: Трек-код
+            carrier_name:
+              type: string
+              description: Курьерская служба
+            carrier_service:
+              type: string
+              description: Сервис курьерской службы
+            shipped_date:
+              type: string
+              description: Дата отправки
+              format: date-time
+            status:
+              type: string
+              description: Статус отправления
+              enum:
+                - shipped
+                - draft
+            items:
+              type: array
+              description: Элементы отправления
+              items:
+                type: object
+                properties:
+                  order_item:
+                    type: string
+                    description: ID элемента заказа
+                  quantity:
+                    type: integer
+                    description: Количество единиц элемента заказа в отправлении
     required:
       - order_id
       - create_date
@@ -19418,39 +19997,54 @@ definitions:
       ship_to:
         $ref: '#/definitions/ShippingAddress'
   Shipment:
-    required:
-      - shipment_id
-      - shipped_date
-      - order
     type: object
+    title: Shipment
+    description: Отправление заказа
+    x-tags:
+      - order
     properties:
       id:
         title: Id
         type: string
         format: uuid
+        description: ID отправления
       shipment_id:
         title: Уникальный идентификатор в системе маркетплейса
         type: string
         maxLength: 30
         minLength: 1
+        description: ID отправления в маркетплейсе
       tracking_code:
         title: Код отправления
         type: string
         maxLength: 255
         x-nullable: true
+        description: Трек-код
       carrier_name:
         title: Служба доставки
         type: string
         maxLength: 255
         x-nullable: true
-      shipped_date:
+        description: Курьерская служба
+      carrier_service:
+        type: string
         title: Дата и время отправления
+        description: Сервис курьерской службы
+      shipped_date:
         type: string
         format: date-time
-      order:
-        title: Заказ
+        description: Дата отправления
+      status:
         type: string
-        format: uuid
+        enum:
+          - draft
+          - shipped
+        description: Статус отправления
+      items:
+        type: array
+        description: Элементы отправления
+        items:
+          $ref: '#/definitions/ShipmentItem'
   Request:
     required:
       - creator
@@ -19685,3 +20279,96 @@ definitions:
           name:
             type: string
             description: Название политики возврата eBay
+  ShipmentItem:
+    title: ShipmentItem
+    type: object
+    description: Элемент отправления заказа
+    properties:
+      order_item:
+        type: string
+        description: ID элемента заказа
+      quantity:
+        type: integer
+        description: Количество единиц элемента заказа в отправлении
+    x-tags:
+      - order
+  CreateOrUpdateEtsyShippingTemplate:
+    title: CreateOrUpdateEtsyShippingTemplate
+    type: object
+    description: Тело запроса для создания или обновления политики доставки Etsy
+    properties:
+      marketplace_user_account:
+        type: string
+        description: ID аккаунта маркетплейса
+      title:
+        type: string
+        description: Название политики
+      min_processing_days:
+        type: integer
+        description: Минимальное количество дней на обработку заказа
+      max_processing_days:
+        type: integer
+        description: Максимальное количество дней на обработку заказа
+      origin_country_id:
+        type: string
+        description: 'ID страны, из которой отправляются заказы'
+      entries:
+        type: array
+        description: Записи политики
+        items:
+          type: object
+          properties:
+            destination_country_id:
+              type: string
+              description: 'ID страны, в которую отправляется заказ'
+            destination_region_id:
+              type: string
+              description: 'ID региона, в который отправляется заказ'
+            primary_cost:
+              type: number
+              description: Стоимость отправки одной единицы товара
+            secondary_cost:
+              type: number
+              description: Стоимость отправки дополнительной единицы товара
+    x-tags:
+      - etsy_shipping_policy
+  CreateOrUpdateBaseListingProduct:
+    title: CreateOrUpdateBaseListingProduct
+    type: object
+    description: Тело запроса для создания или обновления продукта базового листинга
+    x-tags:
+      - base_listing
+    properties:
+      sku:
+        type: string
+        description: SKU
+      quantity:
+        type: integer
+        description: Количество единиц
+      price:
+        type: number
+        description: Цена
+      main_image:
+        type: string
+        description: ID главного изображения продукта
+      extra_images:
+        type: array
+        description: Список ID дополнительных изображений продукта
+        items:
+          type: string
+      product_code:
+        type: string
+        description: Штрих-код
+      product_code_type:
+        type: string
+        description: Тип штрих-кода
+      condition:
+        type: string
+        description: Состояние продукта
+      condition_note:
+        type: string
+        description: Описание состояния продукта
+    required:
+      - sku
+      - quantity
+      - price
