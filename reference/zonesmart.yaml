@@ -10148,6 +10148,141 @@ paths:
             Example: 'https://aliexpress.com'
       operationId: get-v1-aliexpress-account-get_auth_url
       description: Получение ссылки на страницу авторизации аккаунта Aliexpress.
+  '/v1/ebay/account/{id}/all_defaults/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: Идентификатор аккаунта ebay.
+    get:
+      summary: Получение всех значений по умолчанию для аккаунта Ebay
+      tags:
+        - ebay_account
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              channels:
+                type: object
+                description: 'Словарь вида channel_id: data'
+                properties:
+                  channel_id:
+                    $ref: '#/definitions/EbayChannelDefaults'
+              location:
+                type: object
+                description: ''
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор склада ebay
+                  name:
+                    type: string
+                    description: Название склада ebay
+          examples:
+            Example:
+              channels:
+                123-abc-123:
+                  fulfillmentPolicy:
+                    name: Политика №1
+                    id: 00-fgdf-2d
+                  returnPolicy:
+                    name: Интересное название
+                    id: asdg-09123-ad2-31
+                  paymentPolicy:
+                    name: Плати налоги
+                    id: pldg-3da-2d-2-3ad
+              location:
+                name: Склад во дворе
+                id: aaa-bbb-21v
+      operationId: get-v1-ebay-account-id-all_defaults
+      description: Получение всех значений по умолчанию для аккаунта Ebay.
+    put:
+      summary: Обновление значений по умолчанию для аккаунта Ebay
+      operationId: put-v1-ebay-account-id-all_defaults
+      responses:
+        '200':
+          description: OK
+          examples:
+            Example:
+              channels:
+                123-abc-123:
+                  fulfillmentPolicy:
+                    name: Политика №1
+                    id: 00-fgdf-2d
+                  returnPolicy:
+                    name: Интересное название
+                    id: asdg-09123-ad2-31
+                  paymentPolicy:
+                    name: Плати налоги
+                    id: pldg-3da-2d-2-3ad
+              location:
+                name: Склад во дворе
+                id: aaa-bbb-21v
+          schema:
+            type: object
+            properties:
+              channels:
+                type: object
+                description: 'Словарь channel_id: data'
+                properties:
+                  channel_id:
+                    $ref: '#/definitions/EbayChannelDefaults'
+              location:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Идентификатор склада ebay
+                  name:
+                    type: string
+                    description: Название склада ebay
+      description: Обновление значений по умолчанию для аккаунта Ebay
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              channels:
+                type: object
+                properties:
+                  channel_id:
+                    type: object
+                    description: ''
+                    properties:
+                      fulfillmentPolicy:
+                        type:
+                          - string
+                          - 'null'
+                        description: Идентификатор fulfillment политики
+                      returnPolicy:
+                        type:
+                          - string
+                          - 'null'
+                        description: Идентификатор return политики
+                      paymentPolicy:
+                        type:
+                          - string
+                          - 'null'
+                        description: Идентификатор payment политики
+              location_id:
+                type:
+                  - string
+                  - 'null'
+                description: Идентификатор склада ebay
+          x-examples:
+            Example:
+              channels:
+                123-abc-123:
+                  fulfillmentPolicy: 123-123-asd-123
+                  paymentPolicy: null
+                  returnPolicy: null
+              location_id: ad123-123dh-341
+      tags:
+        - ebay_account
 definitions:
   TokenObtainPair:
     type: object
