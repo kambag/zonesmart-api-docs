@@ -7483,26 +7483,54 @@ paths:
         - in: body
           name: body
           schema:
-            type: object
-            properties:
-              title:
-                type: string
-                description: Название
-              description:
-                type: string
-                description: Описание
-              brand:
-                type: string
-                description: Бренд
-              category_name:
-                type: string
-                description: Категория
-              currency:
-                type: string
-                description: Код валюты
-            required:
-              - title
-              - description
+            $ref: '#/definitions/CreateOrUpdateBaseListing'
+          x-examples:
+            example-1:
+              title: TEST LISTING blablabla
+              description: Some description blablabla
+              listing_sku: rhcp
+              category: null
+              category_name: custom category
+              brand: Abibas
+              currency: USD
+              package:
+                weight: 1
+                unit_of_weight: KG
+                length: 30
+                width: 30
+                height: 30
+                unit_of_measure: CM
+              products:
+                - sku: test_product_bla_1
+                  quantity: 1
+                  price: 10
+                  product_code: '124125151251'
+                  product_code_type: 3
+                  condition: NEW
+                  condition_note: ''
+                  main_image: 063bafcf-2874-4a33-b941-866443991647
+                  extra_images:
+                    - 063bafcf-2874-4a33-b941-866443991647
+                  attributes:
+                    - name: Color
+                      value: Blue
+                    - name: Size
+                      value: XL
+                - sku: test_product_bla_2
+                  quantity: 1
+                  price: 10
+                  product_code: '124125151251'
+                  product_code_type: 3
+                  condition: NEW
+                  condition_note: ''
+                  main_image: 063bafcf-2874-4a33-b941-866443991647
+                  extra_images:
+                    - 063bafcf-2874-4a33-b941-866443991647
+                  attributes:
+                    - name: Color
+                      value: Red
+                    - name: Size
+                      value: XL
       tags:
         - base_listing
     parameters: []
@@ -7633,26 +7661,7 @@ paths:
           in: body
           required: true
           schema:
-            type: object
-            properties:
-              title:
-                type: string
-                description: Название
-              description:
-                type: string
-                description: Описание
-              brand:
-                type: string
-                description: Бренд
-              category_name:
-                type: string
-                description: Категория
-              currency:
-                type: string
-                description: Код валюты
-            required:
-              - title
-              - description
+            $ref: '#/definitions/CreateOrUpdateBaseListing'
       responses:
         '200':
           description: ''
@@ -20423,3 +20432,131 @@ definitions:
       - sku
       - quantity
       - price
+  CreateOrUpdateBaseListing:
+    title: CreateOrUpdateBaseListing
+    type: object
+    x-tags:
+      - base_listing
+    description: Тело запроса для создания или обновления базового листинга
+    properties:
+      title:
+        type: string
+        description: Название
+      description:
+        type: string
+        description: Описание
+      listing_sku:
+        type: string
+        description: SKU базового листинга
+      category:
+        type: string
+        description: ID категории
+      category_name:
+        type: string
+        description: Название новой категории. Поле используется для создания новой категории и привязке к ней базового листинга
+      brand:
+        type: string
+        description: Бренд
+      currency:
+        type: string
+        description: Код валюты
+        enum:
+          - USD
+          - RUB
+          - EUR
+          - GBP
+      package:
+        type: object
+        description: Упаковка
+        properties:
+          weight:
+            type: string
+            description: Вес
+          unit_of_weight:
+            type: string
+            description: Единица измерения веса
+            enum:
+              - GR
+              - KG
+              - LB
+              - OZ
+          length:
+            type: string
+            description: Длина
+          width:
+            type: string
+            description: Шир
+          height:
+            type: string
+            description: Высота
+          unit_of_measure:
+            type: string
+            description: Единица измерения длины
+            enum:
+              - M
+              - CM
+              - IN
+              - FT
+        required:
+          - weight
+          - unit_of_weight
+          - length
+          - width
+          - height
+          - unit_of_measure
+      products:
+        type: array
+        items:
+          type: object
+          properties:
+            sku:
+              type: string
+              description: SKU продукта
+            quantity:
+              type: string
+              description: Количество единиц
+            price:
+              type: string
+              description: Цена
+            product_code:
+              type: string
+              description: Штрихкод
+            product_code_type:
+              type: string
+              description: ID типа штрихкода
+            condition:
+              type: string
+              description: Состояние
+            condition_note:
+              type: string
+              description: Описание состояния
+            main_image:
+              type: string
+              description: ID главного изображения продукта
+            extra_images:
+              type: array
+              description: Список ID дополнительных изображений продукта
+              items:
+                type: string
+            attributes:
+              type: array
+              description: Атрибуты продукта
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Название атрибута
+                  value:
+                    type: string
+                    description: Значение атрибута
+                required:
+                  - name
+                  - value
+          required:
+            - sku
+            - quantity
+            - price
+    required:
+      - title
+      - description
