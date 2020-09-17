@@ -8242,9 +8242,6 @@ paths:
           schema:
             type: object
             properties:
-              carrier_name:
-                type: string
-                description: Курьерская служба
               tracking_code:
                 type: string
                 description: Трек-код
@@ -8256,6 +8253,15 @@ paths:
                 description: Элементы отправления
                 items:
                   $ref: '#/definitions/ShipmentItem'
+              carrier_code:
+                type: string
+                description: Код курьерской службы
+              carrier_service:
+                type: string
+                description: Сервис курьерской службы
+              carrier_name:
+                type: string
+                description: Название курьерской службы
   '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/':
     parameters:
       - type: string
