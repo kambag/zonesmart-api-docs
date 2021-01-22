@@ -18,8 +18,8 @@ tags: [authentication, auth, jwt]
     "Content-Type": "application/json"
   },
   "body": {
-    "email": "admin@zonesmart.ru",
-    "password": "4815162342"
+    "email": "test@zonesmart.ru",
+    "password": "4815162342test"
   }
 }
 ```
@@ -57,7 +57,7 @@ tags: [authentication, auth, jwt]
 ```json
 {
     "id": 1,
-    "email": "admin@zonesmart.ru"
+    "email": "test@zonesmart.ru"
 }
 ```
 
