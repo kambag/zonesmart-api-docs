@@ -13,7 +13,7 @@ tags: [authentication, auth, jwt]
 ```json http
 {
   "method": "post",
-  "url": "/v1/zonesmart/auth/jwt/create/",
+  "url": "/v1/auth/jwt/create/",
   "headers": {
     "Content-Type": "application/json"
   },
