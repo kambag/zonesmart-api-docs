@@ -9157,7 +9157,7 @@ paths:
           description: ''
           schema:
             $ref: '#/definitions/Order'
-      summary: Получение заказа
+      summary: Get order // Получение заказа
       tags:
         - order
     parameters:
