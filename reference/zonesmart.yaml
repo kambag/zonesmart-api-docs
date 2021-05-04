@@ -8151,7 +8151,7 @@ paths:
         type: integer
   /v1/zonesmart/order/sync/:
     get:
-      summary: Скачивание заказов с подключенных маркетплейсов
+      summary: Download orders from connected marketplace accounts // Скачивание заказов с подключенных маркетплейсов
       responses:
         '200':
           description: OK
