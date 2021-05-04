@@ -8163,7 +8163,9 @@ paths:
         - order
       description: |-
         Downloading orders from connected marketplace accounts. At the moment, it supports downloading orders from all eBay accounts, all Etsy accounts, and from all sales channels of all Amazon accounts connected by the user. If you want to limit the number of marketplaces for downloading, you can define the get parameter of the request "marketplaces" by passing a list of IDs of the marketplaces of interest, for example, "?marketplaces=1,5" or "?marketplaces=1".
+
         //
+
         Скачивание заказов с интегрированных пользователем маркетплейсов. На данный момент поддерживается скачивание заказов со всех аккаунтов eBay, со всех аккаунтов Etsy и со всех каналов продаж всех аккаунтов Amazon, подключенных пользователем. Если требуется ограничить число маркетплейсов для скачивания, можно определить get-параметр запроса "marketplaces", передав список ID интересующих маркетплейсов, например, "?marketplaces=1,5" или "?marketplaces=1".
       parameters:
         - type: array
