@@ -9120,7 +9120,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Order'
-      summary: Получение списка заказов
+      summary: Get order list // Получение списка заказов
       tags:
         - order
     parameters: []
