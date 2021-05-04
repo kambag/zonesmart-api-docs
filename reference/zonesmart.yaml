@@ -9025,71 +9025,72 @@ paths:
   /v1/zonesmart/order/:
     get:
       operationId: v1_zonesmart_order_list
-      description: Получение списка заказов
+      description: |-
+        Get order list
+        //
+        Получение списка заказов
       parameters:
         - name: marketplace
           in: query
-          description: ID маркетплейса
+          description: Marketplace ID // ID маркетплейса
           required: false
           type: integer
         - type: string
           in: query
           name: marketplace_user_account
-          description: ID аккаунта маркетплейса
+          description: Marketplace account ID // ID аккаунта маркетплейса
         - type: string
           in: query
           name: channel
-          description: ID канала продаж
+          description: Sales channel ID // ID канала продаж
         - type: string
           in: query
           name: create_date_after
-          description: Нижняя граница даты создания
+          description: Lower limit of the creation date // Нижняя граница даты создания
         - type: string
           in: query
           name: create_date_before
-          description: Верхняя граница даты создания
+          description: Upper limit of the creation date // Верхняя граница даты создания
         - type: boolean
           in: query
           name: is_open
-          description: Находится ли заказ в обработке
+          description: Is the order currently in processing // Находится ли заказ в обработке
         - type: boolean
           in: query
           name: is_paid
-          description: Оплачен ли заказ
+          description: Is the order paid // Оплачен ли заказ
         - type: boolean
           in: query
           name: is_partially_shipped
-          description: |
-            Отправлен ли заказ частично
+          description: Is the order partially shipped // Отправлен ли заказ частично
         - type: boolean
           in: query
-          description: |
-            Отправлен ли заказ полностью
+          description: Is the order shipped in full // Отправлен ли заказ полностью
           name: is_shipped
         - type: boolean
           in: query
           name: is_completed
-          description: Завершен ли заказ
+          description: Is the order completed // Завершен ли заказ
         - type: boolean
           in: query
           name: is_canceled
-          description: Отменен ли заказ
+          description: Is the order cancelled // Отменен ли заказ
         - type: boolean
           in: query
           name: is_visible
-          description: Должен ли заказ быть видимым
+          description: Should the order be visible // Должен ли заказ быть видимым
         - type: boolean
           in: query
           name: is_viewed
-          description: Просмотрен ли заказ
+          description: Was the order viewed (by user) // Просмотрен ли заказ
         - type: string
           in: query
           name: base_listing
-          description: ID базового листинга
+          description: Product ID // ID базового листинга
         - type: string
           in: query
           name: search
-          description: Поиск
+          description: Search // Поиск
       responses:
         '200':
           description: ''
@@ -19512,7 +19513,10 @@ definitions:
   Order:
     type: object
     title: BaseOrder
-    description: 'Заказ, его элементы и отправления'
+    description: |-
+      Order, its elements and shipments
+      //
+      Заказ, его элементы и отправления
     x-examples:
       example-1:
         id: 22c526ce-e677-4c4d-8c3a-b9f777c12863
