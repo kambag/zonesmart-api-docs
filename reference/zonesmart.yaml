@@ -8281,7 +8281,7 @@ paths:
         required: true
         description: ID отправления заказа
     get:
-      summary: Получение отправления заказа
+      summary: Get shipment for order // Получение отправления заказа
       tags:
         - order
       responses:
@@ -8290,7 +8290,10 @@ paths:
           schema:
             $ref: '#/definitions/Shipment'
       operationId: get-v1-zonesmart-order-order_id-shipment-shipment_id
-      description: Получение отправления заказа
+      description: |-
+        Get shipment for the order 
+        //
+        Получение отправления заказа
     put:
       summary: Локальное обновление отправления заказа
       operationId: put-v1-zonesmart-order-order_id-shipment-shipment_id
