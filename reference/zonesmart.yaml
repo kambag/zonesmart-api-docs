@@ -10332,6 +10332,122 @@ paths:
               location_id: ad123-123dh-341
       tags:
         - ebay_account
+  /v1/zonesmart/event/:
+    get:
+      summary: Получение списка подписок на события
+      tags:
+        - webhook
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/WebhookSubscription'
+      operationId: get-v1-zonesmart-event
+      parameters:
+        - type: string
+          in: query
+          name: event_type
+          description: Фильтрация по типу события
+        - type: boolean
+          in: query
+          name: is_active
+          description: Фильтрация по активности
+    post:
+      summary: Создание подписки на событие
+      tags:
+        - webhook
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/WebhookSubscription'
+      operationId: post-v1-zonesmart-event
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/WebhookSubscription'
+          x-examples:
+            example-1:
+              name: Уведомления о заказах
+              event_type: NEW_ORDER
+              webhook_url: 'https://6eaff2dddf88cf83104a7170cdf31f51.m.pipedream.net'
+  '/v1/zonesmart/event/{id}/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID подписки
+    patch:
+      summary: Обновление подписки на события
+      tags:
+        - webhook
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/WebhookSubscription'
+      operationId: patch-v1-zonesmart-event-id
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Название подписки
+              webhook_url:
+                type: string
+                description: URL
+    delete:
+      summary: Удаление подписки на события
+      tags:
+        - webhook
+      responses:
+        '204':
+          description: No Content
+          schema:
+            type: object
+            properties: {}
+      operationId: delete-v1-zonesmart-event-id
+  '/v1/zonesmart/event/{id}/activate/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID подписки
+    post:
+      summary: Активация подписки на события
+      tags:
+        - webhook
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: post-v1-zonesmart-event-id-activate
+  '/v1/zonesmart/event/{id}/deactivate/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+        description: ID подписки
+    post:
+      summary: Деактивация подписки на события
+      tags:
+        - webhook
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: post-v1-zonesmart-event-id-deactivate
 definitions:
   TokenObtainPair:
     type: object
@@ -20710,3 +20826,26 @@ definitions:
     required:
       - title
       - description
+  WebhookSubscription:
+    title: WebhookSubscription
+    type: object
+    description: Подписка на событие
+    properties:
+      id:
+        type: string
+        description: ID
+      name:
+        type: string
+        description: Название подписки
+      event_type:
+        type: string
+        description: Тип события
+      webhook_url:
+        type: string
+        description: 'URL, принимающий уведомления'
+      is_active:
+        type: boolean
+        description: Активность подписки
+    required:
+      - event_type
+      - webhook_url
