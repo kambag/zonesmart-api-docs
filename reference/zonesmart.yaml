@@ -10448,6 +10448,61 @@ paths:
             type: object
             properties: {}
       operationId: post-v1-zonesmart-event-id-deactivate
+  /v1/zonesmart/product_inventory/bulk_update/:
+    post:
+      summary: Обновление товарных остатков
+      tags:
+        - base_listing
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties: {}
+      operationId: post-v1-zonesmart-product_inventory-bulk_update
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              inventory:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product:
+                      type: string
+                      description: ID продукта товара
+                    warehouse:
+                      type: string
+                      description: ID склада
+                    quantity:
+                      type: integer
+                      description: Количество
+                  required:
+                    - product
+                    - warehouse
+                    - quantity
+            required:
+              - inventory
+  /v1/zonesmart/warehouse/:
+    post:
+      summary: Создание склада
+      tags:
+        - warehouse
+      responses: {}
+      operationId: post-v1-zonesmart-warehouse
+    get:
+      summary: Получение списка складов
+      tags:
+        - warehouse
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+      operationId: get-v1-zonesmart-warehouse
 definitions:
   TokenObtainPair:
     type: object
