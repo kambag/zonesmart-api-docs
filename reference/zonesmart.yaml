@@ -10503,6 +10503,35 @@ paths:
           schema:
             type: object
       operationId: get-v1-zonesmart-warehouse
+  '/v1/zonesmart/order/{id}/get_marketplace_carriers/':
+    parameters:
+      - type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Получение списка поддерживаемых маркетплейсом курьерских служб
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      description: Код курьерской службы в маркетплейсе
+                    display_name:
+                      type: string
+                      description: Название курьерской службы
+      operationId: get-v1-zonesmart-order-id-get_marketplace_carriers
+      parameters: []
 definitions:
   TokenObtainPair:
     type: object
