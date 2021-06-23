@@ -8270,6 +8270,9 @@ paths:
               carrier_name:
                 type: string
                 description: Название курьерской службы
+              warehouse:
+                type: string
+                description: ID склада
   '/v1/zonesmart/order/{order_id}/shipment/{shipment_id}/':
     parameters:
       - type: string
