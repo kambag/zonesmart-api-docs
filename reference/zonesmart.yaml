@@ -10509,6 +10509,7 @@ paths:
         name: id
         in: path
         required: true
+        description: ID заказа
     get:
       summary: Получение списка поддерживаемых маркетплейсом курьерских служб
       tags:
@@ -10532,6 +10533,7 @@ paths:
                       description: Название курьерской службы
       operationId: get-v1-zonesmart-order-id-get_marketplace_carriers
       parameters: []
+      description: Получение списка поддерживаемых маркетплейсом курьерских служб
 definitions:
   TokenObtainPair:
     type: object
