@@ -22,7 +22,7 @@ securityDefinitions:
 security:
   - API Key - 1: []
 paths:
-  /auth/jwt/create/:
+  v1/auth/jwt/create/:
     post:
       operationId: auth_jwt_create_create
       description: 'Обменивание логина и пароля пользователя Zonesmart на токены доступа и обновления. Токен доступа используется для авторизованных вызовов к API Zonesmart, а токен обновления используется для обновления токена доступа при его устаревании.'
@@ -70,7 +70,7 @@ paths:
                 type: string
                 description: Токен доступа
     parameters: []
-  /auth/jwt/refresh/:
+  v1/auth/jwt/refresh/:
     post:
       operationId: auth_jwt_refresh_create
       description: Обменивание токена обновления на токен доступа.
@@ -109,7 +109,7 @@ paths:
                 type: string
                 description: Токен доступа
     parameters: []
-  /users/:
+  v1/users/:
     get:
       operationId: users_list
       description: Получение списка пользователей Zonesmart
